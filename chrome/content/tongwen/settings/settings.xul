@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://browser/content/bookmarks/bookmarks.css"?>
+<?xml-stylesheet href="chrome://tongwen/skin/tongwen.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://tongwen/locale/tongwen.dtd">
+
+	<dialog id="winMain" 
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		
+		title="&tongwen-settings-window.title;" 
+		style="min-width: 600px; min-height: 500px;"
+		minWidth = "600"
+		minHeight = "500"		
+		width = "600"
+		height = "500"
+		onload="init();" 
+		ondialogaccept="return accept();" 
+		ondialogcancel="ondialog_cancel();"
+		persist="screenX screenY height"
+		>
+
+	<stringbundleset>
+		<stringbundle id="strRes" src="chrome://tongwen/locale/tongwen.properties"/>
+	</stringbundleset>	
+
+	<script type="application/x-javascript" src="chrome://tongwen/content/constants.js"/>
+	<script type="application/x-javascript" src="chrome://tongwen/content/s2t.js"/>
+	<script type="application/x-javascript" src="chrome://tongwen/content/settings/keyCodeMapper.js"/>
+	<script type="application/x-javascript" src="chrome://tongwen/content/settings/settings.js"/>
+	<script type="application/x-javascript" src="chrome://tongwen/content/settings/settings_filter.js"/>
+	<script type="application/x-javascript" src="chrome://tongwen/content/settings/treeView.js"/>	
+	<script type="application/x-javascript" src="chrome://tongwen/content/settings/settings_redefine_phrase.js"/>
+		
+	<!-- TooltipText -->
+	<tooltip id="tip-tongwen-chinese-encoding-only" orient="vertical" crop="right">
+		<description height="50">&tongwen-settings.autoconvert.chinese-encoding-only.description;</description>
+	</tooltip>	
+	<tooltip id="tip-tongwen-opposite-charset-only" orient="vertical" crop="right">
+		<description height="50">&tongwen-settings.autoconvert.opposite-charset-only.description;</description>
+	</tooltip>	
+	<tooltip id="tip-tongwen-enable-utf8-convert" orient="vertical" crop="right">
+		<description height="50">&tongwen-settings.autoconvert.enable-utf8-convert.description;</description>
+	</tooltip>
+
+	<tooltip id="tip-tongwen-convertion-phraseFix" orient="vertical" crop="right">
+		<description height="20">&tongwen-settings.convertion.tooltip.description;</description>
+	</tooltip>
+	
+	<tooltip id="tip-tongwen-disableTransInputTextarea" orient="vertical" crop="right">
+		<description height="20">&tongwen-settings.disableTransInputTextarea.tooltipText;</description>
+	</tooltip>
+			
+	<!--	
+	<tooltip id="tip-tongwen-settings-selection" orient="vertical">
+		<description >&tongwen-settings-list.tooltipText;</description>
+	</tooltip>
+	-->	
+	<popupset>		
+		<!-- filter setting content menu (popup menu on filter setting button)  -->
+		<popup id="popFilterSetting2" position="after_start" onpopupshowing="return isShowPopFilter();">
+			<!--<menuitem id="filter_default" label="&tongwen-settings.default.popup;" oncommand="restoreFilter();"/>-->
+			<menuitem id="contentFilter_import2"  label="&tongwen-settings.import-filter.popup;" oncommand="importFilter();" class="menuitem-iconic tongwen-import"/>
+			<menuitem id="contentFilter_export2"  label="&tongwen-settings.export-filter.popup;" oncommand="exportFilter();" class="menuitem-iconic tongwen-export"/>
+		</popup>
+		
+		<!-- filter setting content menu (right-click menu on filter listbox)  -->
+	  	<popup id="popFilterSetting" position="at_pointer" onpopupshowing="return isShowPopFilter();">
+			<!--<menuitem id="filter_default" label="&tongwen-settings.default.popup;" oncommand="restoreFilter();"/>-->
+			<menuitem id="contentFilter_selectall"  label="&tongwen-settings.selectall.popup;"  oncommand="selectAllFilter();" class="menuitem-iconic tongwen-selectall"/>
+			<menuitem id="contentFilter_delete"  label="&tongwen-settings.delete.popup;"  oncommand="delFilter();" class="menuitem-iconic tongwen-delete" />
+			<menuitem id="contentFilter_goURL"  label="&tongwen-settings.browse-url.popup;"  oncommand="goFilterURL();" class="menuitem-iconic tongwen-web" />
+			<menuseparator/>
+			<menuitem id="contentFilter_trad"  label="&tongwen-settings.contentfilter-conv-trad.popup;"  oncommand="setSelectedFilter('trad');" class="menuitem-iconic tongwen-lang" />
+			<menuitem id="contentFilter_simp"  label="&tongwen-settings.contentfilter-conv-simp.popup;" oncommand="setSelectedFilter('simp');" class="menuitem-iconic tongwen-lang" />			
+			<menuitem id="contentFilter_off"   label="&tongwen-settings.contentfilter-conv-off.popup;" oncommand="setSelectedFilter('off');" class="menuitem-iconic tongwen-lang" />
+			<menuseparator/>
+			<menu id="contentFilter_zoom"     label="&tongwen-textzoom-menu.label;" class="menu-iconic tongwen-font" >
+				<menupopup id="contentFilter_zoom-pop">
+					<menuitem id="contentFilter_zoom_item_200" value="200" label="200 %" oncommand="setSelectedFilter('200');"/>
+					<menuitem id="contentFilter_zoom_item_150" value="150" label="150 %" oncommand="setSelectedFilter('150');"/>
+					<menuitem id="contentFilter_zoom_item_120" value="120" label="120 %" oncommand="setSelectedFilter('120');"/>
+					<menuitem id="contentFilter_zoom_item_100" value="100" 				 oncommand="setSelectedFilter('100');"	label="&tongwen-settings.textzoom-off.label;" />
+					<menuitem id="contentFilter_zoom_item_80" value="80" label="80 %" oncommand="setSelectedFilter('80');"/>
+					<menuitem id="contentFilter_zoom_item_50" value="50" label="50 %" oncommand="setSelectedFilter('50');"/>
+				</menupopup>
+			</menu>			
+			<menuseparator/>
+			<menuitem id="contentFilter_add_domain"  label="&tongwen-settings.add-domain.popup;" oncommand="addFilterFromDomain();" class="menuitem-iconic tongwen-add" />
+			<menuitem id="contentFilter_addUrl"  label="&tongwen-settings.addurl.popup;" oncommand="addFilterFromUrl();" class="menuitem-iconic tongwen-add" />
+			<menuitem id="contentFilter_addClipUrl"  label="&tongwen-settings.addclipurl.popup;" oncommand="addFilterFromClip();" class="menuitem-iconic tongwen-add"/>
+			<menuseparator/>
+			<menuitem id="contentFilter_import"  label="&tongwen-settings.import-filter.popup;" oncommand="importFilter();" class="menuitem-iconic tongwen-import" />
+			<menuitem id="contentFilter_export"  label="&tongwen-settings.export-filter.popup;" oncommand="exportFilter();" class="menuitem-iconic tongwen-export" />
+		</popup>
+		
+		<!-- Redefine phrase setting content menu (popup menu on Redefine phrase setting button)  -->
+		<popup id="popRedimPhraseSetting2" position="after_start" onpopupshowing="return isShowRedimPhrase();">
+			<menuitem id="contentRedimphrase_import_default2" label="&tongwen-settings.import-default.popup;" oncommand="loadDefaultRedimPhrase();" class="menuitem-iconic tongwen-import"/>
+			<menuseparator/>
+			<menuitem id="contentRedimphrase_import_old2"  label="&tongwen-settings.import-oldphrase.popup;"  oncommand="importOldRedimPhrase();" class="menuitem-iconic tongwen-import" />
+			<menuitem id="contentRedimphrase_export_old2"  label="&tongwen-settings.export-oldphrase.popup;"  oncommand="exportOldRedimPhrase();" class="menuitem-iconic tongwen-export" />				
+		</popup>
+
+		<!-- Redefine phrase setting content menu (right-click menu on redimPhrase listbox)  -->
+		<popup id="popRedimPhraseSetting" position="at_pointer" onpopupshowing="return isShowRedimPhrase();">
+			<menuitem id="contentRedimphrase_selectall"  label="&tongwen-settings.selectall.popup;"  oncommand="selectAllRedimPhrase();" class="menuitem-iconic tongwen-selectall" />
+			<menuitem id="contentRedimphrase_delete"  label="&tongwen-settings.delete.popup;"  oncommand="delRedimPhrase();" class="menuitem-iconic tongwen-delete" />
+			<menuseparator/>
+			<menuitem id="contentRedimphrase_import_default" label="&tongwen-settings.import-default.popup;" oncommand="loadDefaultRedimPhrase();" class="menuitem-iconic tongwen-import" />
+			<menuseparator/>
+			<menuitem id="contentRedimphrase_import_old"  label="&tongwen-settings.import-oldphrase.popup;"  oncommand="importOldRedimPhrase();" class="menuitem-iconic tongwen-import" />
+			<menuitem id="contentRedimphrase_export_old"  label="&tongwen-settings.export-oldphrase.popup;"  oncommand="exportOldRedimPhrase();" class="menuitem-iconic tongwen-export" />			
+		</popup>	
+    </popupset>
+
+	<dialogheader id="header" title="&tongwen.label;" description="&tongwen.version.label;"/>
+	<tabbox orient="vertical">
+		<tabs>
+			<tab label="&tongwen-settings-general.label;" />
+			<tab label="&tongwen-settings-textzoom.label;" />
+			<tab label="&tongwen-settings-menu.label;" />
+			<tab label="&tongwen-settings.filter.label;" />
+			<tab label="&tongwen-settings.redimphrase.label;" />
+			<tab label="&tongwen-settings.hotkey.label;" />
+		</tabs>
+		<tabpanels>
+			<!-- Convert setting -->
+			<tabpanel id="tongwen-settings-general">
+				<vbox flex="1">
+					<groupbox>
+						<!--<caption label="&tongwen-settings.showhide-toolbarbutton.caption;" />-->
+					<!--	<checkbox id="chkEnableToolbarButton" label="&tongwen-settings.enable-toolbarbutton.label;" prefstring="tongwentang.toolbar.enable" oncommand="enableToolbarButton(this.checked)" /> -->
+					<!--	<separator class="groove" />-->
+
+					<!--<caption label="&tongwen-settings.phrase.caption;"/>-->
+						<checkbox id="chkInsideTable"  label="&tongwen-settings.phrase-inside.label;" prefstring="tongwentang.phrase.useInsideTable" tooltip="tip-tongwen-convertion-phraseFix" />			
+						<checkbox id="chkDisableTransInputTextarea"  label="&tongwen-settings.disableTransInputTextarea.label;" prefstring="tongwentang.disableTransInputTextarea"  tooltip="tip-tongwen-disableTransInputTextarea" />									
+												
+					</groupbox>
+					
+					<separator class="groove" />
+
+					<!-- auto-convertion setting -->
+					<groupbox align="left" orient="vertical">
+						<caption label="&tongwen-settings.autoconvert.encoding.label;"/>
+						<vbox flex="1">
+							<checkbox id="chkEnableChineseEncodingOnly" label="&tongwen-settings.autoconvert.chinese-encoding-only.label;" prefstring="tongwentang.autoconvert.chineseEncodingOnly" tooltip="tip-tongwen-chinese-encoding-only" />
+							<!--<description>&tongwen-settings.autoconvert.chinese-encoding-only.description;</description>-->
+							<checkbox id="chkEnableOppositeCharsetOnly" label="&tongwen-settings.autoconvert.opposite-charset-only.label;" prefstring="tongwentang.autoconvert.oppositeCharsetOnly" tooltip="tip-tongwen-opposite-charset-only" />
+							<!--<description>&tongwen-settings.autoconvert.opposite-charset-only.description;</description>-->
+							<checkbox id="chkEnableUTF8AutoConvert" label="&tongwen-settings.autoconvert.enable-utf8-convert.label;" prefstring="tongwentang.autoconvert.enableUtf8Trans" tooltip="tip-tongwen-enable-utf8-convert"/>
+							<!--<description>&tongwen-settings.autoconvert.enable-utf8-convert.description;</description>-->
+						</vbox>
+					</groupbox>
+															
+					<groupbox align="left" orient="vertical">
+						<!-- <caption label="&tongwen-settings.enforce.font.label;"/> -->						
+						<checkbox id="chkEnableEnforceFont" label="&tongwen-settings.enforce.font.label;" prefstring="tongwen.enforcefont.enable" oncommand="enableEnforceFont(this.checked)" />
+						<separator class="groove" />
+						
+						<hbox flex="1">							
+							<description style="padding: 4px 0px 0px 0px;">&tongwen-settings-enforce-font-trad.desc;</description>
+							<textbox id="txtEnforceFont_trad"  flex="1" size="40"  value="" prefstring="tongwen.enforcefont.trad" />
+						</hbox>
+						<hbox flex="1">
+							<description style="padding: 4px 0px 0px 0px;">&tongwen-settings-enforce-font-simp.desc;</description>
+							<textbox id="txtEnforceFont_simp"  flex="1" size="40"  value="" prefstring="tongwen.enforcefont.simp" />
+						</hbox>
+					</groupbox>
+					
+				</vbox>
+			</tabpanel>
+			<!-- Text zoom setting -->
+			<tabpanel id="tongwen-settings-textzoom">
+				<vbox flex="1">
+					<groupbox>
+						<caption label="&tongwen-settings.textzoom.caption;" />
+						<checkbox id="chkTextZoomEnable" label="&tongwen-settings.textzoom-enable.label;" prefstring="tongwentang.textZoom.enable" oncommand="enableTextZoom(this.checked)" />
+						<hbox flex="1">
+							<spacer width="30" />
+							<checkbox id="chkTextZoomStandalone" label="&tongwen-settings.textzoom-standalone.label;" prefstring="tongwentang.textZoom.standalone" />
+						</hbox>
+						<hbox flex="1">
+							<spacer width="30" />
+							<label value="&tongwen-settings.textzoom-value.label;" control="zoomPercent"	/>
+							<textbox id="zoomPercent" size="5" prefstring="tongwentang.textZoom.percent" />
+							<label value="&tongwen-settings.textzoom-percent.label;" control="zoomPercent" />
+						</hbox>
+					</groupbox>
+				</vbox>
+			</tabpanel>
+			<!-- Menu setting -->
+			<tabpanel id="tongwen-settings-menu">
+				<vbox flex="1">
+					<checkbox id="chkMenuIcon" label="&tongwen-menu-icon.label;" prefstring="tongwentang.contextMenuIcon" />
+					<groupbox>
+						<caption label="&tongwen-settings-menu.caption;" />
+						<checkbox id="chkMenu" label="&tongwen-context-menu.label;" prefstring="tongwentang.contextMenu" oncommand="enableContextMenu(this.checked)" />
+						<vbox id="contextMenuItem" style="padding-left: 25px;" flex="1">
+							<checkbox id="chkMenuInputSim" label="&tongwen-content-sim-item.label;"      prefstring="tongwentang.contextMenu.InputSim" oncommand="checkContextMenu(this)" />
+							<checkbox id="chkMenuInputTra" label="&tongwen-content-tra-item.label;"      prefstring="tongwentang.contextMenu.InputTra" oncommand="checkContextMenu(this)" />
+							<separator class="groove" />
+							<checkbox id="chkMenuPageSim"  label="&tongwen-simplified-item.label;"       prefstring="tongwentang.contextMenu.PageSim"  oncommand="checkContextMenu(this)" />
+							<checkbox id="chkMenuPageTra"  label="&tongwen-traditional-item.label;"      prefstring="tongwentang.contextMenu.PageTra"  oncommand="checkContextMenu(this)" />
+							<checkbox id="chkMenuAuto"     label="&tongwen-autoconvert-menu.label;"      prefstring="tongwentang.contextMenu.Auto"     oncommand="checkContextMenu(this)" />
+							<separator class="groove" />
+							<checkbox id="chkMenuClipSim"  label="&tongwen-clip-simplified-item.label;"  prefstring="tongwentang.contextMenu.ClipSim"  oncommand="checkContextMenu(this)" />
+							<checkbox id="chkMenuClipTra"  label="&tongwen-clip-traditional-item.label;" prefstring="tongwentang.contextMenu.ClipTra"  oncommand="checkContextMenu(this)" />
+							<separator class="groove" />
+							<checkbox id="chkMenuTextZoom" label="&tongwen-textzoom-menu.label;"         prefstring="tongwentang.contextMenu.TextZoom" oncommand="checkContextMenu(this)" />
+							<separator class="groove" />
+							<checkbox id="chkMenuSetting"  label="&tongwen-settings.label;"              prefstring="tongwentang.contextMenu.Setting"  oncommand="checkContextMenu(this)" />
+						</vbox>
+					</groupbox>
+				</vbox>
+			</tabpanel>
+
+			<!-- Filter setting -->
+			<tabpanel id="tongwen-settings-filter">
+				<vbox flex="1">
+					<hbox>
+						<checkbox id="chkFilter" label="&tongwen-settings.filter-enable.label;" prefstring="tongwentang.filter.enable" oncommand="enableFilter(this.checked)" />
+					</hbox>
+					<hbox align="center">
+						<listbox flex="1" minwidth="400" id="listFilter" disableKeyNavigation="true" seltype="multiple" prefstring="tongwentang.filter.list" onkeydown="filter_keyHandler(event);" onclick="setEditFilter()" style="" context="popFilterSetting" >
+							<!--<listhead popup="popFilterSetting">-->
+							<listhead>
+								<listheader label="&tongwen-settings.filter-list-url.label;" />
+								<listheader label="&tongwen-settings.filter-list-conv.label;" />
+								<listheader label="&tongwen-settings.filter-list-textzoom.label;" />
+							</listhead>
+							<listcols>
+								<listcol flex="1" />
+								<listcol />
+								<listcol />
+							</listcols>
+						</listbox>
+						<vbox>
+							<button id="btnFilterUp"   label="&tongwen-settings.filter-btn-up.label;"   oncommand="upFilter(); event.preventBubble();" />
+							<button id="btnFilterDown" label="&tongwen-settings.filter-btn-down.label;" oncommand="downFilter(); event.preventBubble();" />
+						</vbox>
+					</hbox>	
+					<hbox>
+					    <grid flex="1">
+							<columns><column/><column flex="1"/></columns>
+							<rows>
+								<row>								
+									<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-url.description;</description>
+									<textbox id="filterURL" prefstring="" flex="1"/>
+									<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-url-wildcard-char.description;</description>
+								</row>
+								<row>
+									<hbox>
+										<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-conv.description;</description>
+									</hbox>
+									<hbox>
+										<menulist id="filterZhFlag">
+											<menupopup>
+												<menuitem value=""     label="&tongwen-settings.filter-conv.off-item.label;"  selected="true" />
+												<menuitem value="simp" label="&tongwen-settings.filter-conv.simp-item.label;" />
+												<menuitem value="trad" label="&tongwen-settings.filter-conv.trad-item.label;" />
+											</menupopup>
+										</menulist>
+									</hbox>
+								</row>					
+								<row>
+									<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-textzoom.description;</description>
+									<hbox>
+										<textbox id="filterZoomPercent" size="5" prefstring="" />
+										
+										<label value="&tongwen-settings.textzoom-percent.label;" control="filterZoomPercent" style="padding: 5px 0px 0px 0px;" />
+										<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-textzoom.help;</description>
+									</hbox>
+								</row>					
+							</rows>
+						</grid>
+					</hbox>					
+					<hbox flex="1" align="right">						
+						<button id="btnFilterAdd"  label="&tongwen-settings.filter-btn-add.label;"  oncommand="addFilter();" />
+						<button id="btnFilterEdit" label="&tongwen-settings.filter-btn-edit.label;" oncommand="editFilter()" />
+						<button id="btnFilterDel"  label="&tongwen-settings.filter-btn-del.label;"  oncommand="delFilter()" />
+						<!--<spacer flex="1"/>-->
+						<button id="btnFilterSetting" label="&tongwen-settings.btn-setting.label;" popup="popFilterSetting2" dlgtype="extra2" image="chrome://tongwen/skin/images/tongwen-arrow.png"/>
+						<!-- <button id="btnFilterDel"  label="save"  oncommand="saveFilter()" /> -->
+					</hbox>
+				</vbox>
+			</tabpanel>
+			<!-- ReDefine phrase setting -->
+			<tabpanel id="tongwen-settings-redimphrase">
+				<vbox flex="1">
+				<hbox flex="1">
+					<checkbox id="chkRedimPhrase" label="&tongwen-settings.redimphrase-enable.label;" prefstring="tongwentang.redefinephrase.enable" oncommand="enableRedimPhrase(this.checked);" />
+				</hbox>
+	
+				<hbox flex="1">
+					<groupbox flex="1">
+						<caption label="&tongwen-settings.redimphrase-mode.caption;" />
+						<radiogroup id="rdRedimPhraseMode" flex="1">
+							<radio id="rdRedimPhrase-s2t" label="&tongwen-settings.redimphrase-s2t.label;" oncommand="reloadRedimPhrase_check(this.value);" value="s2t" selected="true"/>
+							<radio id="rdRedimPhrase-t2s" label="&tongwen-settings.redimphrase-t2s.label;" oncommand="reloadRedimPhrase_check(this.value);" value="t2s" />
+						</radiogroup>
+					</groupbox>				
+				</hbox>
+
+				<hbox flex="1">			
+					<grid flex="1">
+						<rows>
+							<row/>
+							<row/>
+						</rows>
+						
+						<columns>
+							<column>
+								<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.redimphrase.keyphrase.description;</description>
+								<textbox id="txtRedimPhrase_keyphrase"  />
+							</column>
+							<column>								
+								<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.redimphrase.mapphrase.description;</description>
+								<textbox id="txtRedimPhrase_mapphrase"  maxlength="20"/>
+							</column>
+						</columns>
+					</grid>
+				</hbox>				
+				
+				<hbox>	
+					<hbox align="center" flex="1">						
+					    <!--<tree id="treeRedimPhrase" flex="1" minwidth="400" minheight="150" seltype="multiple" onselect="redimphrase_setSelectTreeItem();" onkeydown="redimphrase_keyEvent(event);" context="popRedimPhraseSetting" hidecolumnpicker="true" tooltip="tip-tongwen-settings-selection">-->
+						<tree id="treeRedimPhrase" flex="1" minwidth="400" minheight="150" seltype="multiple" onselect="redimphrase_setSelectTreeItem();" onkeydown="redimphrase_keyEvent(event);" context="popRedimPhraseSetting" hidecolumnpicker="true" >
+					        <treecols>
+					            <treecol id="cols0" flex="1" label="&tongwen-settings.redimphrase-list-keyphrase.label;"  />
+					            <treecol id="cols1" flex="1" label="&tongwen-settings.redimphrase-list-mapphrase.label;" />
+					        </treecols>
+					        <treechildren id="treeitems"><!-- datatable -->
+					        </treechildren>
+					    </tree>
+					</hbox>
+					
+					<vbox>						
+						<button id="btnRedimPhraseAdd"  label="&tongwen-settings.btn-add.label;"  oncommand="addRedimPhrase();" />
+						<button id="btnRedimPhraseEdit" label="&tongwen-settings.btn-edit.label;" oncommand="editRedimPhrase();" />
+						<button id="btnRedimPhraseDel"  label="&tongwen-settings.btn-del.label;"  oncommand="delRedimPhrase();" />
+						<!--<spacer flex="1"/>-->
+						<button id="btnRedimphraseSetting" label="&tongwen-settings.btn-setting.label;" popup="popRedimPhraseSetting2" image="chrome://tongwen/skin/images/tongwen-arrow.png"/>
+						<!--  hide this code,  testing button for debuging purpose -->
+						<!--<button id="btnRedimPhraseSave"  label="Saving Pref"  oncommand="saveRedimPhrase();" />-->
+						<!--<button id="btnRedimPhraseLoad"  label="loading"  oncommand="loadRedimPhrase();" />-->
+						<!--<button id="btnRedimPhraseLoadPref"  label="loading Pref"  oncommand="loadPrefRedimPhrase();" />-->
+						<!--<button id="btnRedimPhraseDelAll"  label="Delete listbox item only"  oncommand="delAllRedimPhrase();" />-->
+						<!--<button id="btnRedimPhraseDefault"  label="Load Default"  oncommand="loadDefaultRedimPhrase();" />-->
+						<!--  hide this code,  testing button for debuging purpose -->
+
+						<!-- Hide this code
+						<hbox>
+							<groupbox flex="1">
+							<caption label="&tongwen-settings.redimphrase-action-description.caption;" />
+								<textbox id="txtMsg" cols="70" multiline="true" disabled="true" />
+							</groupbox>
+						</hbox>
+						-->
+					</vbox>
+				</hbox>
+					
+
+				
+				</vbox>
+			</tabpanel>
+			
+			<!--  keyboard shortcuts -->
+			<tabpanel id="tongwen-settings-hotkey">
+				<vbox flex="1">
+					<hbox>
+						<description style="padding: 4px 0px 0px 0px; width: 170px;">&tongwen-traditional-item.label;</description>
+						<textbox id="txtHotkeyPageTra"  flex="1" size="5" onclick="this.select();" readonly="true" onkeydown="setHotkey(event, this);" value="" defaultNullvalue="&tongwen-settings.hotkey.nulltext;" prefstring="tongwentang.hotKey.PageTra" />
+						<button id="btnHotkeyReset"  label="&tongwen-settings.btn-reset.label;"  oncommand="resetHotkey('txtHotkeyPageTra');" />
+					</hbox>
+					<hbox>					
+						<description style="padding: 4px 0px 0px 0px; width: 170px;">&tongwen-simplified-item.label;</description>
+						<textbox id="txtHotkeyPageSim"  flex="1" size="5" onclick="this.select();" readonly="true" onkeydown="setHotkey(event, this);" value="" defaultNullvalue="&tongwen-settings.hotkey.nulltext;" prefstring="tongwentang.hotKey.PageSim" />
+						<button id="btnHotkeyReset"  label="&tongwen-settings.btn-reset.label;"  oncommand="resetHotkey('txtHotkeyPageSim');" />
+					</hbox>
+					<hbox>					
+						<description style="padding: 4px 0px 0px 0px; width: 170px;">&tongwen-settings.hotkey.autoconvert.label;</description>
+						<textbox id="txtHotkeyPageAuto"  flex="1" size="5" onclick="this.select();" readonly="true" onkeydown="setHotkey(event, this);" value="" defaultNullvalue="&tongwen-settings.hotkey.nulltext;" prefstring="tongwentang.hotKey.PageAuto" />
+						<button id="btnHotkeyReset"  label="&tongwen-settings.btn-reset.label;"  oncommand="resetHotkey('txtHotkeyPageAuto');" />
+					</hbox>					
+				</vbox>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</dialog>

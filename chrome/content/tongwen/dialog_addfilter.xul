@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://tongwen/skin/tongwen.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://tongwen/locale/tongwen.dtd">
+
+	<dialog id="winAddFilter" 
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		
+		title="&tongwen-dialog-addfilter.title;"
+		style="min-width: 480px; min-height: 200px;"
+		minWidth = "560"
+		minHeight = "200"
+		width = "560"
+		height = "200"
+		onload="init();" 
+		ondialogaccept="return accept();" 
+		persist="screenX screenY width height"
+		>
+	<stringbundleset>
+		<stringbundle id="strRes" src="chrome://tongwen/locale/tongwen.properties"/>
+	</stringbundleset>	
+
+	<script type="application/x-javascript" src="chrome://tongwen/content/constants.js"/>
+	<script type="application/x-javascript" src="chrome://tongwen/content/dialog_addfilter.js"/>
+	
+	<popupset>
+		<popup id="popTextZoom" position="after_start" onpopupshowing="return isShowPopZoom();">
+			<menuitem id="contentZoom_setCurrent"  label="&tongwen-settings.zoom.setCurrent.popup;" oncommand="setCurrentZoomLevel();" />
+			<menuitem id="contentZoom_clear"  	   label="&tongwen-settings.zoom.clear.popup;" oncommand="clearZoomValue();" />
+		</popup>
+	</popupset>
+	
+					<hbox>
+					    <grid flex="1">
+							<rows flex="1">
+								<row flex="1">								
+									<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-url.description;</description>
+									<!-- <textbox id="filterURL" flex="1" tooltiptext ="&tongwen-settings.filter-url-wildcard-char.description;" /> -->
+									
+									<menulist id="filterURL" style="width:430px" label="" editable="true" tooltiptext ="&tongwen-settings.filter-url-wildcard-char.description;">
+										<menupopup id="menupop_filter">
+										</menupopup>
+								    </menulist>
+									<!--<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-url-wildcard-char.description;</description>-->
+								</row>
+								<row>
+									<hbox>
+										<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-conv.description;</description>
+									</hbox>
+									<hbox>
+										<menulist id="filterZhFlag">
+											<menupopup>
+												<menuitem value=""     label="&tongwen-settings.filter-conv.off-item.label;"  selected="true" />
+												<menuitem value="simp" label="&tongwen-settings.filter-conv.simp-item.label;" />
+												<menuitem value="trad" label="&tongwen-settings.filter-conv.trad-item.label;" />
+											</menupopup>
+										</menulist>
+									</hbox>
+								</row>					
+								<row>
+									<!-- <description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-textzoom.description;</description> -->
+									<button id="btnZoom" label="&tongwen-settings.filter-textzoom.description;"  popup="popTextZoom" image="chrome://tongwen/skin/images/tongwen-arrow.png"/>
+									<hbox>
+										<textbox id="filterZoomPercent" size="5" />
+										<label value="&tongwen-settings.textzoom-percent.label;"  style="padding: 5px 0px 0px 0px;" />										
+										<description style="padding: 4px 0px 0px 0px;">&tongwen-settings.filter-textzoom.help;</description>
+									</hbox>
+								</row>					
+							</rows>
+						</grid>
+					</hbox>
+					<!-- 
+					<hbox flex="1" align="right">
+						<button id="btnFilterTest"  label="test"  oncommand="test123()" /> 
+					</hbox>
+					-->
+</dialog>

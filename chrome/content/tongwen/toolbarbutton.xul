@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://tongwen/skin/tongwen.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://tongwen/locale/tongwen.dtd">
+
+<!-- File content:
+  Our toolbar button UI. Implemented as overlay so that we can include it
+  in both mozilla and firefox. I'm gonna drop one of the browser in the
+  future. It is very tiresome to suppose 2 browsers.
+-->
+<overlay id="tongwen-toolbar-button" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<!-- toolbarbutton.xul -->
+	<commandset id="tongwen_main_commands">
+		<command id="cmd_tongwen"          oncommand="TongWen.trans(); event.stopPropagation();" />
+		<command id="cmd_tongwen_sim"      oncommand="TongWen.trans(TongWen.SIMFLAG); event.stopPropagation();" />
+		<command id="cmd_tongwen_tra"      oncommand="TongWen.trans(TongWen.TRAFLAG); event.stopPropagation();" />
+		<command id="cmd_autoconv_off"     oncommand="TongWen.addAutoTrans('off'); event.stopPropagation();" />
+		<command id="cmd_autoconv_sim"     oncommand="TongWen.addAutoTrans(TongWen.SIMFLAG); event.stopPropagation();" />
+		<command id="cmd_autoconv_tra"     oncommand="TongWen.addAutoTrans(TongWen.TRAFLAG); event.stopPropagation();" />
+		<command id="cmd_tongwen_clip_sim" oncommand="TongWen.transClip(TongWen.SIMFLAG); event.stopPropagation();" />
+		<command id="cmd_tongwen_clip_tra" oncommand="TongWen.transClip(TongWen.TRAFLAG); event.stopPropagation();" />
+		<command id="cmd_tongwen_settings" oncommand="TongWen.showSettingDialog(); event.stopPropagation();" />
+		
+		<command id="cmd_tongwen_textzoom_enlarge" oncommand="TongWen.textzoomEnlarge(); event.stopPropagation();" />
+		<command id="cmd_tongwen_textzoom_reduce"  oncommand="TongWen.textzoomReduce(); event.stopPropagation();" />
+		<command id="cmd_tongwen_textzoom_reset" 
+			oncommand="TongWen.textzoomReset(); event.stopPropagation();" 			
+			/>
+			
+		<command id="cmd_tongwen_addfilter"  oncommand="TongWen.showAddFilterDialog(); event.stopPropagation();" />
+		<command id="cmd_tongwen_addfilter_trad" oncommand="TongWen.addFilterSilence(TongWen.TRAFLAG);  event.stopPropagation();" />
+		<command id="cmd_tongwen_addfilter_sim"  oncommand="TongWen.addFilterSilence(TongWen.SIMFLAG);  event.stopPropagation();" />
+		<command id="cmd_tongwen_removefilter"  oncommand="TongWen.removeFilter();  event.stopPropagation();" />
+
+		<command id="cmd_tongwen_reportbug" oncommand="TongWen.reportbug(); event.stopPropagation();" />
+		<command id="cmd_tongwen_applyfont_sim" oncommand="TongWen.applyFont('sim'); event.stopPropagation();" />
+		<command id="cmd_tongwen_applyfont_trad" oncommand="TongWen.applyFont('trad'); event.stopPropagation();" />
+		<command id="cmd_tongwen_applyfont_none" oncommand="TongWen.applyFont('none'); event.stopPropagation();" />
+				
+	</commandset>
+
+	<toolbarbutton id="tongwen-button" type="menu-button" class="chromeclass-toolbar-additional toolbarbutton-1"
+		label="&tongwen-button.label;" tooltiptext="&tongwen-button.tooltipText;" statustext="&tongwen-button.statusText;"
+		command="cmd_tongwen">
+		<menupopup onpopupshown="TongWen.initTools();">
+			<!--
+			<menuitem id="tongwen-auto-off-item"
+				class="menuitem-iconic tongwen-auto"
+				iconic="menuitem-iconic tongwen-auto"
+				label="&tongwen-auto-off-item.label;"
+				tooltiptext="&tongwen-auto-off-item.tooltipText;"
+				type="radio"
+				name="tongwen-auto-group"
+				command="cmd_autoconv_off" />
+			<menuitem id="tongwen-auto-simplified-item"
+				class="menuitem-iconic tongwen-auto"
+				iconic="menuitem-iconic tongwen-auto"
+				label="&tongwen-auto-simplified-item.label;" 
+				tooltiptext="&tongwen-auto-simplified-item.tooltipText;"
+				type="radio"
+				name="tongwen-auto-group"
+				command="cmd_autoconv_sim" />
+			<menuitem id="tongwen-auto-traditional-item"
+				class="menuitem-iconic tongwen-auto"
+				iconic="menuitem-iconic tongwen-auto"
+				label="&tongwen-auto-traditional-item.label;"
+				tooltiptext="&tongwen-auto-traditional-item.tooltipText;"
+				type="radio"
+				name="tongwen-auto-group"
+				command="cmd_autoconv_tra" />			
+			<menuseparator />
+			-->
+		    <menuitem id="tongwen-simplified-item" 
+				class="menuitem-iconic tongwen-web"
+				iconic="menuitem-iconic tongwen-web"
+				label="&tongwen-simplified-item.label;" 
+				tooltiptext="&tongwen-simplified-item.tooltipText;"
+				command="cmd_tongwen_sim" />
+		    <menuitem id="tongwen-traditional-item"
+				class="menuitem-iconic tongwen-web"
+				iconic="menuitem-iconic tongwen-web"
+				label="&tongwen-traditional-item.label;" 
+				tooltiptext="&tongwen-traditional-item.tooltipText;"
+				command="cmd_tongwen_tra" />
+				
+		    <menu id="tongwen-autoconvert-menu" 
+				class="menu-iconic tongwen-auto"
+				iconic="menu-iconic tongwen-auto"
+				label="&tongwen-autoconvert-menu.label;" 
+				tooltiptext="&tongwen-autoconvert-menu.tooltipText;">				
+				<menupopup id="tongwen-autoconvert-pop">
+				    <menuitem id="tongwen-auto-off-item"
+						label="&tongwen-auto-off-item.label;" tooltiptext="&tongwen-auto-off-item.tooltipText;"
+						type="radio" name="tongwen-auto-group" command="cmd_autoconv_off" />
+				    <menuitem id="tongwen-auto-simplified-item"
+						label="&tongwen-auto-simplified-item.label;" tooltiptext="&tongwen-auto-simplified-item.tooltipText;"
+						type="radio" name="tongwen-auto-group" command="cmd_autoconv_sim" />
+				    <menuitem id="tongwen-auto-traditional-item"
+						label="&tongwen-auto-traditional-item.label;" tooltiptext="&tongwen-auto-traditional-item.tooltipText;"
+						type="radio" name="tongwen-auto-group" command="cmd_autoconv_tra" />
+				</menupopup>
+		    </menu>
+
+			<menuseparator />
+			<menuitem id="tongwen-clip-simplified-item" 
+				class="menuitem-iconic tongwen-clipboard"
+				iconic="menuitem-iconic tongwen-clipboard"
+				label="&tongwen-clip-simplified-item.label;" 
+				tooltiptext="&tongwen-clip-simplified-item.tooltipText;"
+				command="cmd_tongwen_clip_sim" />
+			<menuitem id="tongwen-clip-traditional-item" 
+				class="menuitem-iconic tongwen-clipboard"
+				iconic="menuitem-iconic tongwen-clipboard"
+				label="&tongwen-clip-traditional-item.label;" 
+				tooltiptext="&tongwen-clip-traditional-item.tooltipText;"
+				command="cmd_tongwen_clip_tra" />
+			<menuseparator />
+		    <menu id="tongwen-textzoom-menu"
+				class="menu-iconic tongwen-zoom"
+				iconic="menu-iconic tongwen-zoom"
+				label="&tongwen-textzoom-menu.label;"
+				tooltiptext="&tongwen-textzoom-menu.tooltipText;">
+				<menupopup id="tongwen-textzoom-pop">
+				    <menuitem id="tongwen-textzoom-off-item" value="disabled"
+						label="&tongwen-textzoom-off-item.label;" tooltiptext="&tongwen-textzoom-off-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+					<menuseparator />
+				    <menuitem id="tongwen-textzoom-150-item" value="150"
+						label="&tongwen-textzoom-150-item.label;" tooltiptext="&tongwen-textzoom-150-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+				    <menuitem id="tongwen-textzoom-110-item" value="110"
+						label="&tongwen-textzoom-110-item.label;" tooltiptext="&tongwen-textzoom-110-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+				    <menuitem id="tongwen-textzoom-100-item" value="100"
+						label="&tongwen-textzoom-100-item.label;" tooltiptext="&tongwen-textzoom-100-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+				    <menuitem id="tongwen-textzoom-90-item" value="90"
+						label="&tongwen-textzoom-90-item.label;" tooltiptext="&tongwen-textzoom-90-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+				    <menuitem id="tongwen-textzoom-50-item" value="50"
+						label="&tongwen-textzoom-50-item.label;" tooltiptext="&tongwen-textzoom-50-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+					<menuseparator />
+				    <menuitem id="tongwen-textzoom-user-item" value="" mylabel="&tongwen-textzoom-user-item.label;"
+						label="&tongwen-textzoom-user-item.label;" tooltiptext="&tongwen-textzoom-user-item.tooltipText;"
+						type="radio" name="tongwen-textzoom-group" oncommand="TongWen.textZoomSetting(this.value); event.stopPropagation();" />
+				</menupopup>
+		    </menu>
+		    <menuseparator />
+		    <menuitem id="tongwen-settings-item" 
+				class="menuitem-iconic tongwen-config"
+				iconic="menuitem-iconic tongwen-config"
+				label="&tongwen-settings.label;" 
+				tooltiptext="&tongwen-settings.tooltipText;"
+				command="cmd_tongwen_settings" />
+				
+			<menuseparator />	
+
+		    <menuitem id="tongwen-applyfont-sim" 
+				class="menuitem-iconic tongwen-applyfont"
+				iconic="menuitem-iconic tongwen-applyfont"
+				label="&tongwen-applyfont-sim-item.label;" 
+				tooltiptext="&tongwen-applyfont-sim-item.tooltipText;"
+				command="cmd_tongwen_applyfont_sim" />
+
+		    <menuitem id="tongwen-applyfont-trad" 
+				class="menuitem-iconic tongwen-applyfont"
+				iconic="menuitem-iconic tongwen-applyfont"
+				label="&tongwen-applyfont-trad-item.label;" 
+				tooltiptext="&tongwen-applyfont-trad-item.tooltipText;"
+				command="cmd_tongwen_applyfont_trad" />
+
+		    <menuitem id="tongwen-applyfont-none" 
+				class="menuitem-iconic tongwen-applyfont"
+				iconic="menuitem-iconic tongwen-applyfont"
+				label="&tongwen-applyfont-none-item.label;" 
+				tooltiptext="&tongwen-applyfont-none-item.tooltipText;"
+				command="cmd_tongwen_applyfont_none" />
+				
+			<menuseparator />
+			
+			<menuitem id="tongwen-bug-report-item" 
+				class="menuitem-iconic tongwen-report" 
+				iconic="menuitem-iconic tongwen-report" 
+				label="&tongwen-reportbug-item.label;" 
+				tooltiptext = "&tongwen-reportbug-item.tooltipText;"
+				local-lang = "&tongwen-local-lang;"
+				command = "cmd_tongwen_reportbug" />
+		<!--			
+			<menuitem id="tongwen-checkupdate-item" 
+				class="menuitem-iconic tongwen-checkupdate" 
+				iconic="menuitem-iconic tongwen-checkupdate" 
+				label="&tongwen-checkupdate-item.label;" 
+				tooltiptext = "&tongwen-checkupdate-item.tooltipText;" 
+				command = "cmd_tongwen_checkupdate" />
+		-->
+		    <!--
+			<menuseparator />
+		    <menuitem id="tongwen-about-item"
+				label="&tongwen-about-item.label;"
+				oncommand="window.openDialog('chrome://tongwen/content/aboutDialog.xul', 'about-dialog', 'chrome,tab=about'); event.stopPropagation();" />
+		    -->
+		</menupopup>
+	</toolbarbutton>
+	
+	<toolbarbutton id="tongwen-button-web-trad" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-web-trad.label;"
+	  tooltiptext="&tongwen-traditional-item.tooltipText;"
+   	  command="cmd_tongwen_tra"/>
+	  
+	<toolbarbutton id="tongwen-button-web-sim" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-web-sim.label;"
+	  tooltiptext="&tongwen-simplified-item.tooltipText;"
+	  command="cmd_tongwen_sim"/>
+	  
+	<toolbarbutton id="tongwen-button-clip-trad" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-web-trad.label;"
+	  tooltiptext="&tongwen-clip-traditional-item.tooltipText;"	  
+   	  command="cmd_tongwen_clip_tra"/>
+	  
+	<toolbarbutton id="tongwen-button-clip-sim" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-web-sim.label;"
+	  tooltiptext="&tongwen-clip-simplified-item.tooltipText;"
+   	  command="cmd_tongwen_clip_sim"/>
+	  
+	<toolbarbutton id="tongwen-button-textzoom-enlarge" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-textzoom-enlarge.label;"
+	  tooltiptext="&tongwen-button-textzoom-enlarge.tooltipText;"
+	  command="cmd_tongwen_textzoom_enlarge"/>
+	  
+	<toolbarbutton id="tongwen-button-textzoom-reduce" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-textzoom-reduce.label;"
+	  tooltiptext="&tongwen-button-textzoom-reduce.tooltipText;"
+   	  command="cmd_tongwen_textzoom_reduce"/>
+	  
+	<toolbarbutton id="tongwen-button-textzoom-reset" class="chromeclass-toolbar-additional toolbarbutton-1"
+  	  label="&tongwen-button-textzoom-reset.label;"
+	  tooltiptext="&tongwen-button-textzoom-reset.tooltipText;"
+   	  command="cmd_tongwen_textzoom_reset"/>
+
+	<toolbarbutton id="tongwen-button-show-filter-dialog" class="chromeclass-toolbar-additional toolbarbutton-1"
+	  label="&tongwen-button-addfilter.label;"
+	  tooltiptext="&tongwen-button-addfilter.tooltipText;"
+   	  command="cmd_tongwen_addfilter"/>
+	  
+	<toolbarbutton id="tongwen-button-remove-filter-dialog" class="chromeclass-toolbar-additional toolbarbutton-1"
+	  label="&tongwen-button-removefilter.label;"
+	  tooltiptext="&tongwen-button-removefilter.tooltipText;"
+   	  command="cmd_tongwen_removefilter"/>
+
+	  
+	<!--standalone toolbar-tongwen button -->
+	<toolbarbutton id="tongwen-button2-web-trad" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-traditional-item.tooltipText;"
+   	  command="cmd_tongwen_tra"/>
+	  
+	<toolbarbutton id="tongwen-button2-web-sim" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-simplified-item.tooltipText;"
+	  command="cmd_tongwen_sim"/>
+	  
+	<toolbarbutton id="tongwen-button2-clip-trad" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-clip-traditional-item.tooltipText;"	  
+   	  command="cmd_tongwen_clip_tra"/>
+	  
+	<toolbarbutton id="tongwen-button2-clip-sim" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-clip-simplified-item.tooltipText;"
+   	  command="cmd_tongwen_clip_sim"/>
+	  
+	<toolbarbutton id="tongwen-button2-textzoom-enlarge" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-textzoom-enlarge.tooltipText;"
+	  command="cmd_tongwen_textzoom_enlarge"/>
+	  
+	<toolbarbutton id="tongwen-button2-textzoom-reduce" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-textzoom-reduce.tooltipText;"
+   	  command="cmd_tongwen_textzoom_reduce"/>
+	  
+	<toolbarbutton id="tongwen-button2-textzoom-reset" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-textzoom-reset.tooltipText;" 
+   	  command="cmd_tongwen_textzoom_reset"/>
+	  
+	<toolbarbutton id="tongwen-button2-show-filter-dialog" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-addfilter.tooltipText;"
+   	  command="cmd_tongwen_addfilter"/>
+
+	<toolbarbutton id="tongwen-button2-add-filter-dialog-trad" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-addfilter-trad.tooltipText;"
+   	  command="cmd_tongwen_addfilter_trad"/>
+
+	<toolbarbutton id="tongwen-button2-add-filter-dialog-sim" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-addfilter-sim.tooltipText;"
+   	  command="cmd_tongwen_addfilter_sim"/>
+	  
+	<toolbarbutton id="tongwen-button2-remove-filter-dialog" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-button-removefilter.tooltipText;"
+   	  command="cmd_tongwen_removefilter"/>
+	  
+	<toolbarbutton id="tongwen-button2_config" class="toolbarbutton-1 chromeclass-toolbar-additional"
+	  tooltiptext="&tongwen-settings.tooltipText;"
+   	  command="cmd_tongwen_settings"/>
+</overlay>

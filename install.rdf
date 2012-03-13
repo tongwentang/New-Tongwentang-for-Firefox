@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="rdf:#$zxTou"
+                   em:id="{3550f703-e582-4d05-9a08-453d09bdfdc6}"
+                   em:minVersion="1.0"
+                   em:maxVersion="2.0.0.*" />
+  <Description RDF:about="rdf:#$0xeXI1"
+                   em:id="{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}"
+                   em:minVersion="2.0"
+                   em:maxVersion="2.*" />
+  <RDF:Description RDF:about="rdf:#$pxTou"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="1.5"
+                   em:maxVersion="6.*" />
+  <RDF:Description RDF:about="urn:mozilla:extension:file:tongwen.jar"
+                   em:package="content/tongwen/"
+                   em:skin="skin/classic/tongwen/">
+    <em:locale>locale/en-US/tongwen/</em:locale>
+    <em:locale>locale/zh-TW/tongwen/</em:locale>
+    <em:locale>locale/zh-CN/tongwen/</em:locale>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:install-manifest"
+                   em:id="{22870005-adef-4c9d-ae36-d0e1f2f27e5a}"
+                   em:version="0.4.0.9.2"
+                   em:type="2"
+                   em:name="新同文堂 (New Tong Wen Tang)"
+                   em:description="中文繁簡轉換 (Chinese Simplified&lt;-&gt;Traditional switcher)"
+                   em:creator="passerby, softcup"
+                   em:homepageURL="http://tongwen.openfoundry.org"
+                   em:iconURL="chrome://tongwen/skin/images/tongwen-icon.png"
+                   em:updateURL="http://tongwen.openfoundry.org/src/update.rdf"
+                   em:optionsURL="chrome://tongwen/content/settings/settings.xul"
+                   em:updateKey="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDK3wGrH+BlHZf3aHd8/KHP9M/Gr38xMmcyY1/lnrhkiUM/NdbeC9+rMPMku4QrPBDPW02us0ogn0XiPCWMPRd+duNiQBld9DqclXzXWjasQVGekr61ZUrWPHU/ERQQI7wNQvDlOO2U5RplnNlcxEdyXia+fM3Qs+mQhR64U8fZSwIDAQAB">
+    <em:contributor>哈少 (hashao)</em:contributor>
+    <em:contributor>Hemiola SUN</em:contributor>
+    <em:contributor>vertex</em:contributor>
+    <em:contributor>josesun</em:contributor>
+    <em:contributor>得翼科技</em:contributor>
+    <em:contributor>可愛の人型姬</em:contributor>
+    <em:targetApplication RDF:resource="rdf:#$pxTou"/>
+    <em:targetApplication RDF:resource="rdf:#$uxTou"/>
+    <em:targetApplication RDF:resource="rdf:#$zxTou"/>
+    <em:targetApplication RDF:resource="rdf:#$0xeXI1"/>
+    <em:file RDF:resource="urn:mozilla:extension:file:tongwen.jar"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$uxTou"
+                   em:id="{a463f10c-3994-11da-9945-000d60ca027b}"
+                   em:minVersion="0.4"
+                   em:maxVersion="1.0" />
+</RDF:RDF>

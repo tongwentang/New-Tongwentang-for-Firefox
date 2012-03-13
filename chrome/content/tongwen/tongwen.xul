@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://tongwen/skin/tongwen.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://tongwen/locale/tongwen.dtd">
+
+<?xul-overlay href="chrome://tongwen/content/toolbarbutton.xul"?>
+<?xul-overlay href="chrome://tongwen/content/contextmenu.xul"?>
+
+<!--
+  The main() entry point for our extension.
+-->
+
+<overlay id="tongwen" 
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/x-javascript" src="chrome://tongwen/content/constants.js" />
+	<script type="application/x-javascript" src="chrome://tongwen/content/s2t.js" />
+	<script type="application/x-javascript" src="chrome://tongwen/content/s2t_phrase.js" />
+	<script type="application/x-javascript" src="chrome://tongwen/content/settings/keyCodeMapper.js"/>	
+	<script type="application/x-javascript" src="chrome://tongwen/content/tongwen_conv.js" />
+	<script type="application/x-javascript" src="chrome://tongwen/content/tongwen_filter.js" />
+	<script type="application/x-javascript" src="chrome://tongwen/content/textzoom.js" />
+	<script type="application/x-javascript" src="chrome://tongwen/content/tongwen.js" />
+	
+	<script type="application/x-javascript">
+	<![CDATA[		
+		window.addEventListener("DOMContentLoaded", function (e){TongWen.init(e);TongWen.autoTrans(e);}, false);
+		
+		window.addEventListener("unload", function (e){ TongWen.unload(e); }, false);
+		window.addEventListener("keydown", function (e){ TongWen.onkeyDown(e); }, false);
+	]]>
+	</script>
+
+<!-- Toolbar for Mozilla Suit, Firefox -->
+	
+<!-- <window id="main-window"> -->
+	<toolbox id="navigator-toolbox">
+		<toolbarpalette id="BrowserToolbarPalette">
+				<toolbarbutton id="tongwen-button2-web-trad" />
+				<toolbarbutton id="tongwen-button2-web-sim"  />
+				<toolbarbutton id="tongwen-button2-clip-trad"  />
+				<toolbarbutton id="tongwen-button2-clip-sim"  />
+				<toolbarbutton id="tongwen-button2-textzoom-enlarge"  />
+				<toolbarbutton id="tongwen-button2-textzoom-reduce"  />
+				<toolbarbutton id="tongwen-button2-textzoom-reset"  />
+				<toolbarbutton id="tongwen-button2-show-filter-dialog"  />
+				<toolbarbutton id="tongwen-button2-add-filter-dialog-trad" />
+				<toolbarbutton id="tongwen-button2-add-filter-dialog-sim"  />
+				<toolbarbutton id="tongwen-button2-remove-filter-dialog"  />
+				<toolbarbutton id="tongwen-button2_config"  />			
+		</toolbarpalette>
+
+		<!--<toolbar id="tongwen-toolbar" 	hidden="false" 	toolbarname="&tongwen.label;" 	savedtoolbarname="&tongwen.label;" insertafter="nav-bar">-->
+		
+		<!-- passerby note: toolbar customizable='true' cause many problem, don;t enable it maybe better -->
+		<!--	
+		<toolbar id="tongwen-toolbar"
+			class="chromeclass-toolbar"
+			toolbarname="&tongwen.label;"
+			savedtoolbarname="&tongwen.label;"
+			hidden="false"
+			collapsed="false"
+			persist="collapsed,hidden"			
+			mode="icons"
+			iconsize="large"
+			customizable="true"
+			insertafter="PersonalToolbar"
+			insertbefore="browser-stack,browser"
+			currentset="tongwen-button2-web-trad,tongwen-button2-web-sim,tongwen-button2-clip-trad,tongwen-button2-clip-sim,tongwen-button2-textzoom-enlarge,tongwen-button2-textzoom-reduce,tongwen-button2-textzoom-reset,tongwen-button2-show-filter-dialog,tongwen-button2-add-filter-dialog-trad,tongwen-button2-add-filter-dialog-sim,tongwen-button2-remove-filter-dialog,tongwen-button2_config"
+			defaultset="tongwen-button2-web-trad,tongwen-button2-web-sim,tongwen-button2-clip-trad,tongwen-button2-clip-sim,tongwen-button2-textzoom-enlarge,tongwen-button2-textzoom-reduce,tongwen-button2-textzoom-reset,tongwen-button2-show-filter-dialog,tongwen-button2-add-filter-dialog-trad,tongwen-button2-add-filter-dialog-sim,tongwen-button2-remove-filter-dialog,tongwen-button2_config"			
+			>
+		-->		
+			<toolbar id="tongwen-toolbar"
+				class="chromeclass-toolbar-additional"
+				toolbarname="&tongwen.label;"
+				hidden="false"
+				collapsed="false"
+				persist="collapsed,hidden"
+				mode="icons"
+				align="left"
+				customizable="true"			
+				insertafter="PersonalToolbar"
+				fullscreentoolbar="false"
+				moz-collapsed="false"
+				defaultset="tongwen-button2-web-trad,tongwen-button2-web-sim,tongwen-button2-clip-trad,tongwen-button2-clip-sim,tongwen-button2-textzoom-enlarge,tongwen-button2-textzoom-reduce,tongwen-button2-textzoom-reset,,tongwen-button2-show-filter-dialog,tongwen-button2-add-filter-dialog-trad,tongwen-button2-add-filter-dialog-sim,tongwen-button2-remove-filter-dialog,tongwen-button2_config"
+				>
+			</toolbar>
+	</toolbox>
+<!-- </window> -->
+		   
+	
+	<!-- Toolbar for Mozilla Suite -->
+	<hbox id="nav-bar-buttons">
+		<toolbarbutton id="tongwen-button" />
+	</hbox>
+
+	<!-- Toolbar for Mozilla Firefox -->
+	<toolbarpalette id="BrowserToolbarPalette">
+		<toolbarbutton id="tongwen-button" />
+		<toolbarbutton id="tongwen-button-web-trad" />
+		<toolbarbutton id="tongwen-button-web-sim" />
+		<toolbarbutton id="tongwen-button-clip-trad" />
+		<toolbarbutton id="tongwen-button-clip-sim" />
+		<toolbarbutton id="tongwen-button-textzoom-enlarge" />
+		<toolbarbutton id="tongwen-button-textzoom-reduce" />
+		<toolbarbutton id="tongwen-button-textzoom-reset" />
+		<toolbarbutton id="tongwen-button-show-filter-dialog" />
+		<toolbarbutton id="tongwen-button-remove-filter-dialog" />
+	</toolbarpalette>
+
+	<!-- Toolbar for Mozilla Thunderbird -->
+	<toolbarpalette id="MailToolbarPalette">
+		<toolbarbutton id="tongwen-button" />
+		<toolbarbutton id="tongwen-button-web-trad" />
+		<toolbarbutton id="tongwen-button-web-sim" />
+		<toolbarbutton id="tongwen-button-clip-trad" />
+		<toolbarbutton id="tongwen-button-clip-sim" />
+	</toolbarpalette>
+
+	<!-- Context Menu Firefox, Mozilla -->
+	<popup id="contentAreaContextMenu">
+		<!-- insertbefore must be put here, or it won't work. BUG! -->
+		<menu id="tongwen-context-menu" insertbefore="context-sep-paste" />
+	</popup>
+
+	<!-- Context Menu Thunderbird -->
+	<popup id="messagePaneContext">
+		<menu id="tongwen-context-menu" insertbefore="context-sep-paste" />
+	</popup>
+
+	<!-- need to include to mainCommandSet otherwise won't work. -->
+	<!-- Command set Mozilla-->
+	<commandset id="commands">
+		<commandset id="tongwen_main_commands" />
+		<commandset id="tongwen_context_commands" />
+	</commandset>
+
+	<!-- Command set Firefox-->
+	<commandset id="mainCommandSet">
+		<commandset id="tongwen_main_commands" />
+		<commandset id="tongwen_context_commands" />
+	</commandset>
+
+	<!-- Command set Thunderbird-->
+	<commandset id="mailCommands">
+		<commandset id="tongwen_main_commands" />
+		<commandset id="tongwen_context_commands" />
+	</commandset>
+	
+	<!-- Keyset overlay -->
+	<!-- Shortcuts Element Mozilla -->
+	<!--	
+	<keyset id="navKeys">
+		<keyset id="tongwen_main_keyset" />
+	</keyset>
+	-->
+	<!-- Shortcuts Element Firefox -->
+	<!--	
+	<keyset id="mainKeyset">
+		<keyset id="tongwen_main_keyset" />
+	</keyset>
+	-->
+
+    <!-- Shortcuts Element Thunderbird -->
+	<!-- 
+	<keyset id="mailKeys">
+		<keyset id="tongwen_main_keyset" />
+	</keyset>
+	-->
+	<!-- Firefox viewMenu -->
+</overlay>
