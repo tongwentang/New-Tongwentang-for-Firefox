@@ -91,7 +91,7 @@
 <!ENTITY tongwen-settings.disableTransInputTextarea.tooltipText	"">
 
 <!ENTITY tongwen-settings.phrase-inside.label 					"Use internal phrase table">
-<!ENTITY tongwen-settings.enforce.font.label 					"Apply custom font for convertion">
+<!ENTITY tongwen-settings.enforce.font.label 					"Apply custom font for conversion">
 <!ENTITY tongwen-settings-enforce-font-trad.desc				"Traditional chinese font: ">
 <!ENTITY tongwen-settings-enforce-font-simp.desc				"Simplified Chinese font: ">
 
