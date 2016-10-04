@@ -1,0 +1,358 @@
+{
+	"extName": {
+		"message": "新同文堂",
+		"description": ""
+	},
+	"extDescription": {
+		"message": "繁体简体中文转换工具",
+		"description": ""
+	},
+	"extTitle": {
+		"message": "新同文堂",
+		"description": ""
+	},
+	"optionTitle": {
+		"message": "新同文堂 - 设定",
+		"description": ""
+	},
+	"optionVersion": {
+		"message": "版本：",
+		"description": ""
+	},
+
+	"btnClose": {
+		"message": "关闭",
+		"description": ""
+	},
+	"btnSave": {
+		"message": "保存",
+		"description": ""
+	},
+	"btnImportOptions": {
+		"message": "导入设定",
+		"description": ""
+	},
+	"btnExportOptions": {
+		"message": "导出设定",
+		"description": ""
+	},
+	"btnImport": {
+		"message": "导入",
+		"description": ""
+	},
+	"btnExport": {
+		"message": "导出",
+		"description": ""
+	},
+	"btnCancel": {
+		"message": "取消",
+		"description": ""
+	},
+	"btnApply": {
+		"message": "套用",
+		"description": ""
+	},
+	"btnDelete": {
+		"message": "删除",
+		"description": ""
+	},
+	"btnEdit": {
+		"message": "修改",
+		"description": ""
+	},
+	"btnOK": {
+		"message": "确定",
+		"description": ""
+	},
+	"btnAdd": {
+		"message": "加入",
+		"description": ""
+	},
+
+	"dlgImportOption": {
+		"message": "导入所有设定",
+		"description": ""
+	},
+	"dlgExportOption": {
+		"message": "导出所有设定",
+		"description": ""
+	},
+	"dlgImportRules": {
+		"message": "导入网址自订转换规则",
+		"description": ""
+	},
+	"dlgExportRules": {
+		"message": "导出网址自订转换规则",
+		"description": ""
+	},
+	"dlgWarning": {
+		"message": "警告",
+		"description": ""
+	},
+	"dlgImportPhraseTrad": {
+		"message": "导入简转繁对照表",
+		"description": ""
+	},
+	"dlgExportPhraseTrad": {
+		"message": "导出简转繁对照表",
+		"description": ""
+	},
+	"dlgImportPhraseSimp": {
+		"message": "导入繁转简对照表",
+		"description": ""
+	},
+	"dlgExportPhraseSimp": {
+		"message": "导出繁转简对照表",
+		"description": ""
+	},
+	"dlgNotice": {
+		"message": "提示讯息",
+		"description": ""
+	},
+
+	"tabsGeneral": {
+		"message": "一般设定",
+		"description": ""
+	},
+	"tabsUrl": {
+		"message": "自订转换规则",
+		"description": ""
+	},
+	"tabsPhrase": {
+		"message": "自订词汇",
+		"description": ""
+	},
+	"tabSimpToTrad": {
+		"message": "简 转 繁",
+		"description": ""
+	},
+	"tabTradToSimp": {
+		"message": "繁 转 简",
+		"description": ""
+	},
+
+	"msgSaveSuccess": {
+		"message": "设定保存完成。",
+		"description": ""
+	},
+	"msgExportNotice": {
+		"message": "请记得先保存再导出。",
+		"description": ""
+	},
+	"msgImportNotice": {
+		"message": "请贴上之前备份的设定。",
+		"description": ""
+	},
+	"msgImportSuccess": {
+		"message": "设定资料导入完成。",
+		"description": ""
+	},
+	"msgImportFailed": {
+		"message": "输入的设定资料格式错误，请重新输入！",
+		"description": ""
+	},
+	"msgUrlNotEmpty": {
+		"message": "网址不得为空白，请填写网址！",
+		"description": ""
+	},
+	"msgPhraseNotEmpty": {
+		"message": "要转换的字串不得为空白，请填写！",
+		"description": ""
+	},
+	"msgFrameNotConvert": {
+		"message": "某些网页的页框会无法正常转换。",
+		"description": ""
+	},
+	"msgUrlFilter": {
+		"message": "可在网址内使用万用字元 (*)",
+		"description": ""
+	},
+	"msgInputConvert1": {
+		"message": "要转换时，请先让鼠标停留在输入区内，再点选工具列上的图标",
+		"description": ""
+	},
+	"msgInputConvert2": {
+		"message": "不支援“所见即所得”输入区内的文字转换",
+		"description": ""
+	},
+
+	"labelNoTranslate": {
+		"message": "不转换",
+		"description": ""
+	},
+	"labelToTraditional": {
+		"message": "转 繁体",
+		"description": ""
+	},
+	"labelToSimplified": {
+		"message": "转 简体",
+		"description": ""
+	},
+	"labelReplaceOption": {
+		"message": "直接取代原本的设定",
+		"description": ""
+	},
+	"labelTraditional": {
+		"message": "繁体",
+		"description": ""
+	},
+	"labelSimplified": {
+		"message": "简体",
+		"description": ""
+	},
+	"labelTraditionalColon": {
+		"message": "繁体：",
+		"description": ""
+	},
+	"labelSimplifiedColon": {
+		"message": "简体：",
+		"description": ""
+	},
+
+	"labelAutoConvert": {
+		"message": "自动转换设定",
+		"description": ""
+	},
+	"labelAutoConvertNone": {
+		"message": "不激活自动转换",
+		"description": ""
+	},
+	"labelAutoConvertTrad": {
+		"message": "自动转为 繁体 (简 > 繁)",
+		"description": ""
+	},
+	"labelAutoConvertSimp": {
+		"message": "自动转为 简体 (繁 > 简)",
+		"description": ""
+	},
+
+	"labelIconAction": {
+		"message": "图示转换设定",
+		"description": ""
+	},
+	"labelIconActionAuto": {
+		"message": "自动侦测转换 (简 > 繁、繁 > 简)",
+		"description": ""
+	},
+	"labelIconActionTrad": {
+		"message": "转为 繁体 (简 > 繁)",
+		"description": ""
+	},
+	"labelIconActionSimp": {
+		"message": "转为 简体 (繁 > 简)",
+		"description": ""
+	},
+	"labelInputConvert": {
+		"message": "输入区转换设定",
+		"description": ""
+	},
+	"labelinputConvertNone": {
+		"message": "停用 输入区转换",
+		"description": ""
+	},
+	"labelinputConvertAuto": {
+		"message": "输入区文字繁简转换 (简 > 繁、繁 > 简)",
+		"description": ""
+	},
+	"labelinputConvertTrad": {
+		"message": "输入区文字转为 繁体 (简 > 繁)",
+		"description": ""
+	},
+	"labelinputConvertSimp": {
+		"message": "输入区文字转为 简体 (繁 > 简)",
+		"description": ""
+	},
+	"labelSymbolConvert": {
+		"message": "标点符号转换",
+		"description": ""
+	},
+	"labelSymbolConvertEnable": {
+		"message": "激活 标点符号 转换",
+		"description": ""
+	},
+	"labelSymbolConvertDisable": {
+		"message": "停用 标点符号 转换",
+		"description": ""
+	},
+	"labelShowFontSet": {
+		"message": "显示字型设定",
+		"description": ""
+	},
+	"labelShowFontSetEnable": {
+		"message": "强制字型转换",
+		"description": ""
+	},
+	"labelShowFontSetTrad": {
+		"message": "繁体显示字型：",
+		"description": ""
+	},
+	"labelShowFontSetSimp": {
+		"message": "简体显示字型：",
+		"description": ""
+	},
+	"labelContextMenuEnable": {
+		"message": "激活 右键选单",
+		"description": ""
+	},
+
+	"labelUrlFilterEnable": {
+		"message": "激活自订转换规则",
+		"description": ""
+	},
+	"labelUrlFilterUrl": {
+		"message": "网址",
+		"description": ""
+	},
+	"labelUrlFilterConvert": {
+		"message": "繁简转换",
+		"description": ""
+	},
+	"labelUrlFilterUrlColon": {
+		"message": "网址：",
+		"description": ""
+	},
+	"labelUrlFilterConvertColon": {
+		"message": "繁简转换：",
+		"description": ""
+	},
+
+	"labelCustomPhraseEnable": {
+		"message": "激活自订词汇",
+		"description": ""
+	},
+
+	"contextInput2Trad": {
+		"message": "输入区：转 繁体",
+		"description": ""
+	},
+
+	"contextInput2Simp": {
+		"message": "输入区：转 简体",
+		"description": ""
+	},
+
+	"contextPage2Trad": {
+		"message": "网页：转 繁体",
+		"description": ""
+	},
+
+	"contextPage2Simp": {
+		"message": "网页：转 简体",
+		"description": ""
+	},
+
+	"contextClip2Trad": {
+		"message": "剪贴板：转 繁体",
+		"description": ""
+	},
+
+	"contextClip2Simp": {
+		"message": "剪贴板：转 简体",
+		"description": ""
+	},
+
+	"empty": {
+		"message": "",
+		"description": ""
+	}
+}

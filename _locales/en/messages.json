@@ -1,0 +1,358 @@
+{
+	"extName": {
+		"message": "New Tong Wen Tang",
+		"description": ""
+	},
+	"extDescription": {
+		"message": "Traditional and Simplified Chinese Converter",
+		"description": ""
+	},
+	"extTitle": {
+		"message": "New Tong Wen Tang",
+		"description": ""
+	},
+	"optionTitle": {
+		"message": "New Tong Wen Tang - Options",
+		"description": ""
+	},
+	"optionVersion": {
+		"message": "Version: ",
+		"description": ""
+	},
+
+	"btnClose": {
+		"message": "Close",
+		"description": ""
+	},
+	"btnSave": {
+		"message": "Save",
+		"description": ""
+	},
+	"btnImportOptions": {
+		"message": "Import Options",
+		"description": ""
+	},
+	"btnExportOptions": {
+		"message": "Export Options",
+		"description": ""
+	},
+	"btnImport": {
+		"message": "Import",
+		"description": ""
+	},
+	"btnExport": {
+		"message": "Export",
+		"description": ""
+	},
+	"btnCancel": {
+		"message": "Cancel",
+		"description": ""
+	},
+	"btnApply": {
+		"message": "Apply",
+		"description": ""
+	},
+	"btnDelete": {
+		"message": "Delete",
+		"description": ""
+	},
+	"btnEdit": {
+		"message": "Edit",
+		"description": ""
+	},
+	"btnOK": {
+		"message": "OK",
+		"description": ""
+	},
+	"btnAdd": {
+		"message": "Add",
+		"description": ""
+	},
+
+	"dlgImportOption": {
+		"message": "Import all options",
+		"description": ""
+	},
+	"dlgExportOption": {
+		"message": "Export all options",
+		"description": ""
+	},
+	"dlgImportRules": {
+		"message": "Import URL-based conversion rules",
+		"description": ""
+	},
+	"dlgExportRules": {
+		"message": "Export URL-based conversion rules",
+		"description": ""
+	},
+	"dlgWarning": {
+		"message": "WARNING",
+		"description": ""
+	},
+	"dlgImportPhraseTrad": {
+		"message": "Import Simplified-to-Traditional phrase table",
+		"description": ""
+	},
+	"dlgExportPhraseTrad": {
+		"message": "Export Simplified-to-Traditional phrase table",
+		"description": ""
+	},
+	"dlgImportPhraseSimp": {
+		"message": "Import Traditional-to-Simplified phrase table",
+		"description": ""
+	},
+	"dlgExportPhraseSimp": {
+		"message": "Export Traditional-to-Simplified phrase table",
+		"description": ""
+	},
+	"dlgNotice": {
+		"message": "Note",
+		"description": ""
+	},
+
+	"tabsGeneral": {
+		"message": "General",
+		"description": ""
+	},
+	"tabsUrl": {
+		"message": "Customize Conversion Rules",
+		"description": ""
+	},
+	"tabsPhrase": {
+		"message": "Customize Phrases",
+		"description": ""
+	},
+	"tabSimpToTrad": {
+		"message": "Simplified to Traditional",
+		"description": ""
+	},
+	"tabTradToSimp": {
+		"message": "Traditional to Simplified",
+		"description": ""
+	},
+
+	"msgSaveSuccess": {
+		"message": "Options saved.",
+		"description": ""
+	},
+	"msgExportNotice": {
+		"message": "Please save before export.",
+		"description": ""
+	},
+	"msgImportNotice": {
+		"message": "Please paste exported option data.",
+		"description": ""
+	},
+	"msgImportSuccess": {
+		"message": "Options imported.",
+		"description": ""
+	},
+	"msgImportFailed": {
+		"message": "Data format error. Please try again!",
+		"description": ""
+	},
+	"msgUrlNotEmpty": {
+		"message": "URL can not be empty. Please enter a valid URL!",
+		"description": ""
+	},
+	"msgPhraseNotEmpty": {
+		"message": "Phrase can not be empty. Please enter a phrase to convert!",
+		"description": ""
+	},
+	"msgFrameNotConvert": {
+		"message": "Some frames of websites can not be converted normally.",
+		"description": ""
+	},
+	"msgUrlFilter": {
+		"message": "You can use wildcard (*) in an URL.",
+		"description": ""
+	},
+	"msgInputConvert1": {
+		"message": "Click TextArea box first then click the Toolbar icon to convert the content text in TextArea",
+		"description": ""
+	},
+	"msgInputConvert2": {
+		"message": "This feature is NOT supported in WYSIWYG TextArea editors",
+		"description": ""
+	},
+
+	"labelNoTranslate": {
+		"message": "Do not convert",
+		"description": ""
+	},
+	"labelToTraditional": {
+		"message": "to Traditional",
+		"description": ""
+	},
+	"labelToSimplified": {
+		"message": "to Simplified",
+		"description": ""
+	},
+	"labelReplaceOption": {
+		"message": "Override options",
+		"description": ""
+	},
+	"labelTraditional": {
+		"message": "Traditional",
+		"description": ""
+	},
+	"labelSimplified": {
+		"message": "Simplified",
+		"description": ""
+	},
+	"labelTraditionalColon": {
+		"message": "Traditional: ",
+		"description": ""
+	},
+	"labelSimplifiedColon": {
+		"message": "Simplified: ",
+		"description": ""
+	},
+
+	"labelAutoConvert": {
+		"message": "AutoConversion Settings",
+		"description": ""
+	},
+	"labelAutoConvertNone": {
+		"message": "Disable AutoConversion",
+		"description": ""
+	},
+	"labelAutoConvertTrad": {
+		"message": "Convert to Traditional (Simplified-to-Traditional) automatically",
+		"description": ""
+	},
+	"labelAutoConvertSimp": {
+		"message": "Convert to Simplified (Traditional-to-Simplified) automatically",
+		"description": ""
+	},
+
+	"labelIconAction": {
+		"message": "Button Function",
+		"description": ""
+	},
+	"labelIconActionAuto": {
+		"message": "Detect and Convert automatically <br />(Simplified-to-Traditional and Traditional-to-Simplified)",
+		"description": ""
+	},
+	"labelIconActionTrad": {
+		"message": "Convert to Traditional (Simplified-to-Traditional)",
+		"description": ""
+	},
+	"labelIconActionSimp": {
+		"message": "Convert to Simplified (Traditional-to-Simplified)",
+		"description": ""
+	},
+	"labelInputConvert": {
+		"message": "TextArea Conversion Configuration",
+		"description": ""
+	},
+	"labelinputConvertNone": {
+		"message": "Disable TextArea conversion",
+		"description": ""
+	},
+	"labelinputConvertAuto": {
+		"message": "Convert content in TextArea <br />(Simplified-to-Traditional and Traditional-to-Simplified)",
+		"description": ""
+	},
+	"labelinputConvertTrad": {
+		"message": "Convert content in TextArea to Traditional Chinese <br />(Simplified-to-Traditional)",
+		"description": ""
+	},
+	"labelinputConvertSimp": {
+		"message": "Convert content in TextArea to Simplified Chinese <br />(Traditional-to-Simplified)",
+		"description": ""
+	},
+	"labelSymbolConvert": {
+		"message": "Punctuation Conversion",
+		"description": ""
+	},
+	"labelSymbolConvertEnable": {
+		"message": "Enable Punctuation Conversion",
+		"description": ""
+	},
+	"labelSymbolConvertDisable": {
+		"message": "Disable Punctuation Conversion",
+		"description": ""
+	},
+	"labelShowFontSet": {
+		"message": "Set Font",
+		"description": ""
+	},
+	"labelShowFontSetEnable": {
+		"message": "Specify Font Changing",
+		"description": ""
+	},
+	"labelShowFontSetTrad": {
+		"message": "Font for Traditional Chinese: ",
+		"description": ""
+	},
+	"labelShowFontSetSimp": {
+		"message": "Font for Simplified Chinese: ",
+		"description": ""
+	},
+	"labelContextMenuEnable": {
+		"message": "Enable Context/Right-Click Menu",
+		"description": ""
+	},
+
+	"labelUrlFilterEnable": {
+		"message": "Enable Customized Conversion Rules",
+		"description": ""
+	},
+	"labelUrlFilterUrl": {
+		"message": "URL",
+		"description": ""
+	},
+	"labelUrlFilterConvert": {
+		"message": "Conversion",
+		"description": ""
+	},
+	"labelUrlFilterUrlColon": {
+		"message": "URL: ",
+		"description": ""
+	},
+	"labelUrlFilterConvertColon": {
+		"message": "Conversion: ",
+		"description": ""
+	},
+
+	"labelCustomPhraseEnable": {
+		"message": "Enable Customized Phrases",
+		"description": ""
+	},
+
+	"contextInput2Trad": {
+		"message": "Textarea: to Traditional",
+		"description": ""
+	},
+
+	"contextInput2Simp": {
+		"message": "Textarea: to Simplified",
+		"description": ""
+	},
+
+	"contextPage2Trad": {
+		"message": "Web Page: to Traditional",
+		"description": ""
+	},
+
+	"contextPage2Simp": {
+		"message": "Web Page: to Simplified",
+		"description": ""
+	},
+
+	"contextClip2Trad": {
+		"message": "Clipboard: to Traditional",
+		"description": ""
+	},
+
+	"contextClip2Simp": {
+		"message": "Clipboard: to Simplified",
+		"description": ""
+	},
+
+	"empty": {
+		"message": "",
+		"description": ""
+	}
+}

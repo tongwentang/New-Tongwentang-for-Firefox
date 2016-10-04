@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+
+    <link type="text/css" rel="stylesheet" media="all" href="./css/humanity/jquery-ui.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="./css/tongwen.css" />
+
+    <script src="./lib/jquery/jquery-1.11.1.min.js"></script>
+    <script src="./lib/jquery/jquery-ui.min.js"></script>
+    <script src="options.js"></script>
+</head>
+<body>
+	<div id="msgDialog" title="dlgNotice">
+		<div id="msgContent"></div>
+	</div>
+	<div id="msgInOutDialog" title="">
+		<form style="display: inline;">
+		<div style="padding: 3px 0px 3px 10px; margin: 0 0 5px 0;" class="ui-state-highlight ui-corner-all">
+			<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span><span id="msgNotice"></span>
+		</div>
+		<div><textarea id="tongwenOptions" class="text ui-widget-content ui-corner-all"></textarea></div>
+		<div id="divReplace"><input type="checkbox" name="ckReplace" id="ckReplace"><label for="ckReplace">labelReplaceOption</label></div>
+		<div id="divWarning" style="padding: 3px 10px; margin: 5px 0 0 0; display: none;" class="ui-state-error ui-corner-all">
+			<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span><span id="msgWarning"></span>
+		</div>
+		</form>
+	</div>
+
+	<form style="display: inline;">
+	<div id="tongwenWrap" class="ui-widget ui-widget-content ui-corner-all">
+		<div id="msgBanner" style="padding: 3px 10px; margin: 0px 1px 5px 1px; display: none;" class="ui-state-highlight ui-corner-all">
+			<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span><span id="msgBannerContent"></span>
+		</div>
+		<div id="tabsTongwen">
+			<ul>
+				<li><a href="#tabsGeneral">tabsGeneral</a></li>
+				<li><a href="#tabsUrl">tabsUrl</a></li>
+				<li><a href="#tabsPhrase">tabsPhrase</a></li>
+			</ul>
+
+			<!-- 一般設定 -->
+			<div id="tabsGeneral">
+				<fieldset>
+					<legend>labelAutoConvert</legend>
+					<div><input name="autoConvert" id="autoConvertNone" type="radio" value="none"/><label for="autoConvertNone">labelAutoConvertNone</label></div>
+					<div><input name="autoConvert" id="autoConvertTrad" type="radio" value="trad"/><label for="autoConvertTrad">labelAutoConvertTrad</label></div>
+					<div><input name="autoConvert" id="autoConvertSimp" type="radio" value="simp"/><label for="autoConvertSimp">labelAutoConvertSimp</label></div>
+				</fieldset>
+				<fieldset>
+					<legend>labelIconAction</legend>
+					<div style="display: none; padding: 3px 10px; margin: 4px 5px 4px 0px;" class="ui-state-highlight ui-corner-all">
+						<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span><span>msgFrameNotConvert</span>
+					</div>
+					<div><input name="iconAction" id="iconActionAuto" type="radio" value="auto"/><label for="iconActionAuto">labelIconActionAuto</label></div>
+					<div><input name="iconAction" id="iconActionTrad" type="radio" value="trad"/><label for="iconActionTrad">labelIconActionTrad</label></div>
+					<div><input name="iconAction" id="iconActionSimp" type="radio" value="simp"/><label for="iconActionSimp">labelIconActionSimp</label></div>
+				</fieldset>
+				<fieldset>
+					<legend>labelInputConvert</legend>
+					<div style="padding: 3px 10px; margin: 4px 5px 4px 0px;" class="ui-state-highlight ui-corner-all">
+						<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span><span>msgInputConvert1</span><br />
+						<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span><span>msgInputConvert2</span>
+					</div>
+					<div><input name="inputConvert" id="inputConvertNone" type="radio" value="none"/><label for="inputConvertNone">labelinputConvertNone</label></div>
+					<div><input name="inputConvert" id="inputConvertAuto" type="radio" value="auto"/><label for="inputConvertAuto">labelinputConvertAuto</label></div>
+					<div><input name="inputConvert" id="inputConvertTrad" type="radio" value="trad"/><label for="inputConvertTrad">labelinputConvertTrad</label></div>
+					<div><input name="inputConvert" id="inputConvertSimp" type="radio" value="simp"/><label for="inputConvertSimp">labelinputConvertSimp</label></div>
+				</fieldset>
+				<fieldset>
+					<legend>labelSymbolConvert</legend>
+					<div><input name="symConvert" id="symbolEnable" type="radio" value="enable"/><label for="symbolEnable">labelSymbolConvertEnable</label></div>
+					<div><input name="symConvert" id="symbolDisable" type="radio" value="disable"/><label for="symbolDisable">labelSymbolConvertDisable</label></div>
+				</fieldset>
+				<fieldset>
+					<legend>labelShowFontSet</legend>
+					<div><input name="fontEnable" id="fontEnable" type="checkbox" value="enable"/><label for="fontEnable">labelShowFontSetEnable</label></div>
+					<div><label for="fontTrad">labelShowFontSetTrad</label><input name="fontTrad" id="fontTrad" type="text" value="" size="40"/></div>
+					<div><label for="fontSimp">labelShowFontSetSimp</label><input name="fontSimp" id="fontSimp" type="text" value="" size="40"/></div>
+				</fieldset>
+				<div><input name="enableContextMenu" id="enableContextMenu" type="checkbox" value="enable"/><label for="enableContextMenu">labelContextMenuEnable</label></div>
+			</div>
+
+			<!-- 自訂網址轉換規則 -->
+			<div id="tabsUrl">
+				<div><input type="checkbox" name="enableUrlFilter" id="enableUrlFilter" value="enable"/><label for="enableUrlFilter">labelUrlFilterEnable</label></div>
+				<div id="paneUrlFilter">
+					<ul id="tableUrlList">
+						<li class="ui-state-default disabled">
+							<span class="url center">labelUrlFilterUrl</span>
+							<span class="zhflag center">labelUrlFilterConvert</span>
+							<span class="icon ui-state-default right"><span class="ui-icon icon-import" title="btnImport"></span></span>
+							<span class="icon ui-state-default right"><span class="ui-icon icon-export" title="btnExport"></span></span>
+						</li>
+					</ul>
+				</div>
+				<div style="padding: 3px 10px; margin: 4px 5px 4px 0px;" class="ui-state-highlight ui-corner-all">
+					<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span><span>msgUrlFilter</span>
+				</div>
+				<div id="tableUrlEdit">
+					<table border="0" cellpadding="0" cellspacing="0" width="98%">
+						<tr>
+							<td>
+								<div><span>labelUrlFilterUrlColon</span><input type="text" value="" name="urlAnchor" id="urlAnchor" class="text ui-widget-content ui-corner-all"></div>
+								<div><span>labelUrlFilterConvertColon</span><input type="radio" name="urlAction" id="urlActionNone" value="none" checked="checked"><label for="urlActionNone">labelNoTranslate</label>
+									<input type="radio" name="urlAction" id="urlActionTrad" value="trad"><label for="urlActionTrad">labelToTraditional</label>
+									<input type="radio" name="urlAction" id="urlActionSimp" value="simp"><label for="urlActionSimp">labelToSimplified</label>
+								</div>
+							</td>
+							<td align="right">
+								<div><button id="btnAddUrl" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">btnAdd</span></button></div>
+								<div style="display: none;"><button id="btnCancel" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">btnCancel</span></button></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<!-- 自訂詞彙 -->
+			<div id="tabsPhrase">
+				<div><input type="checkbox" name="enableCustomPhrase" id="enableCustomPhrase" value="enable"/><label for="enableCustomPhrase">labelCustomPhraseEnable</label></div>
+				<div id="tabUserPhrase">
+					<ul>
+						<li><a href="#tabsTrad">tabSimpToTrad</a></li>
+						<li><a href="#tabsSimp">tabTradToSimp</a></li>
+					</ul>
+					<div id="tabsTrad">
+						<div id="paneTrad">
+							<ul id="tableTradList">
+								<li class="ui-state-default disabled">
+									<span class="simp center">labelSimplified</span>
+									<span class="trad center">labelTraditional</span>
+									<span class="icon ui-state-default right"><span class="ui-icon icon-import" title="btnImport"></span></span>
+									<span class="icon ui-state-default right"><span class="ui-icon icon-export" title="btnExport"></span></span>
+								</li>
+							</ul>
+						</div>
+						<div id="tableTradPhraseEdit">
+							<table border="0" cellpadding="0" cellspacing="0" width="98%">
+								<tr>
+									<td>
+										<div><span>labelSimplifiedColon</span><input type="text" value="" name="tradSimp" id="tradSimp" class="text ui-widget-content ui-corner-all"></div>
+										<div><span>labelTraditionalColon</span><input type="text" value="" name="tradTrad" id="tradTrad" class="text ui-widget-content ui-corner-all"></div>
+									</td>
+									<td align="right">
+										<div><button id="btnAddTrad" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">btnAdd</span></button></div>
+										<div style="display: none;"><button id="btnTradCancel" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">btnCancel</span></button></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div id="tabsSimp">
+						<div id="paneSimp">
+							<ul id="tableSimpList">
+								<li class="ui-state-default disabled">
+									<span class="trad center">labelTraditional</span>
+									<span class="simp center">labelSimplified</span>
+									<span class="icon ui-state-default right"><span class="ui-icon icon-import" title="btnImport"></span></span>
+									<span class="icon ui-state-default right"><span class="ui-icon icon-export" title="btnExport"></span></span>
+								</li>
+							</ul>
+						</div>
+						<div id="tableSimpPhraseEdit">
+							<table border="0" cellpadding="0" cellspacing="0" width="98%">
+								<tr>
+									<td>
+										<div><span>labelTraditionalColon</span><input type="text" value="" name="simpTrad" id="simpTrad" class="text ui-widget-content ui-corner-all"></div>
+										<div><span>labelSimplifiedColon</span><input type="text" value="" name="simpSimp" id="simpSimp" class="text ui-widget-content ui-corner-all"></div>
+									</td>
+									<td align="right">
+										<div><button id="btnAddSimp" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">btnAdd</span></button></div>
+										<div style="display: none;"><button id="btnSimpCancel" class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">btnCancel</span></button></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> <!-- for #tabsTongwen -->
+	</div> <!-- for #tongwenWrap -->
+	</form>
+</body>
+</html>
