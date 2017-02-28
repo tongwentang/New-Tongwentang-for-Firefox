@@ -35,6 +35,9 @@ const loadPreference = () => {
       supportClipboard = false;
     }
     browser.storage.local.get().then(results => {
+      if ((typeof results.length === 'number') && (results.length > 0)) {
+        results = results[0];
+      }
       if (!results.version) {
         preferences = defaultPreference;
         browser.storage.local.set(defaultPreference).then(res => {

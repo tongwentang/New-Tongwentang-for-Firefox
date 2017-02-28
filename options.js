@@ -475,6 +475,9 @@ window.addEventListener('load', event => {
       document.getElementById('contextMenuClipboardS').style.display = 'none';
     }
     browser.storage.local.get().then(results => {
+      if ((typeof results.length === 'number') && (results.length > 0)) {
+        results = results[0];
+      }
       if (results.version) {
         init(results);
         startup();
