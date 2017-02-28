@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "__MSG_extName__",
   "version": "1.1",
-  "homepage_url": "https://addons.mozilla.org/zh-TW/firefox/user/ett-chung/",
+  "homepage_url": "https://github.com/softcup/New-Tongwentang-for-Firefox",
   "icons": {
     "16": "icon/tongwen-icon-16.png",
     "32": "icon/tongwen-icon-32.png",
@@ -13,7 +13,7 @@
 
   "applications": {
     "gecko": {
-      "id": "tongwen@ettoolong",
+      "id": "{22870005-adef-4c9d-ae36-d0e1f2f27e5a}",
       "strict_min_version": "50.0"
     }
   },
