@@ -32,6 +32,9 @@ const docLoadedInit = uri => {
 };
 
 browser.storage.local.get().then(results => {
+  if ((typeof results.length === 'number') && (results.length > 0)) {
+    results = results[0];
+  }
   if (results.version) {
     preferences = results;
     //console.log(JSON.stringify(preferences, null, 4));

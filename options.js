@@ -468,18 +468,20 @@ const init = preferences => {
   });
 }
 
-browser.runtime.getBrowserInfo().then( info => {
-  if(info.name === 'Firefox' && parseInt(info.version) < 54) {
-    document.getElementById('contextMenuClipboardT').style.display = 'none';
-    document.getElementById('contextMenuClipboardS').style.display = 'none';
-  }
-  browser.storage.local.get().then(results => {
-    if (results.version) {
-      init(results);
-      startup();
+window.addEventListener('load', event => {
+  browser.runtime.getBrowserInfo().then( info => {
+    if(info.name === 'Firefox' && parseInt(info.version) < 54) {
+      document.getElementById('contextMenuClipboardT').style.display = 'none';
+      document.getElementById('contextMenuClipboardS').style.display = 'none';
     }
+    browser.storage.local.get().then(results => {
+      if (results.version) {
+        init(results);
+        startup();
+      }
+    });
   });
-});
+}, true);
 
 window.addEventListener('contextmenu', event => {
   event.stopPropagation();
