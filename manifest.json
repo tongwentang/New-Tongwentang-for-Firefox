@@ -13,10 +13,12 @@
 
   "applications": {
     "gecko": {
-      "id": "{22870005-adef-4c9d-ae36-d0e1f2f27e5a}",
+      "id": "tongwen@softcup",
       "strict_min_version": "50.0"
     }
   },
+
+  "author": "Ett Chung",
 
   "background": {
     "scripts": ["background.js"]
