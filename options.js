@@ -1,697 +1,493 @@
-var
-    tongwen = {}, timer = null, btnList = null,
-    nowEditUrl = null, nowEditTrad = null, nowEditSimp = null,
-    messages = {}, flagmap = {};
+let categories;
+let tableRowItems = {
+  urlFilterList:[],
+  userPhraseTradList:[],
+  userPhraseSimpList:[]
+};
+let tableRowButtons;
+let screenMask;
+let urlFilterEditor;
+let userPhraseEditor;
+let currentPrefs = {};
+let l10n = {};
+let flagmap = {};
 
-// ----------------------------------------------------------------------
-// 自動轉換設定
-function autoConvert() {
-    var val = tongwen.autoConvert || 'none';
-    switch (val) {
-        case 'trad':
-            $('#autoConvertTrad').prop('checked', true);
-            break;
-        case 'simp':
-            $('#autoConvertSimp').prop('checked', true);
-            break;
-        default    :
-            $('#autoConvertNone').prop('checked', true);
-            val = 'none';
+const checkFilterEditorInput = () => {
+  console.log('checkFilterEditorInput');
+  let checkAny = false;
+  let radios = Array.from(document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]'));
+  for(let radio of radios) {
+    if(radio.checked) {
+      checkAny = true;
+      break;
     }
-    tongwen.autoConvert = val;
-}
-// 圖示轉換設定值
-function iconAction() {
-    var val = tongwen.iconAction || 'auto';
-    switch (val) {
-        case 'trad':
-            $('#iconActionTrad').prop('checked', true);
-            break;
-        case 'simp':
-            $('#iconActionSimp').prop('checked', true);
-            break;
-        default    :
-            $('#iconActionAuto').prop('checked', true);
-            val = 'auto';
-    }
-    tongwen.iconAction = val;
-}
-// 網址轉換規則設定值
-function urlAction() {
-    var val, txt, i, c;
-
-    val = (typeof tongwen.urlFilter.enable === 'undefined') ? false : tongwen.urlFilter.enable;
-    $('#enableUrlFilter').prop('checked', val);
-
-    val = tongwen.urlFilter.list;
-    txt = '';
-    for (i = 0, c = val.length; i < c; i += 1) {
-        txt += '<li class="ui-state-default">';
-        txt += uiMakeUrlList(val[i].url, val[i].zhflag);
-        txt += '</li>';
-    }
-    $('#tableUrlList').append(txt);
-}
-// 輸入區轉換設定值
-function inputAction() {
-    var val = tongwen.inputConvert || 'none';
-    switch (val) {
-        case 'auto':
-            $('#inputConvertAuto').prop('checked', true);
-            break;
-        case 'trad':
-            $('#inputConvertTrad').prop('checked', true);
-            break;
-        case 'simp':
-            $('#inputConvertSimp').prop('checked', true);
-            break;
-        default    :
-            $('#inputConvertNone').prop('checked', true);
-            val = 'none';
-    }
-    tongwen.inputConvert = val;
-}
-// 標點符號轉換設定值
-function symbolAction() {
-    var val = tongwen.symConvert;
-    if (typeof tongwen.symConvert === 'undefined') {
-        val = true;
-    }
-    if (val) {
-        $('#symbolEnable').prop('checked', true);
-    } else {
-        $('#symbolDisable').prop('checked', true);
-    }
-    tongwen.symConvert = val;
-}
-// 強制字型設定值
-function fontAction() {
-    var val = tongwen.fontCustom;
-    if (typeof tongwen.fontCustom === 'undefined') {
-        tongwen.fontCustom = {
-            'enable': false,
-            'trad': 'PMingLiU,MingLiU,新細明體,細明體',
-            'simp': 'MS Song,宋体,SimSun'
-        };
-        val = tongwen.fontCustom;
-    }
-    $('#fontEnable').prop('checked', val.enable);
-    $('#fontTrad').val(val.trad).prop('disabled', !val.enable);
-    $('#fontSimp').val(val.simp).prop('disabled', !val.enable);
-    tongwen.fontCustom = val;
-}
-// 自訂詞彙
-function phraseAction() {
-    var val, txt, i;
-
-    val = (typeof tongwen.userPhrase.enable === 'undefined') ? false : tongwen.userPhrase.enable;
-    $('#enableCustomPhrase').prop('checked', val);
-
-    // 繁體
-    txt = '';
-    val = tongwen.userPhrase.trad;
-    for (i in val) {
-        txt += '<li class="ui-state-default">';
-        txt += uiMakeTradList(i, val[i]);
-        txt += '</li>';
-    }
-    $('#tableTradList').append(txt);
-    // 簡體
-    txt = '';
-    val = tongwen.userPhrase.simp;
-    for (i in val) {
-        txt += '<li class="ui-state-default">';
-        txt += uiMakeSimpList(val[i], i);
-        txt += '</li>';
-    }
-    $('#tableSimpList').append(txt);
-}
-// 右鍵選單
-function contextMenuAction() {
-    var val = (typeof tongwen.contextMenu.enable === 'undefined') ? false : tongwen.contextMenu.enable;
-    $('#enableContextMenu').prop('checked', val);
-}
-// ----------------------------------------------------------------------
-// 儲存設定
-function saveOptions() {
-    tongwen.iconAction = $('input[name=iconAction]:checked').val();
-    tongwen.autoConvert = $('input[name=autoConvert]:checked').val();
-    tongwen.inputConvert = $('input[name=inputConvert]:checked').val();
-    tongwen.symConvert = ($('#symbolEnable').length > 0) ? $('#symbolEnable').get(0).checked : false;
-    // 網址轉換規則
-    tongwen.urlFilter = {
-        'enable': $('#enableUrlFilter').prop('checked'),
-        'list': []
-//			{ 'url': '', 'zhflag': 'none, trad, simp' }
-    };
-    $('#tableUrlList li:not(.disabled)').each(function () {
-        var url = $(this).children('span.url').attr('value');
-        var zhflag = $(this).children('span.zhflag').attr('value');
-        tongwen.urlFilter.list.push({'url': url, 'zhflag': zhflag});
-    });
-    // 強制字型設定
-    tongwen.fontCustom = {
-        'enable': $('#fontEnable').prop('checked'),
-        'trad': $('#fontTrad').val(),
-        'simp': $('#fontSimp').val()
-    };
-
-    // 自訂詞彙
-    tongwen.userPhrase = {
-        'enable': $('#enableCustomPhrase').prop('checked'),
-        'trad': {},
-        'simp': {}
-    };
-    $('#tableTradList li:not(.disabled)').each(function () {
-        var simp = $(this).children('span.simp').attr('value');
-        var trad = $(this).children('span.trad').attr('value');
-        tongwen.userPhrase.trad[simp] = trad;
-    });
-    $('#tableSimpList li:not(.disabled)').each(function () {
-        var simp = $(this).children('span.simp').attr('value');
-        var trad = $(this).children('span.trad').attr('value');
-        tongwen.userPhrase.simp[trad] = simp;
-    });
-    // 右鍵選單
-    tongwen.contextMenu = {
-        'enable': $('#enableContextMenu').prop('checked')
-    };
-
-    // 回存
-    localStorage['tongwen'] = JSON.stringify(tongwen);
-
-    var bgPage = chrome.extension.getBackgroundPage();
-    bgPage.reloadConfig('options');
-    bgPage.iconActionStat();
-
-    // 顯示訊息
-    if (typeof timer == 'number') clearTimeout(timer);
-    $('#msgBannerContent').html(messages.msgSaveSuccess);
-    $('#msgBanner').fadeIn('slow');
-    timer = setTimeout(function () {
-        $('#msgBanner').fadeOut('slow');
-    }, 6000); // 6 秒後自動關閉訊息
+  }
+  if(document.getElementById('newFilterUrl').value !== '' && checkAny) {
+    document.getElementById('btnAcceptFilter').disabled = false;
+  }
+  else {
+    document.getElementById('btnAcceptFilter').disabled = true;
+  }
 }
 
-// 取出設定
-function restoreOptions() {
-    if (typeof localStorage['tongwen'] === 'undefined') {
+const checkPhraseEditorInput = () => {
+  console.log('checkPhraseEditorInput');
+  if(document.getElementById('originPhrase').value !== '' && document.getElementById('newPhrase').value !== '') {
+    document.getElementById('btnAcceptPhrase').disabled = false;
+  }
+  else {
+    document.getElementById('btnAcceptPhrase').disabled = true;
+  }
+}
+
+const hideScreenMask = () => {
+  urlFilterEditor.style.display = 'none';
+  userPhraseEditor.style.display = 'none';
+  screenMask.style.display = 'none';
+  document.body.style.height = 'none';
+  document.body.style.overflowY = 'scroll';
+}
+
+const showUrlFilterEditor = (url, action) => {
+  screenMask.style.display = 'block';
+  urlFilterEditor.style.display = 'block';
+  document.body.style.height = document.documentElement.clientHeight + 'px';
+  document.body.style.overflowY = 'hidden';
+  document.getElementById('newFilterUrl').value = url;
+  let radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
+  for(let radio of radios) {
+    radio.checked = (parseInt(radio.getAttribute('value')) === action);
+  }
+  document.getElementById('newFilterUrl').focus();
+  checkFilterEditorInput();
+}
+
+const showUserPhraseEditor = (key, value, type) => {
+  screenMask.style.display = 'block';
+  userPhraseEditor.style.display = 'block';
+  document.body.style.height = document.documentElement.clientHeight + 'px';
+  document.body.style.overflowY = 'hidden';
+  document.getElementById('originPhrase').value = key;
+  document.getElementById('originPhrase').focus();
+  document.getElementById('newPhrase').value = value;
+  userPhraseEditor.setAttribute('type', type);
+  if(type === 'tard') {
+    document.getElementById('originPhraseLabel').textContent = browser.i18n.getMessage('labelSimplified');
+    document.getElementById('newPhraseLabel').textContent = browser.i18n.getMessage('labelTraditional');
+  }
+  else if(type === 'simp'){
+    document.getElementById('originPhraseLabel').textContent = browser.i18n.getMessage('labelTraditional');
+    document.getElementById('newPhraseLabel').textContent = browser.i18n.getMessage('labelSimplified');
+  }
+  checkPhraseEditorInput();
+}
+
+const clickOnCategory = (event) => {
+  for(let category of categories) {
+    let id = category.getAttribute('id');
+    let panel = document.getElementById('panel-' + id);
+    if(category === event.currentTarget) {
+      category.setAttribute('selected', true);
+      panel.setAttribute('selected', true);
+    }
+    else {
+      category.removeAttribute('selected');
+      panel.removeAttribute('selected');
+    }
+  }
+}
+
+const clickOnRowItem = (event) => {
+  let target = event.currentTarget.parentNode.getAttribute('id');
+  let items = tableRowItems[target];
+  for(let tableRowItem of items) {
+    if(tableRowItem === event.currentTarget) {
+      tableRowItem.setAttribute('selected', true);
+    }
+    else {
+      tableRowItem.removeAttribute('selected');
+    }
+  }
+}
+
+const clickOnRowButton = (event) => {
+  event.stopPropagation();
+  event.preventDefault();
+  let button = event.currentTarget;
+  if(button.nodeName === 'LI')
+    button = button.querySelector('.cellEdit');
+  if(button.classList.contains('cellEdit')) {
+    let target = button.parentNode.parentNode.getAttribute('id');
+    if(target === 'urlFilterList') {
+      let index = parseInt(button.parentNode.getAttribute('index'));
+      let url = button.parentNode.firstChild.textContent;
+      let action = currentPrefs.urlFilterList[index].action;
+      showUrlFilterEditor(url, action);
+    }
+    else {
+      let target = button.parentNode.parentNode.getAttribute('id');
+      let key = button.previousElementSibling.previousElementSibling.textContent;
+      let value = button.previousElementSibling.textContent;
+      if(target === 'userPhraseTradList') {
+        showUserPhraseEditor(key, value, 'trad');
+      }
+      else if(target === 'userPhraseSimpList') {
+        showUserPhraseEditor(key, value, 'simp');
+      }
+    }
+  }
+  else if(button.classList.contains('cellDelete')){
+    let target = button.parentNode.parentNode.getAttribute('id');
+    if(target === 'urlFilterList') {
+      let node = button.parentNode;
+      if(node.getAttribute('selected')==='true') {
+        let index = parseInt(node.getAttribute('index'));
+        node.parentNode.removeChild(node);
+        currentPrefs.urlFilterList.splice(index, 1);
+        sendVelueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+        //sendVelueChangeMessage(id);
+      }
+      else {
+        clickOnRowItem({currentTarget: node});
+      }
+    }
+    else {
+      let target = button.parentNode.parentNode.getAttribute('id');
+      let key = button.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+      let node = button.parentNode;
+      if(node.getAttribute('selected')==='true') {
+        node.parentNode.removeChild(node);
+        delete currentPrefs[target][key];
+        sendVelueChangeMessage(target, currentPrefs[target]);
+      }
+      else {
+        clickOnRowItem({currentTarget: node});
+      }
+    }
+  }
+}
+
+const addRowItemCell = (row, classList, text, onClick) => {
+  let div = document.createElement('div');
+  for(let c of classList) {
+    div.classList.add(c);
+  }
+  if(text)
+    div.appendChild(document.createTextNode(text));
+  if(onClick)
+    div.addEventListener('click', onClick, true);
+  row.appendChild(div);
+  return div;
+}
+
+const moveUrlFilterPos = (shift) => {
+  let selectedIndex = 0;
+  let selectedRowItem = null;
+  let nNode = null;
+  let nIndex = 0;
+  for(let tableRowItem of tableRowItems.urlFilterList) {
+    if(tableRowItem.getAttribute('selected') === 'true') {
+      let index = parseInt(tableRowItem.getAttribute('index'));
+      if((shift === -1 && index === 0) || (shift === 1 && index === currentPrefs.urlFilterList.length-1))
         return;
+      selectedIndex = index;
+      selectedRowItem = tableRowItem;
+      let filter = currentPrefs.urlFilterList.splice(index, 1);
+      currentPrefs.urlFilterList.splice(index+shift, 0, filter[0]);
+      sendVelueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+      break;
     }
-    tongwen = JSON.parse(localStorage['tongwen']);
-    if (tongwen == null) {
-        tongwen = {};
+  }
+
+  let urlFilterList = document.getElementById('urlFilterList');
+  if(shift === 1 && selectedIndex === currentPrefs.urlFilterList.length-2) {
+    let lastChild = urlFilterList.querySelector('li:last-of-type');
+    urlFilterList.insertBefore(selectedRowItem, lastChild);
+    nNode = selectedRowItem.previousElementSibling;
+    nIndex = selectedIndex;
+  }
+  else {
+    for(let tableRowItem of tableRowItems.urlFilterList) {
+      let index = parseInt(tableRowItem.getAttribute('index'));
+      if(shift === -1 && index === selectedIndex-1) {
+        urlFilterList.insertBefore(selectedRowItem, tableRowItem);
+        nNode = selectedRowItem;
+        nIndex = selectedIndex-1;
+        break;
+      }
+      else if(shift === 1 && index === selectedIndex+2) {
+        urlFilterList.insertBefore(selectedRowItem, tableRowItem);
+        nNode = selectedRowItem.previousElementSibling;
+        nIndex = selectedIndex;
+        break;
+      }
     }
-    // 清空資料
-    $('#tableUrlList li:not(.disabled)').remove();
-    $('#tableTradList li:not(.disabled)').remove();
-    $('#tableSimpList li:not(.disabled)').remove();
+  }
 
-    // 顯示資料
-    autoConvert();
-    iconAction();
-    urlAction();
-    inputAction();
-    symbolAction();
-    fontAction();
-    phraseAction();
-    contextMenuAction();
+  let item = nNode;
+  while(item) {
+    if(item.classList.contains('tableFooter'))
+      break;
+    item.setAttribute('index', nIndex++);
+    item = item.nextElementSibling;
+  }
 }
 
-// 匯出設定
-function ExportOptions(title, node, kind) {
-    if (typeof timer == 'number') clearTimeout(timer);
-    $('#divWarning, #divReplace').hide();
-
-    var option = JSON.stringify(node);
-    btnList = {};
-    btnList[messages.btnClose] = function () {
-        $(this).dialog('close');
-    };
-    $('#msgNotice').html(messages.msgExportNotice);
-    $('#tongwenOptions').prop('readonly', true).val(option).click(function () {
-        this.select();
-    });
-    $('#msgInOutDialog').dialog('option', 'title', title).dialog('option', 'buttons', btnList).dialog('open');
+const addUrlFilter = (url, action, index) => {
+  let urlFilterList = document.getElementById('urlFilterList');
+  let li = document.createElement('li');
+  if(index === undefined)
+    index = currentPrefs.urlFilterList.length;
+  li.setAttribute('index', index);
+  li.classList.add('tableRow');
+  addRowItemCell(li, ['cellUrl'], url);
+  addRowItemCell(li, ['cellAction'], flagmap[action]);
+  let edit = addRowItemCell(li, ['cellEdit','cellButton'], null, clickOnRowButton);
+  edit.setAttribute('custom', true);
+  addRowItemCell(li, ['cellDelete','cellButton'], null, clickOnRowButton);
+  li.addEventListener('click', clickOnRowItem, false);
+  li.addEventListener('dblclick', clickOnRowButton, false);
+  let lastChild = urlFilterList.querySelector('li:last-of-type');
+  urlFilterList.insertBefore(li, lastChild);
+  tableRowItems.urlFilterList.push(li);
 }
 
-// 匯入設定
-function ImportOptions(title, kind) {
-    if (typeof timer == 'number') clearTimeout(timer);
-    $('#divWarning').hide();
-    $('#divReplace').show();
-
-    $('#msgNotice').html(messages.msgImportNotice);
-    $('#tongwenOptions').removeProp('readonly').val('').click(function () {
-    });
-    $('#ckReplace').removeProp('checked');
-
-    btnList = {};
-    btnList[messages.btnCancel] = function () {
-        $(this).dialog('close');
-    };
-    btnList[messages.btnApply] = function () {
-        var val = null;
-        try {
-            var bol = $('#ckReplace').prop('checked');
-            var val = JSON.parse($('#tongwenOptions').val());
-
-            switch (kind) {
-                case 'all' :
-                    if (bol) {
-                        if (val.urlFilter && val.urlFilter.list) {
-                            tongwen.urlFilter.list = [];
-                        }
-                        if (val.userPhrase && val.userPhrase.trad) {
-                            tongwen.userPhrase.trad = {};
-                        }
-                        if (val.userPhrase && val.userPhrase.simp) {
-                            tongwen.userPhrase.simp = {};
-                        }
-                    }
-                    for (var i in val) {
-                        if (i == 'version') continue;
-                        switch (i) {
-                            case 'urlFilter':
-                                if (typeof val.urlFilter.enable != 'undefined')
-                                    tongwen.urlFilter.enable = val.urlFilter.enable;
-                                if (val.urlFilter.list) {
-                                    for (var i = 0, c = val.urlFilter.list.length; i < c; i++) {
-                                        tongwen.urlFilter.list.push(val.urlFilter.list[i]);
-                                    }
-                                }
-                                break;
-                            case 'userPhrase':
-                                if (typeof val.userPhrase.enable != 'undefined')
-                                    tongwen.userPhrase.enable = val.userPhrase.enable;
-                                if (val.userPhrase.trad) {
-                                    for (var i in val.userPhrase.trad) {
-                                        tongwen.userPhrase.trad[i] = val.userPhrase.trad[i];
-                                    }
-                                }
-                                if (val.userPhrase.simp) {
-                                    for (var i in val.userPhrase.simp) {
-                                        tongwen.userPhrase.simp[i] = val.userPhrase.simp[i];
-                                    }
-                                }
-                                break;
-                            default:
-                                tongwen[i] = val[i];
-                        }
-                    }
-                    break;
-                case 'url' :
-                    if (bol) tongwen.urlFilter.list = [];
-                    for (var i = 0, c = val.length; i < c; i++) {
-                        tongwen.urlFilter.list.push(val[i]);
-                    }
-                    break;
-                case 'trad' :
-                    if (bol) tongwen.userPhrase.trad = {};
-                    for (var i in val) {
-                        tongwen.userPhrase.trad[i] = val[i];
-                    }
-                    break;
-                case 'simp' :
-                    if (bol) tongwen.userPhrase.simp = {};
-                    for (var i in val) {
-                        tongwen.userPhrase.simp[i] = val[i];
-                    }
-                    break;
-            }
-            // val = JSON.parse($('#tongwenOptions').val());
-            // 回存
-            localStorage['tongwen'] = JSON.stringify(tongwen);
-            restoreOptions();
-            $(this).dialog('close');
-
-            if (typeof timer == 'number') clearTimeout(timer);
-            $('#msgBannerContent').html(messages.msgImportSuccess);
-            $('#msgBanner').fadeIn('slow');
-            timer = setTimeout(function () {
-                $('#msgBanner').fadeOut('slow');
-            }, 6000); // 6 秒後自動關閉訊息
-        } catch (ex) {
-            $('#divWarning').fadeIn('slow');
-            $('#msgWarning').html(messages.msgImportFailed);
-            timer = setTimeout(function () {
-                $('#divWarning').fadeOut('slow');
-            }, 6000); // 6 秒後自動關閉訊息
-        }
-    };
-
-    $('#msgInOutDialog').dialog('option', 'title', title).dialog('option', 'buttons', btnList).dialog('open');
+const addUserPhrase = (key, value, type) => {
+  let list = type === 'tard' ? document.getElementById('userPhraseTradList') : document.getElementById('userPhraseSimpList');
+  let li = document.createElement('li');
+  li.classList.add('tableRow');
+  addRowItemCell(li, ['cellConvert'], key);
+  addRowItemCell(li, ['cellConvert'], value);
+  let edit = addRowItemCell(li, ['cellEdit','cellButton'], null, clickOnRowButton);
+  edit.setAttribute('custom', true);
+  addRowItemCell(li, ['cellDelete','cellButton'], null, clickOnRowButton);
+  li.addEventListener('click', clickOnRowItem, false);
+  li.addEventListener('dblclick', clickOnRowButton, false);
+  let lastChild = list.querySelector('li:last-of-type');
+  list.insertBefore(li, lastChild);
+  if(type === 'tard')
+    tableRowItems.userPhraseTradList.push(li);
+  else
+    tableRowItems.userPhraseSimpList.push(li);
 }
 
-// ----------------------------------------------------------------------
-function uiMackList(kind, v1, v2) {
-    var data = '';
-    switch (kind) {
-        case 'url':
-            data += '<span class="url" value="' + v1 + '" title="' + v1 + '">' + v1 + '</span>';
-            data += '<span class="zhflag center" value="' + v2 + '" title="' + flagmap[v2] + '">' + flagmap[v2] + '</span>';
+const startup = () => {
+  categories = Array.from(document.querySelectorAll('.categories .categoryItem'));
+  categories.forEach(category => {
+    category.addEventListener('click', clickOnCategory, true);
+  });
+
+  tableRowButtons = Array.from(document.querySelectorAll('.cellButton'));
+  tableRowButtons.forEach(tableRowButton => {
+    tableRowButton.addEventListener('click', clickOnRowButton, true);
+  });
+  screenMask = document.getElementById('screenMask');
+  urlFilterEditor = document.getElementById('urlFilterEditor');
+  userPhraseEditor = document.getElementById('userPhraseEditor');
+
+  screenMask.addEventListener('click', event => {
+    hideScreenMask();
+  }, false);
+
+  Array.from(document.querySelectorAll('.btnCancel')).forEach(btn => {
+    btn.addEventListener('click', event => {
+      hideScreenMask();
+    }, false);
+  });
+
+  Array.from(document.querySelectorAll('.btnAccept')).forEach(btn => {
+    btn.addEventListener('click', event => {
+      let dlgName = event.target.getAttribute('dlgName');
+      if(dlgName === 'urlFilterEditor') {
+        let url = document.getElementById('newFilterUrl').value;
+        let radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
+        let action;
+        for(let radio of radios) {
+          if(radio.checked) {
+            action = parseInt(radio.getAttribute('value'));
             break;
-        case 'trad':
-            data += '<span class="simp" value="' + v1 + '" title="' + v1 + '">' + v1 + '</span>';
-            data += '<span class="trad" value="' + v2 + '" title="' + v2 + '">' + v2 + '</span>';
-            break;
-        case 'simp':
-            data += '<span class="trad" value="' + v2 + '" title="' + v2 + '">' + v2 + '</span>';
-            data += '<span class="simp" value="' + v1 + '" title="' + v1 + '">' + v1 + '</span>';
-            break;
-        default:
-            return '';
+          }
+        }
+
+        addUrlFilter(url, action);
+        currentPrefs.urlFilterList.push({url: url, action: action});
+        sendVelueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+        hideScreenMask();
+      }
+      else if(dlgName === 'userPhraseEditor'){
+        let key = document.getElementById('originPhrase').value;
+        let value = document.getElementById('newPhrase').value;
+        let type = userPhraseEditor.getAttribute('type');
+        addUserPhrase(key, value, type);
+        if(type === 'tard') {
+          currentPrefs.userPhraseTradList[key] = value;
+          sendVelueChangeMessage('userPhraseTradList', currentPrefs.userPhraseTradList);
+        }
+        else if(type === 'simp'){
+          currentPrefs.userPhraseSimpList[key] = value;
+          sendVelueChangeMessage('userPhraseSimpList', currentPrefs.userPhraseSimpList);
+        }
+        hideScreenMask();
+      }
+    }, false);
+  });
+
+  document.getElementById('btnAddUserPhraseTrad').addEventListener('click', event => {
+    showUserPhraseEditor('', '', 'tard');
+  }, false);
+  document.getElementById('btnAddUserPhraseSimp').addEventListener('click', event => {
+    showUserPhraseEditor('', '', 'simp');
+  }, false);
+  document.getElementById('btnAddUrlFilter').addEventListener('click', event => {
+    showUrlFilterEditor('', -1);
+  }, false);
+  document.getElementById('btnMoveUp').addEventListener('click', event => {
+    moveUrlFilterPos(-1);
+  }, false);
+  document.getElementById('btnMoveDown').addEventListener('click', event => {
+    moveUrlFilterPos(+1);
+  }, false);
+
+  document.getElementById('newFilterUrl').addEventListener('input', event => {
+    checkFilterEditorInput();
+  }, false);
+  let radios2 = Array.from(document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]'));
+  for(let radio of radios2) {
+    radio.addEventListener('input', event => {
+      checkFilterEditorInput();
+    });
+  }
+
+  document.getElementById('originPhrase').addEventListener('input', event => {
+    checkPhraseEditorInput();
+  }, false);
+  document.getElementById('newPhrase').addEventListener('input', event => {
+    checkPhraseEditorInput();
+  }, false);
+}
+
+const setValueToElem = (id, value) => {
+  let elem = document.getElementById(id);
+  if(elem) {
+    let elemType = elem.getAttribute('type');
+    if(elemType === 'radioGroup') {
+      let radios = Array.from(elem.querySelectorAll('input[name='+id+']'));
+      for(let radio of radios) {
+        if(parseInt(radio.getAttribute('value')) === value) {
+          radio.checked = true;
+          break;
+        }
+      }
     }
-    data += '<span class="icon ui-state-default right"><span class="ui-icon icon-cross delete" title="' + messages.btnDelete + '"></span></span>';
-    data += '<span class="icon ui-state-default right"><span class="ui-icon icon-pencil edit" title="' + messages.btnEdit + '"></span></span>';
-    return data;
-}
-function uiMakeUrlList(url, zhflag) {
-    return uiMackList('url', url, zhflag);
-}
-function uiMakeTradList(simp, trad) {
-    return uiMackList('trad', simp, trad);
-}
-function uiMakeSimpList(simp, trad) {
-    return uiMackList('simp', simp, trad);
-}
-
-function uiUrlFilter() {
-    // 網址自訂轉換規則
-    $(document)
-        .on('mouseover', '#tableUrlList li:not(.disabled), #tableUrlList li span.icon', function () {
-            $(this).addClass('ui-state-hover');
-        })
-        .on('mouseout', '#tableUrlList li:not(.disabled), #tableUrlList li span.icon', function () {
-            $(this).removeClass('ui-state-hover');
-        });
-    $('#btnAddUrl, #btnCancel').hover(
-        function () {
-            $(this).addClass('ui-state-hover');
-        },
-        function () {
-            $(this).removeClass('ui-state-hover');
-        }
-    );
-    // 匯出
-    $('#tableUrlList li.disabled span.icon-export').click(function () {
-        ExportOptions(messages.dlgExportRules, tongwen.urlFilter.list, 'url');
-    });
-    // 匯入
-    $('#tableUrlList li.disabled span.icon-import').click(function () {
-        ImportOptions(messages.dlgImportRules, 'url');
-    });
-    $('#btnAddUrl').click(function () {
-        var data = '';
-        var url = $.trim($('#urlAnchor').val());
-        var zhflag = $('#tableUrlEdit input:radio:checked').val();
-        if (url == '') {
-            $('#msgContent').html(messages.msgUrlNotEmpty);
-            btnList = {};
-            btnList[messages.btnOK] = function () {
-                $(this).dialog('close');
-                $('#urlAnchor').focus();
-            };
-            $('#msgDialog')
-                .dialog('option', 'title', messages.dlgWarning)
-                .dialog('option', 'width', 300)
-                .dialog('option', 'buttons', btnList)
-                .dialog('open');
-            return;
-        }
-        data = uiMakeUrlList(url, zhflag);
-        if (nowEditUrl == null) {
-            data = '<li class="ui-state-default">' + data + '</li>';
-            $('#tableUrlList').append(data);
-        } else {
-            nowEditUrl.html(data);
-        }
-        $('#btnCancel').trigger('click');
-    });
-    $('#btnCancel').click(function () {
-        nowEditUrl = null;
-        $(this).parent().hide();
-        $('#btnAddUrl').html('<span class="ui-button-text">' + messages.btnAdd + '</span>');
-        $('#urlAnchor').val('');
-        $('#tableUrlEdit input:radio[value=none]').prop('checked', true);
-    });
-    $(document).on('click', '#tableUrlList .delete', function () {
-        $(this).parents('li').remove();
-        if (nowEditUrl != null) $('#btnCancel').trigger('click');
-    });
-    $(document).on('click', '#tableUrlList .edit', function () {
-        nowEditUrl = $(this).parents('li');
-        var val = $(this).parents('li').children('span.url').attr('value');
-        $('#urlAnchor').val(val);
-        val = $(this).parents('li').children('span.zhflag').attr('value');
-        $('#tableUrlEdit input:radio[value=' + val + ']').prop('checked', true);
-        $('#btnAddUrl').html('<span class="ui-button-text">' + messages.btnEdit + '</span>');
-        $('#btnCancel').parent().show();
-    });
-}
-
-function uiUserPhrase() {
-    // 自定詞彙
-    $(document)
-        .on('mouseover', '#tabsPhrase li:not(.disabled), #tabsPhrase li span.icon', function () {
-            $(this).addClass('ui-state-hover');
-        })
-        .on('mouseout', '#tabsPhrase li:not(.disabled), #tabsPhrase li span.icon', function () {
-            $(this).removeClass('ui-state-hover');
-        });
-    $('#btnAddTrad, #btnTradCancel, #btnAddSimp, #btnSimpCancel').hover(
-        function () {
-            $(this).addClass('ui-state-hover');
-        },
-        function () {
-            $(this).removeClass('ui-state-hover');
-        }
-    );
-    $(document).on('click', '#tabsPhrase .delete', function () {
-        $(this).parents('li').remove();
-        if (nowEditTrad != null) $('#btnTradCancel').trigger('click');
-        if (nowEditSimp != null) $('#btnSimpCancel').trigger('click');
-    });
-    // 繁體
-    // 匯出
-    $('#tableTradList li.disabled span.icon-export').click(function () {
-        ExportOptions(messages.dlgExportPhraseTrad, tongwen.userPhrase.trad, 'trad');
-    });
-    // 匯入
-    $('#tableTradList li.disabled span.icon-import').click(function () {
-        ImportOptions(messages.dlgImportPhraseTrad, 'trad');
-    });
-    $(document).on('click', '#tableTradList .edit', function () {
-        nowEditTrad = $(this).parents('li');
-        var val = $(this).parents('li').children('span.simp').attr('value');
-        $('#tradSimp').val(val);
-        val = $(this).parents('li').children('span.trad').attr('value');
-        $('#tradTrad').val(val);
-        $('#btnAddTrad').html('<span class="ui-button-text">' + messages.btnEdit + '</span>');
-        $('#btnTradCancel').parent().show();
-    });
-    $('#btnAddTrad').click(function () {
-        var data = '';
-        var simp = $.trim($('#tradSimp').val());
-        var trad = $.trim($('#tradTrad').val());
-        if (simp == '') {
-            btnList = {};
-            btnList[messages.btnOK] = function () {
-                $(this).dialog('close');
-                $('#tradSimp').focus();
-            };
-            $('#msgContent').html(messages.msgPhraseNotEmpty);
-            $('#msgDialog')
-                .dialog('option', 'title', messages.dlgWarning)
-                .dialog('option', 'width', 300)
-                .dialog('option', 'buttons', btnList)
-                .dialog('open');
-            return;
-        }
-        data = uiMakeTradList(simp, trad);
-        if (nowEditTrad == null) {
-            data = '<li class="ui-state-default">' + data + '</li>';
-            $('#tableTradList').append(data);
-        } else {
-            nowEditTrad.html(data);
-        }
-        $('#btnTradCancel').trigger('click');
-    });
-    $('#btnTradCancel').click(function () {
-        nowEditTrad = null;
-        $(this).parent().hide();
-        $('#btnAddTrad').html('<span class="ui-button-text">' + messages.btnAdd + '</span>');
-        $('#tradSimp, #tradTrad').val('');
-    });
-    // 簡體
-    // 匯出
-    $('#tableSimpList li.disabled span.icon-export').click(function () {
-        ExportOptions(messages.dlgExportPhraseSimp, tongwen.userPhrase.simp, 'simp');
-    });
-    // 匯入
-    $('#tableSimpList li.disabled span.icon-import').click(function () {
-        ImportOptions(messages.dlgImportPhraseSimp, 'simp');
-    });
-    $(document).on('click', '#tableSimpList .edit', function () {
-        nowEditSimp = $(this).parents('li');
-        var val = $(this).parents('li').children('span.simp').attr('value');
-        $('#simpSimp').val(val);
-        val = $(this).parents('li').children('span.trad').attr('value');
-        $('#simpTrad').val(val);
-        $('#btnAddSimp').html('<span class="ui-button-text">' + messages.btnEdit + '</span>');
-        $('#btnSimpCancel').parent().show();
-    });
-    $('#btnAddSimp').click(function () {
-        var data = '';
-        var simp = $.trim($('#simpSimp').val());
-        var trad = $.trim($('#simpTrad').val());
-        if (trad == '') {
-            btnList = {};
-            btnList[messages.btnOK] = function () {
-                $(this).dialog('close');
-                $('#simpTrad').focus();
-            };
-            $('#msgContent').html(messages.msgPhraseNotEmpty);
-            $('#msgDialog')
-                .dialog('option', 'title', messages.dlgWarning)
-                .dialog('option', 'width', 300)
-                .dialog('option', 'buttons', btnList)
-                .dialog('open');
-            return;
-        }
-        data = uiMakeSimpList(simp, trad);
-        if (nowEditSimp == null) {
-            data = '<li class="ui-state-default">' + data + '</li>';
-            $('#tableSimpList').append(data);
-        } else {
-            nowEditSimp.html(data);
-        }
-        $('#btnSimpCancel').trigger('click');
-    });
-    $('#btnSimpCancel').click(function () {
-        nowEditSimp = null;
-        $(this).parent().hide();
-        $('#btnAddSimp').html('<span class="ui-button-text">' + messages.btnAdd + '</span>');
-        $('#simpSimp, #simpTrad').val('');
-    });
-}
-// ----------------------------------------------------------------------
-
-function loadLang() {
-    var lst = [
-        'optionTitle', 'optionVersion',
-        'btnAdd', 'btnApply', 'btnCancel', 'btnClose', 'btnDelete', 'btnEdit',
-        'btnExportOptions', 'btnImportOptions', 'btnOK', 'btnSave',
-        'dlgExportOption', 'dlgExportPhraseSimp', 'dlgExportPhraseTrad', 'dlgExportRules',
-        'dlgImportOption', 'dlgImportPhraseSimp', 'dlgImportPhraseTrad', 'dlgImportRules', 'dlgWarning',
-        'labelNoTranslate', 'labelToSimplified', 'labelToTraditional', 'msgExportNotice', 'msgImportFailed',
-        'msgImportNotice', 'msgImportSuccess', 'msgPhraseNotEmpty', 'msgSaveSuccess', 'msgUrlNotEmpty'
-    ];
-
-    for (var i = 0, c = lst.length; i < c; i++) {
-        messages[lst[i]] = chrome.i18n.getMessage(lst[i]);
+    else if(elemType === 'checkbox') {
+      elem.checked = value;
     }
-
-    flagmap = {
-        'none': messages.labelNoTranslate,
-        'trad': messages.labelToTraditional,
-        'simp': messages.labelToSimplified
-    };
-
-    document.title = messages.optionTitle;
-
-    $('*[title]').each(function () {
-        var atr = '', msg = '';
-        atr = $(this).attr('title');
-        msg = chrome.i18n.getMessage(atr);
-        if (msg !== '') {
-            $(this).attr('title', msg);
-        }
-    });
-    $('a, label, legend, span').each(function () {
-        var atr = '', msg = '';
-        atr = $(this).text();
-        msg = chrome.i18n.getMessage(atr);
-        if (msg !== '') {
-            $(this).html(msg);
-        }
-    });
+    else if(elemType === 'color' || elemType === 'number' || elemType === 'text') {
+      elem.value = value;
+    }
+    else if(elemType === 'listBox') {
+      for(let i = 0; i < value.length; ++i) {
+        addUrlFilter(value[i].url, value[i].action, i);
+      }
+    }
+    else if(elemType === 'listBoxObj') {
+      for(let key in value) {
+        addUserPhrase(key, value[key], id === 'userPhraseTradList' ? 'tard' : 'simp');
+      }
+    }
+  }
 }
 
-// 初始化
-$(function () {
+const getValueFromElem = (id) => {
 
-    loadLang();
+}
 
-    restoreOptions();
-    uiUrlFilter();
-    uiUserPhrase();
+const sendVelueChangeMessage = (id, value) => {
+  if(value === undefined) {
+    delete currentPrefs[id];
+    //console.log('sendVelueChangeMessage(0): id = ' + id);
+  }
+  else if(typeof value === 'object') {
+    //console.log('sendVelueChangeMessage(1): id = ' + id + ', value = ' + JSON.stringify(value));
+    let update = {};
+    update[id] = value;
+    browser.storage.local.set(update).then(null, err => {});
+  }
+  else {
+    if(currentPrefs[id] !== value) {
+      currentPrefs[id] = value;
+      //console.log('sendVelueChangeMessage(2): id = ' + id + ', value = ' + value + ', type = ' + typeof(value));
+      let update = {};
+      update[id] = value;
+      browser.storage.local.set(update).then(null, err => {});
+    }
+  }
+}
 
-    btnList = {};
-    btnList[messages.btnExportOptions] = function () {
-        ExportOptions(messages.dlgExportOption, tongwen, 'all');
-    };
-    btnList[messages.btnImportOptions] = function () {
-        ImportOptions(messages.dlgImportOption, 'all');
-    };
-    btnList[messages.btnSave] = function () {
-        saveOptions();
-    };
-    btnList[messages.btnClose] = function () {
-        window.close();
-    };
+const handleVelueChange = (id, value) => {
+  let elem = document.getElementById(id);
+  let newValue;
+  if(elem) {
+    let elemType = elem.getAttribute('type');
+    if(elemType === 'radioGroup') {
+      let radios = Array.from(elem.querySelectorAll('input[name='+id+']'));
+      for(let radio of radios) {
+        radio.addEventListener('input', event => {if(radio.checked)sendVelueChangeMessage(id, parseInt(radio.getAttribute("value")));});
+      }
+    }
+    else if(elemType === 'checkbox') {
+      elem.addEventListener('input', event => {sendVelueChangeMessage(id, elem.checked);});
+    }
+    else if(elemType === 'color') {
+      elem.addEventListener('input', event => {sendVelueChangeMessage(id, elem.value);});
+    }
+    else if(elemType === 'number') {
+      elem.addEventListener('input', event => {sendVelueChangeMessage(id, parseInt(elem.value));});
+    }
+  }
+}
 
-    $('#tongwenWrap').dialog({
-        modal: false,
-        draggable: false,
-        resizable: false,
-        title: messages.optionTitle,
-        width: 550,
-        buttons: btnList,
-        close: function () {
-            window.close();
-        }
-    });
+const init = preferences => {
+  flagmap = [
+    browser.i18n.getMessage('labelNoTranslate'),
+    '',
+    browser.i18n.getMessage('labelToTraditional'),
+    browser.i18n.getMessage('labelToSimplified')
+  ];
 
-    // 隱藏關閉按鈕 並 顯示版本資訊
-    $('[aria-describedby=tongwenWrap] button.ui-dialog-titlebar-close').hide();
-    $('[aria-describedby=tongwenWrap] .ui-dialog-buttonpane').append(
-        '<span class="left" style="margin-top: 10px; margin-left: 5px;">v' + tongwen.version + '</span>'
-    );
+  //console.log(JSON.stringify(preferences,null,4));
+  currentPrefs = preferences;
+  for(let p in preferences) {
+    setValueToElem(p, preferences[p]);
+    handleVelueChange(p, preferences[p]);
+  }
+  document.title = browser.i18n.getMessage('optionTitle');
+  let l10nTags = categories = Array.from(document.querySelectorAll('[data-l10n-id]'));
+  l10nTags.forEach(tag => {
+    tag.textContent = browser.i18n.getMessage(tag.getAttribute('data-l10n-id'));
+  });
+}
 
-    $('#fontEnable').click(function () {
-        $('#fontTrad').prop('disabled', !this.checked);
-        $('#fontSimp').prop('disabled', !this.checked);
-    });
-
-    $('#tabsTongwen, #tabUserPhrase').tabs();
-    $('#tableUrlList').sortable({
-        cursor: 'move',
-        placeholder: 'ui-state-highlight',
-        items: 'li:not(.disabled)'
-    });
-
-    btnList = {};
-    btnList[messages.btnClose] = function () {
-        $(this).dialog('close');
-    };
-    $('#msgDialog').dialog({
-        autoOpen: false,
-        modal: true,
-        width: 300,
-        resizable: false,
-        buttons: btnList
-    });
-
-    btnList = {};
-    btnList[messages.btnClose] = function () {
-        $(this).dialog('close');
-    };
-    $('#msgInOutDialog, #msgLoginDialog').dialog({
-        autoOpen: false,
-        modal: true,
-        width: 460,
-        resizable: false,
-        buttons: btnList
-    });
+browser.runtime.getBrowserInfo().then( info => {
+  if(info.name === 'Firefox' && parseInt(info.version) < 54) {
+    document.getElementById('contextMenuClipboardT').style.display = 'none';
+    document.getElementById('contextMenuClipboardS').style.display = 'none';
+  }
+  browser.storage.local.get().then(results => {
+    if (results.version) {
+      init(results);
+      startup();
+    }
+  });
 });
+
+window.addEventListener('contextmenu', event => {
+  event.stopPropagation();
+  event.preventDefault();
+}, true);
+
+window.addEventListener('keydown', event => {
+  if(event.keyCode === 27) {
+    hideScreenMask();
+  }
+}, true);

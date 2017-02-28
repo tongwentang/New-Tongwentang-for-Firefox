@@ -1,79 +1,91 @@
 {
-    "name": "__MSG_extName__",
-    "version": "1.0",
-    "manifest_version": 2,
+  "description": "__MSG_extDescription__",
+  "manifest_version": 2,
+  "name": "__MSG_extName__",
+  "version": "1.1",
+  "homepage_url": "https://addons.mozilla.org/zh-TW/firefox/user/ett-chung/",
+  "icons": {
+    "16": "icon/tongwen-icon-16.png",
+    "32": "icon/tongwen-icon-32.png",
+    "48": "icon/tongwen-icon-48.png",
+    "128": "icon/tongwen-icon-128.png"
+  },
 
-    "description": "__MSG_extDescription__",
-    "icons": {
-        "16": "icon/tongwen-icon-16.png",
-        "32": "icon/tongwen-icon-32.png",
-        "48": "icon/tongwen-icon-48.png",
-        "128": "icon/tongwen-icon-128.png"
+  "applications": {
+    "gecko": {
+      "id": "tongwen@ettoolong",
+      "strict_min_version": "50.0"
+    }
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "lib/tongwen/tongwen_core.js",
+        "lib/tongwen/tongwen_table_s2t.js",
+        "lib/tongwen/tongwen_table_t2s.js",
+        "lib/tongwen/tongwen_table_ps2t.js",
+        "lib/tongwen/tongwen_table_pt2s.js",
+        "lib/tongwen/tongwen_table_ss2t.js",
+        "lib/tongwen/tongwen_table_st2s.js",
+        "tongwen.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+
+  "browser_action": {
+    "browser_style": true,
+    "default_title": "__MSG_extTitle__",
+    "default_icon": "icon/tongwen-icon-32.png"
+  },
+
+  "commands": {
+    "page-trad": {
+      "description": "__MSG_contextPage2Trad__",
+      "suggested_key": {
+        "default": "Alt+Shift+T"
+      }
     },
-    "default_locale": "en",
-
-    "browser_action": {
-        "default_title": "__MSG_extTitle__",
-        "default_icon": "icon/tongwen-icon-32.png"
+    "page-simp": {
+      "description": "__MSG_contextPage2Simp__",
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      }
     },
-
-    "commands": {
-        "page-trad": {
-            "description": "__MSG_contextPage2Trad__",
-            "suggested_key": {
-                "default": "Alt+Shift+T"
-            }
-        },
-        "page-simp": {
-            "description": "__MSG_contextPage2Simp__",
-            "suggested_key": {
-                "default": "Alt+Shift+S"
-            }
-        },
-        "clip-trad": {
-            "description": "__MSG_contextClip2Trad__",
-            "suggested_key": {
-                "default": "Alt+Shift+K"
-            }
-        },
-        "clip-simp": {
-            "description": "__MSG_contextClip2Simp__",
-            "suggested_key": {
-                "default": "Alt+Shift+L"
-            }
-        }
+    "clip-trad": {
+      "description": "__MSG_contextClip2Trad__",
+      "suggested_key": {
+        "default": "Alt+Shift+K"
+      }
     },
+    "clip-simp": {
+      "description": "__MSG_contextClip2Simp__",
+      "suggested_key": {
+        "default": "Alt+Shift+L"
+      }
+    }
+  },
 
-    "background": {
-        "page": "background.html"
-    },
+  "permissions": [
+    "<all_urls>",
+    "storage",
+    "tabs",
+    "contextMenus",
+    "clipboardRead",
+    "clipboardWrite"
+  ],
 
-    "content_scripts": [
-        {
-            "matches": ["http://*/*", "https://*/*", "file:///*"],
-            "js": [
-                "lib/tongwen/tongwen_core.js",
-                "lib/tongwen/tongwen_table_s2t.js" , "lib/tongwen/tongwen_table_t2s.js",
-                "lib/tongwen/tongwen_table_ps2t.js", "lib/tongwen/tongwen_table_pt2s.js",
-                "tongwen_chrome.js"
-            ],
-            "run_at": "document_end",
-            "all_frames": true
-        }
-    ],
-    "minimum_chrome_version": "33",
+  "default_locale": "en",
 
-    "offline_enabled": true,
-    "options_ui": {
-        "page": "options.html",
-        "open_in_tab": true
-    },
-    "permissions": [
-        "http://*/*",
-        "https://*/*",
-        "tabs",
-        "contextMenus",
-        "clipboardRead",
-        "clipboardWrite"
-    ]
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
 }

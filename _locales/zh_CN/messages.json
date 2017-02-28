@@ -114,12 +114,20 @@
 		"message": "一般设定",
 		"description": ""
 	},
+	"tabsContextmenu": {
+		"message": "右键选单",
+		"description": ""
+	},
 	"tabsUrl": {
 		"message": "自订转换规则",
 		"description": ""
 	},
 	"tabsPhrase": {
 		"message": "自订词汇",
+		"description": ""
+	},
+	"tabsSupport": {
+		"message": "支持",
 		"description": ""
 	},
 	"tabSimpToTrad": {
@@ -267,11 +275,11 @@
 		"description": ""
 	},
 	"labelSymbolConvertEnable": {
-		"message": "激活 标点符号 转换",
+		"message": "激活标点符号转换",
 		"description": ""
 	},
 	"labelSymbolConvertDisable": {
-		"message": "停用 标点符号 转换",
+		"message": "停用标点符号转换",
 		"description": ""
 	},
 	"labelShowFontSet": {
@@ -290,8 +298,12 @@
 		"message": "简体显示字型：",
 		"description": ""
 	},
+	"labelContextMenu": {
+		"message": "激活右键选单",
+		"description": ""
+	},
 	"labelContextMenuEnable": {
-		"message": "激活 右键选单",
+		"message": "激活右键选单",
 		"description": ""
 	},
 
