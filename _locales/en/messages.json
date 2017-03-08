@@ -114,12 +114,20 @@
 		"message": "General",
 		"description": ""
 	},
+	"tabsContextmenu": {
+		"message": "Context Menu",
+		"description": ""
+	},
 	"tabsUrl": {
-		"message": "Customize Conversion Rules",
+		"message": "Conversion Rules",
 		"description": ""
 	},
 	"tabsPhrase": {
 		"message": "Customize Phrases",
+		"description": ""
+	},
+	"tabsSupport": {
+		"message": "Support",
 		"description": ""
 	},
 	"tabSimpToTrad": {
@@ -231,7 +239,7 @@
 		"description": ""
 	},
 	"labelIconActionAuto": {
-		"message": "Detect and Convert automatically <br />(Simplified-to-Traditional and Traditional-to-Simplified)",
+		"message": "Detect and Convert automatically (Simplified-to-Traditional and Traditional-to-Simplified)",
 		"description": ""
 	},
 	"labelIconActionTrad": {
@@ -251,15 +259,15 @@
 		"description": ""
 	},
 	"labelinputConvertAuto": {
-		"message": "Convert content in TextArea <br />(Simplified-to-Traditional and Traditional-to-Simplified)",
+		"message": "Convert content in TextArea (Simplified-to-Traditional and Traditional-to-Simplified)",
 		"description": ""
 	},
 	"labelinputConvertTrad": {
-		"message": "Convert content in TextArea to Traditional Chinese <br />(Simplified-to-Traditional)",
+		"message": "Convert content in TextArea to Traditional Chinese (Simplified-to-Traditional)",
 		"description": ""
 	},
 	"labelinputConvertSimp": {
-		"message": "Convert content in TextArea to Simplified Chinese <br />(Traditional-to-Simplified)",
+		"message": "Convert content in TextArea to Simplified Chinese (Traditional-to-Simplified)",
 		"description": ""
 	},
 	"labelSymbolConvert": {
@@ -288,6 +296,10 @@
 	},
 	"labelShowFontSetSimp": {
 		"message": "Font for Simplified Chinese: ",
+		"description": ""
+	},
+	"labelContextMenu": {
+		"message": "Context/Right-Click Menu",
 		"description": ""
 	},
 	"labelContextMenuEnable": {

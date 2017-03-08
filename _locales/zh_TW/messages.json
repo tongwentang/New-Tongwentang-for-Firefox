@@ -114,12 +114,20 @@
 		"message": "一般設定",
 		"description": ""
 	},
+	"tabsContextmenu": {
+		"message": "右鍵選單",
+		"description": ""
+	},
 	"tabsUrl": {
 		"message": "自訂轉換規則",
 		"description": ""
 	},
 	"tabsPhrase": {
 		"message": "自訂詞彙",
+		"description": ""
+	},
+	"tabsSupport": {
+		"message": "支援",
 		"description": ""
 	},
 	"tabSimpToTrad": {
@@ -267,11 +275,11 @@
 		"description": ""
 	},
 	"labelSymbolConvertEnable": {
-		"message": "啟用 標點符號 轉換",
+		"message": "啟用標點符號轉換",
 		"description": ""
 	},
 	"labelSymbolConvertDisable": {
-		"message": "停用 標點符號 轉換",
+		"message": "停用標點符號轉換",
 		"description": ""
 	},
 	"labelShowFontSet": {
@@ -290,8 +298,13 @@
 		"message": "簡體顯示字型：",
 		"description": ""
 	},
+
+	"labelContextMenu": {
+		"message": "右鍵選單",
+		"description": ""
+	},
 	"labelContextMenuEnable": {
-		"message": "啟用 右鍵選單",
+		"message": "啟用右鍵選單",
 		"description": ""
 	},
 
