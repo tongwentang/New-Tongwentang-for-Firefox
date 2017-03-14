@@ -424,9 +424,8 @@ const sendVelueChangeMessage = (id, value) => {
   }
 }
 
-const handleVelueChange = (id, value) => {
+const handleVelueChange = (id) => {
   let elem = document.getElementById(id);
-  let newValue;
   if(elem) {
     let elemType = elem.getAttribute('type');
     if(elemType === 'radioGroup') {
@@ -459,10 +458,10 @@ const init = preferences => {
   currentPrefs = preferences;
   for(let p in preferences) {
     setValueToElem(p, preferences[p]);
-    handleVelueChange(p, preferences[p]);
+    handleVelueChange(p);
   }
   document.title = browser.i18n.getMessage('optionTitle');
-  let l10nTags = categories = Array.from(document.querySelectorAll('[data-l10n-id]'));
+  let l10nTags = Array.from(document.querySelectorAll('[data-l10n-id]'));
   l10nTags.forEach(tag => {
     tag.textContent = browser.i18n.getMessage(tag.getAttribute('data-l10n-id'));
   });
