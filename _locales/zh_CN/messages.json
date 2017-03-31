@@ -4,7 +4,7 @@
 		"description": ""
 	},
 	"extDescription": {
-		"message": "繁体简体中文转换工具",
+		"message": "简体/繁体中文转换工具",
 		"description": ""
 	},
 	"extTitle": {
@@ -12,7 +12,7 @@
 		"description": ""
 	},
 	"optionTitle": {
-		"message": "新同文堂 - 设定",
+		"message": "新同文堂 - 设置",
 		"description": ""
 	},
 	"optionVersion": {
@@ -29,11 +29,11 @@
 		"description": ""
 	},
 	"btnImportOptions": {
-		"message": "导入设定",
+		"message": "导入设置",
 		"description": ""
 	},
 	"btnExportOptions": {
-		"message": "导出设定",
+		"message": "导出设置",
 		"description": ""
 	},
 	"btnImport": {
@@ -49,7 +49,7 @@
 		"description": ""
 	},
 	"btnApply": {
-		"message": "套用",
+		"message": "应用",
 		"description": ""
 	},
 	"btnDelete": {
@@ -65,16 +65,16 @@
 		"description": ""
 	},
 	"btnAdd": {
-		"message": "加入",
+		"message": "添加",
 		"description": ""
 	},
 
 	"dlgImportOption": {
-		"message": "导入所有设定",
+		"message": "导入所有设置",
 		"description": ""
 	},
 	"dlgExportOption": {
-		"message": "导出所有设定",
+		"message": "导出所有设置",
 		"description": ""
 	},
 	"dlgImportRules": {
@@ -106,16 +106,16 @@
 		"description": ""
 	},
 	"dlgNotice": {
-		"message": "提示讯息",
+		"message": "提示信息",
 		"description": ""
 	},
 
 	"tabsGeneral": {
-		"message": "一般设定",
+		"message": "一般设置",
 		"description": ""
 	},
 	"tabsContextmenu": {
-		"message": "右键选单",
+		"message": "右键菜单",
 		"description": ""
 	},
 	"tabsUrl": {
@@ -140,47 +140,47 @@
 	},
 
 	"msgSaveSuccess": {
-		"message": "设定保存完成。",
+		"message": "设置保存完成。",
 		"description": ""
 	},
 	"msgExportNotice": {
-		"message": "请记得先保存再导出。",
+		"message": "别忘记先保存再导出。",
 		"description": ""
 	},
 	"msgImportNotice": {
-		"message": "请贴上之前备份的设定。",
+		"message": "请粘贴之前备份的设置。",
 		"description": ""
 	},
 	"msgImportSuccess": {
-		"message": "设定资料导入完成。",
+		"message": "设置信息导入完成。",
 		"description": ""
 	},
 	"msgImportFailed": {
-		"message": "输入的设定资料格式错误，请重新输入！",
+		"message": "输入的设置信息格式有误，请重新输入！",
 		"description": ""
 	},
 	"msgUrlNotEmpty": {
-		"message": "网址不得为空白，请填写网址！",
+		"message": "网址不能为空白！",
 		"description": ""
 	},
 	"msgPhraseNotEmpty": {
-		"message": "要转换的字串不得为空白，请填写！",
+		"message": "要转换的字符串不能为空白！",
 		"description": ""
 	},
 	"msgFrameNotConvert": {
-		"message": "某些网页的页框会无法正常转换。",
+		"message": "某些网页的框架无法正常转换。",
 		"description": ""
 	},
 	"msgUrlFilter": {
-		"message": "可在网址内使用万用字元 (*)",
+		"message": "可在网址内使用通配符 (*)",
 		"description": ""
 	},
 	"msgInputConvert1": {
-		"message": "要转换时，请先让鼠标停留在输入区内，再点选工具列上的图标",
+		"message": "需要转换时，请先将输入符放到输入区内，再点击工具栏上的图标",
 		"description": ""
 	},
 	"msgInputConvert2": {
-		"message": "不支援“所见即所得”输入区内的文字转换",
+		"message": "不支持“所见即所得”输入区内的文字转换",
 		"description": ""
 	},
 
@@ -197,7 +197,7 @@
 		"description": ""
 	},
 	"labelReplaceOption": {
-		"message": "直接取代原本的设定",
+		"message": "直接替换原本的设置",
 		"description": ""
 	},
 	"labelTraditional": {
@@ -218,7 +218,7 @@
 	},
 
 	"labelAutoConvert": {
-		"message": "自动转换设定",
+		"message": "自动转换设置",
 		"description": ""
 	},
 	"labelAutoConvertNone": {
@@ -235,7 +235,7 @@
 	},
 
 	"labelIconAction": {
-		"message": "图示转换设定",
+		"message": "转换图标设置",
 		"description": ""
 	},
 	"labelIconActionAuto": {
@@ -251,7 +251,7 @@
 		"description": ""
 	},
 	"labelInputConvert": {
-		"message": "输入区转换设定",
+		"message": "输入区转换设置",
 		"description": ""
 	},
 	"labelinputConvertNone": {
@@ -283,27 +283,27 @@
 		"description": ""
 	},
 	"labelShowFontSet": {
-		"message": "显示字型设定",
+		"message": "显示字体设置",
 		"description": ""
 	},
 	"labelShowFontSetEnable": {
-		"message": "强制字型转换",
+		"message": "强制转换字体",
 		"description": ""
 	},
 	"labelShowFontSetTrad": {
-		"message": "繁体显示字型：",
+		"message": "繁体显示字体：",
 		"description": ""
 	},
 	"labelShowFontSetSimp": {
-		"message": "简体显示字型：",
+		"message": "简体显示字体：",
 		"description": ""
 	},
 	"labelContextMenu": {
-		"message": "激活右键选单",
+		"message": "激活右键菜单",
 		"description": ""
 	},
 	"labelContextMenuEnable": {
-		"message": "激活右键选单",
+		"message": "激活右键菜单",
 		"description": ""
 	},
 
