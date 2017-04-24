@@ -77,7 +77,7 @@ const messageHandler = (request, sender, sendResponse) => {
   val = (typeof elem.type === 'undefined') ? '' : elem.type.toLowerCase();
   isInput = ((['textarea', 'input'].indexOf(tag) >= 0) && (['textarea', 'text'].indexOf(val) >= 0));
 
-  if (isInput && ((request.act === 'input') || (preferences.inputConvert !== 'none'))) {
+  if (isInput && ((request.act === 'input') || (convertMapping[preferences.inputConvert] !== 'none'))) {
     // 輸入區文字轉換
     zhflag = request.flag;
     val = document.activeElement.value;
