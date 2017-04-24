@@ -317,19 +317,17 @@ browser.commands.onCommand.addListener(command => {
       doAction(tab, 'page', 'simp');
     });
   }
-  else if (command === 'clip-trad') {
-    getClipData( txt => {
-      getClipData( text => {
-        getActiveTab( tab => {
-          browser.tabs.sendMessage(
-            tab.id,
-            {act: 'paste', text: text, flag: 'traditional'}
-          );
-        });
+  else if (command === 'clip-trad' && supportClipboard) {
+    getClipData( text => {
+      getActiveTab( tab => {
+        browser.tabs.sendMessage(
+          tab.id,
+          {act: 'paste', text: text, flag: 'traditional'}
+        );
       });
     });
   }
-  else if (command === 'clip-simp') {
+  else if (command === 'clip-simp' && supportClipboard) {
     getClipData( text => {
       getActiveTab( tab => {
         browser.tabs.sendMessage(
