@@ -338,3 +338,16 @@ browser.commands.onCommand.addListener(command => {
     });
   }
 });
+
+
+browser.pageAction.onClicked.addListener((tab) => {
+  doAction(tab, 'page', 'auto');
+});
+
+function handleMessage(request, sender, sendResponse) {
+  if (request.loaded) {
+    browser.pageAction.show(sender.tab.id);
+  }
+}
+
+browser.runtime.onMessage.addListener(handleMessage);
