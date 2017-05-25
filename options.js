@@ -444,6 +444,9 @@ const handleVelueChange = (id, value) => {
     else if(elemType === 'number') {
       elem.addEventListener('input', event => {sendVelueChangeMessage(id, parseInt(elem.value));});
     }
+    else if(elemType === 'text') {
+      elem.addEventListener('input', event => {sendVelueChangeMessage(id, elem.value);});
+    }
   }
 }
 
