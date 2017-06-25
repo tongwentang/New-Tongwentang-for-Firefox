@@ -90,7 +90,8 @@
     "tabs",
     "contextMenus",
     "clipboardRead",
-    "clipboardWrite"
+    "clipboardWrite",
+    "downloads"
   ],
 
   "default_locale": "en",
