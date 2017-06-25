@@ -105,7 +105,7 @@ body {
 
 .content {
   display: none;
-  padding: 35px 0px 0px 240px;
+  padding: 35px 0px 10px 240px;
   /*width: 100%;
   height: 100%;
   overflow: scroll;*/
@@ -478,7 +478,7 @@ li.tableRow:not([selected=true]):nth-child(odd):hover:not(.tableHeader) {
   z-index: 655352;
 }
 .dialogButton:hover {
-  background-color: rgb(222, 222, 222);
+  background-color: rgb(232, 232, 232);
 }
 .dialogButton:active {
   background-color: rgb(202, 202, 202);
@@ -503,13 +503,25 @@ button {
   font-size: 13.75px;
   background-color: rgb(251, 251, 251);
   border: 1px solid rgb(153, 153, 153);
-  border-radius: 1;
+  border-radius: 3px;
 }
-button:not([disabled=true]):hover {
-  background-color: rgb(242, 242, 242);
+.dialogButton:not([disabled=true]):hover {
+  background-color: rgb(232, 232, 232);
 }
-button:active {
-  background-color: rgb(222, 222, 222);
+.dialogButton:active {
+  background-color: rgb(202, 202, 202);
+}
+
+ul li button{
+  position: relative;
+  border-radius: 3px;
+}
+
+ul li button:hover{
+  background-color: rgb(232, 232, 232);
+}
+ul li button:active {
+  background-color: rgb(202, 202, 202);
 }
 
 #addNewUrlFilter {

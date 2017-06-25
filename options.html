@@ -138,6 +138,44 @@
         </ul>
       </div>
 
+      <div class="groupTitle" data-l10n-id="btnExportOptions">Export Options</div>
+      <div>
+        <ul>
+          <li class="inline">
+            <button id="btnExportAllOptions" data-l10n-id="dlgExportOption">Export all options</button>
+          </li>
+          <li class="inline">
+            <button id="btnExportUrlRule" data-l10n-id="dlgExportRules">Export URL-based conversion rules</button>
+          </li>
+          <li class="inline">
+            <button id="btnExportS2TTable" data-l10n-id="dlgExportPhraseTrad">Export Simplified-to-Traditional phrase table</button>
+          </li>
+          <li class="inline">
+            <button id="btnExportT2STable" data-l10n-id="dlgExportPhraseSimp">Export Traditional-to-Simplified phrase table</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="btnImportOptions">Import Options</div>
+      <div>
+        <input id="selectFile" type="file" style="display:none" accept=".json">
+        <ul>
+          <li class="inline">
+
+            <button id="btnImportAllOptions" data-l10n-id="dlgImportOption">Import all options</button>
+          </li>
+          <li class="inline">
+            <button id="btnImportUrlRule" data-l10n-id="dlgImportRules">Import URL-based conversion rules</button>
+          </li>
+          <li class="inline">
+            <button id="btnImportS2TTable" data-l10n-id="dlgImportPhraseTrad">Import Simplified-to-Traditional phrase table</button>
+          </li>
+          <li class="inline">
+            <button id="btnImportT2STable" data-l10n-id="dlgImportPhraseSimp">Import Traditional-to-Simplified phrase table</button>
+          </li>
+        </ul>
+      </div>
+
     </div>
     <!--panel general end-->
 
@@ -292,7 +330,7 @@
         <ul class="inline">
           <li class="">GitHub: <a href="https://github.com/softcup/New-Tongwentang-for-Firefox" target="_blank">https://github.com/softcup/New-Tongwentang-for-Firefox</a></li>
           <li class="">Issue Report: <a href="https://github.com/softcup/New-Tongwentang-for-Firefox/issues" target="_blank">https://github.com/softcup/New-Tongwentang-for-Firefox/issues</a></li>
-        </ul>        
+        </ul>
       </div>
 
 
@@ -349,6 +387,7 @@
             <label class="labelText" id="originPhraseLabel"></label>
           </li>
           <li class="inline">
+            <input type="text" id="originPhrase-old" style="display:none" size="40" >
             <input type="text" id="originPhrase" size="40">
           </li>
         </ul>
