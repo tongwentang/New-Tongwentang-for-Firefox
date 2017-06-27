@@ -116,3 +116,7 @@ const messageHandler = (request, sender, sendResponse) => {
 };
 
 browser.runtime.onMessage.addListener(messageHandler);
+
+browser.runtime.sendMessage({
+  loaded: true
+});
