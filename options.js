@@ -80,7 +80,14 @@ const exportT2STable = () => {
 const importAllOptions = () => {
   importFromFile(data => {
     if (data) {
-      for (let p in data) {
+      const validated = importConfigValidate(data, 'all');
+
+      if (validated.error) {
+        console.error('config invalid');
+        return;
+      }
+
+      for (let p in validated.config) {
         let elem = document.getElementById(p);
         let elemType = elem.getAttribute('type');
         if (elemType === 'listBox' || elemType === 'listBoxObj') {
@@ -88,12 +95,12 @@ const importAllOptions = () => {
           for (let i = elem.children.length - 2; i > 0; i--) {
             elem.removeChild(elem.children[i]);
           }
-          currentPrefs[p] = data[p];
+          currentPrefs[p] = validated.config[p];
         }
-        setValueToElem(p, data[p]);
-        sendVelueChangeMessage(p, data[p]);
+        setValueToElem(p, validated.config[p]);
+        sendVelueChangeMessage(p, validated.config[p]);
       }
-      currentPrefs = data;
+      currentPrefs = validated.config;
     }
   });
 };
@@ -118,23 +125,137 @@ const resetListPrefs = (name, data) => {
 const importUrlRule = () => {
   importFromFile(data => {
     if (data) {
-      resetListPrefs('urlFilterList', data);
+      const validated = importConfigValidate(data, 'url');
+
+      if (validated.error) {
+        console.error('url config invalid');
+        return;
+      }
+
+      resetListPrefs('urlFilterList', validated.config);
     }
   });
 };
 
 const importS2TTable = () => {
   importFromFile(data => {
-    if (data)
-      resetListPrefs('userPhraseTradList', data);
+    if (data) {
+      const validated = importConfigValidate(data, 'phrase');
+
+      if (validated.error) {
+        console.error('s2t config invalid');
+        return;
+      }
+
+      resetListPrefs('userPhraseTradList', validated.config);
+    }
   });
 };
 
 const importT2STable = () => {
   importFromFile(data => {
-    if (data)
-      resetListPrefs('userPhraseSimpList', data);
+    if (data) {
+      const validated = importConfigValidate(data, 'phrase');
+
+      if (validated.error) {
+        console.error('t2s config invalid');
+        return;
+      }
+
+      resetListPrefs('userPhraseSimpList', validated.config);
+    }
   });
+};
+
+const importConfigValidate = (config, type) => {
+  switch (type) {
+    case 'all':
+      let isInvalid = false;
+      const allConfigKeys = Object.keys(config).sort();
+      const allKeyValuePair = [
+        { key: 'autoConvert', type: 'number' },
+        { key: 'iconAction', type: 'number' },
+        { key: 'inputConvert', type: 'number' },
+        { key: 'symConvert', type: 'boolean' },
+        { key: 'fontCustomEnabled', type: 'boolean' },
+        { key: 'fontCustomTrad', type: 'string' },
+        { key: 'fontCustomSimp', type: 'string' },
+        { key: 'contextMenuEnabled', type: 'boolean' },
+        { key: 'contextMenuInput2Trad', type: 'boolean' },
+        { key: 'contextMenuInput2Simp', type: 'boolean' },
+        { key: 'contextMenuPage2Trad', type: 'boolean' },
+        { key: 'contextMenuPage2Simp', type: 'boolean' },
+        { key: 'contextMenuClip2Trad', type: 'boolean' },
+        { key: 'contextMenuClip2Simp', type: 'boolean' },
+        { key: 'urlFilterEnabled', type: 'boolean' },
+        { key: 'urlFilterList', type: 'object' },
+        { key: 'userPhraseEnable', type: 'boolean' },
+        { key: 'userPhraseTradList', type: 'object' },
+        { key: 'userPhraseSimpList', type: 'object' },
+        { key: 'version', type: 'number' }
+      ];
+
+      allKeyValuePair.forEach((pair, index) => {
+        if (isInvalid) {
+          return;
+        }
+        if (pair.key === 'urlFilterList' && importConfigValidate(config[pair.key], 'url').error) {
+          isInvalid = true;
+          return;
+        }
+        else if ((pair.key === 'userPhraseTradList' || pair.key === 'userPhraseSimpList') && importConfigValidate(config[pair.key], 'phrase').error) {
+          isInvalid = true;
+          return;
+        }
+        else if (typeof config[pair.key] !== pair.type) {
+          isInvalid = true;
+        }
+      });
+
+      return isInvalid ? { error: true } : { error: false, config };
+    case 'url':
+      if (!Array.isArray(config)) {
+        return { error: true };
+      }
+      if (config.length < 1) {
+        return { error: false, config };
+      }
+      let isUrlInvalid = false;
+      config.forEach(url => {
+        if (isUrlInvalid) {
+          return;
+        }
+        const urlKeys = Object.keys(url).sort();
+        if (urlKeys.length !== 2) {
+          isUrlInvalid = true;
+          return;
+        }
+        if (
+          (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
+          !url.url.match(
+            /^(https?:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/
+          )
+        ) {
+          isUrlInvalid = true;
+          return;
+        }
+      });
+      return isUrlInvalid ? { error: true } : { error: false, config };
+    case 'phrase':
+      let isPhraseInvalid = false;
+      const safeConfig = Object.assign({}, config);
+      Object.keys(safeConfig).forEach(key => {
+        if (isPhraseInvalid) {
+          return;
+        }
+        if (typeof safeConfig[key] !== 'string') {
+          isPhraseInvalid = true;
+        }
+      });
+      return isPhraseInvalid ? { error: true } : { error: false, safeConfig };
+    default:
+      return { error: true };
+  }
 };
 
 const checkPhraseEditorInput = () => {
