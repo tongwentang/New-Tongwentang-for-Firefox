@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/softcup/New-Tongwentang-for-Firefox#readme",
   "devDependencies": {
+    "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
     "webpack": "^3.1.0"
   }
