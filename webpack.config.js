@@ -11,7 +11,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
-  }, 
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
@@ -19,7 +19,6 @@ module.exports = {
       { from: './src/manifest.json' },
       { from: './src/options.css' },
       { from: './src/options.html' },
-      { from: './src/README.md' },
       { from: './src/_locales', to: '_locales' },
       { from: './src/icon', to: 'icon' },
       { from: './src/lib/tongwen', to: 'lib/tongwen' }
