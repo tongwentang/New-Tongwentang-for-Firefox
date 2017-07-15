@@ -11,9 +11,9 @@ Released under [MIT/X11 License](https://opensource.org/licenses/mit-license.php
 # Todos
 - modular
   - es6
-  - webpack
-  - typescript
+  - ~~webpack~~
+  - typescript (maybe)
 - UI rework
   - react / angular / vue
-- reactive
+- reactive to async
 - integrate sync with third party
