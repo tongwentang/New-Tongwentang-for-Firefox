@@ -1,3 +1,9 @@
+import { default_PS2T_table } from './tongwen_table_ps2t';
+import { default_PT2S_table } from './tongwen_table_pt2s';
+import { default_S2T_table } from './tongwen_table_s2t';
+import { default_T2S_table } from './tongwen_table_t2s';
+import { symbolS2T } from './tongwen_table_ss2t';
+import { symbolT2S } from './tongwen_table_st2s';
 /****************************
  * Node Types http://www.w3schools.com/dom/dom_nodetype.asp
  * NodeType Named Constant
@@ -46,10 +52,10 @@ if (!Array.prototype.indexOf) {
       }
     }
     return -1;
-  }
+  };
 }
 
-var TongWen = (function () {
+export const TongWen = (function () {
   "use strict";
   var
     version = '0.4',       // 版本
@@ -402,9 +408,7 @@ var TongWen = (function () {
     }
   }
 
-  function extensionAction(opts) {
-
-  }
+  function extensionAction(opts) { }
   // =============================================================================
 
   return {

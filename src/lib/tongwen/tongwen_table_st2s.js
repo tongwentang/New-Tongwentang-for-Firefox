@@ -1,4 +1,4 @@
-var symbolT2S = {
+export const symbolT2S = {
   "¯": "ˉ",
   "‥": "¨",
   "‧": "·",

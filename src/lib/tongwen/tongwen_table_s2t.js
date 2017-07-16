@@ -1,5 +1,5 @@
-//TongWen.addS2TTable(
-var default_S2T_table = {
+//TongWen.addS2TTable
+export const default_S2T_table = {
   "㑇": "㑳",
   "㖞": "喎",
   "㘎": "㘚",
@@ -2505,4 +2505,4 @@ var default_S2T_table = {
   "龛": "龕",
   "龟": "龜",
   "": "　"
-};//);
+};

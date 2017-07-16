@@ -1,5 +1,5 @@
-//TongWen.addS2TTable(
-var default_PS2T_table = {
+//TongWen.addS2TTable
+export const default_PS2T_table = {
   "0余": "0餘",
   "0天": "0天",
   "0天后": "0天後",
@@ -7049,4 +7049,4 @@ var default_PS2T_table = {
   "０海裡": "０海里",
   "０裡": "０里",
   "披肩發": "披肩髮"
-};//);
+};

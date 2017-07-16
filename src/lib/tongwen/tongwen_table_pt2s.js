@@ -1,5 +1,5 @@
-//TongWen.addT2STable(
-var default_PT2S_table = {
+//TongWen.addT2STable
+export const default_PT2S_table = {
   "专着": "专著",
   "亲着": "亲著",
   "卓着": "卓著",
@@ -87,4 +87,4 @@ var default_PT2S_table = {
   "郭子干": "郭子乾",
   "颇着": "颇著",
   "鲇鱼": "鲶鱼"
-};//);
+};

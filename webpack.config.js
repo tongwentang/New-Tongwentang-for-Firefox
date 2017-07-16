@@ -6,7 +6,7 @@ module.exports = {
   entry: {
     background: './src/background',
     options: './src/options',
-    tongwen: './src/tongwen'
+    tongwen: './src/lib/tongwen/tongwen'
   },
   output: {
     filename: '[name].js',
@@ -20,8 +20,7 @@ module.exports = {
       { from: './src/options.css' },
       { from: './src/options.html' },
       { from: './src/_locales', to: '_locales' },
-      { from: './src/icon', to: 'icon' },
-      { from: './src/lib/tongwen', to: 'lib/tongwen' }
+      { from: './src/icon', to: 'icon' }
     ])
   ]
 };
