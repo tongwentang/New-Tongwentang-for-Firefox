@@ -2,7 +2,7 @@
   "description": "__MSG_extDescription__",
   "manifest_version": 2,
   "name": "__MSG_extName__",
-  "version": "1.4",
+  "version": "1.5",
   "homepage_url": "https://github.com/softcup/New-Tongwentang-for-Firefox",
   "icons": {
     "16": "icon/tongwen-icon-16.png",
@@ -46,15 +46,6 @@
     "browser_style": true,
     "default_title": "__MSG_extTitle__",
     "default_icon": "icon/tongwen-icon-32.png"
-  },
-
-  "page_action": {
-    "browser_style": true,
-    "default_icon": {
-      "19": "icon/tongwen-icon-16.png",
-      "38": "icon/tongwen-icon-32.png"
-    },
-    "default_title": "__MSG_extName__"
   },
 
   "commands": {
