@@ -7,11 +7,20 @@ module.exports = {
   entry: {
     background: './src/background',
     options: './src/lib/options/options',
-    tongwen: './src/lib/tongwen/tongwen'
+    tongwen: './src/lib/tongwen/tongwen',
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: 'eslint-loader'
+      }
+    ]
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
@@ -20,12 +29,12 @@ module.exports = {
       { from: './src/manifest.json' },
       { from: './src/lib/options/options.css' },
       { from: './src/_locales', to: '_locales' },
-      { from: './src/icon', to: 'icon' }
+      { from: './src/icon', to: 'icon' },
     ]),
     new HtmlWebpackPlugin({
       filename: 'options.html',
       template: 'src/lib/options/options.html',
-      chunks: ['options']
-    })
-  ]
+      chunks: ['options'],
+    }),
+  ],
 };
