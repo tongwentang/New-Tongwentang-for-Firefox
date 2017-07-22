@@ -1,16 +1,18 @@
-let categories;
+import { exportToFile, importFromFile, exportAllOptions, exportUrlRule, exportS2TTable, exportT2STable, importAllOptions, importUrlRule, importS2TTable, importT2STable } from './config-importer-exporter';
+
+let categories = [];
 let tableRowItems = {
   urlFilterList: [],
   userPhraseTradList: [],
   userPhraseSimpList: []
 };
-let tableRowButtons;
+let tableRowButtons = [];
 let screenMask;
 let urlFilterEditor;
 let userPhraseEditor;
 let currentPrefs = {};
 let l10n = {};
-let flagmap = {};
+let flagmap = [];
 
 const checkFilterEditorInput = () => {
   //console.log('checkFilterEditorInput');
@@ -30,81 +32,6 @@ const checkFilterEditorInput = () => {
   }
 };
 
-const exportToFile = (data, fileName) => {
-  let blob = new Blob([data], { type: "text/json;charset=utf-8" });
-
-  browser.downloads.download({
-    url: URL.createObjectURL(blob),
-    filename: fileName,
-    saveAs: true
-  });
-};
-
-const importFromFile = (callback) => {
-  let selectFile = document.getElementById('selectFile');
-  selectFile.onchange = () => {
-    if (selectFile.files && selectFile.files.length) {
-      let file = selectFile.files[0];
-      let reader = new FileReader();
-      reader.onload = function (evt) {
-        try {
-          let data = JSON.parse(evt.target.result);
-          callback(data);
-        }
-        catch (ex) {
-          callback();
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
-  selectFile.click();
-};
-
-const exportAllOptions = () => {
-  exportToFile(JSON.stringify(currentPrefs), 'NewTongWenTang-Options.json');
-};
-
-const exportUrlRule = () => {
-  exportToFile(JSON.stringify(currentPrefs.urlFilterList), 'NewTongWenTang-UrlRule.json');
-};
-
-const exportS2TTable = () => {
-  exportToFile(JSON.stringify(currentPrefs.userPhraseTradList), 'NewTongWenTang-S2TTable.json');
-};
-
-const exportT2STable = () => {
-  exportToFile(JSON.stringify(currentPrefs.userPhraseSimpList), 'NewTongWenTang-T2STable.json');
-};
-
-const importAllOptions = () => {
-  importFromFile(data => {
-    if (data) {
-      const validated = importConfigValidate(data, 'all');
-
-      if (validated.error) {
-        console.error('config invalid');
-        return;
-      }
-
-      for (let p in validated.config) {
-        let elem = document.getElementById(p);
-        let elemType = elem.getAttribute('type');
-        if (elemType === 'listBox' || elemType === 'listBoxObj') {
-          //Remove all list from UI
-          for (let i = elem.children.length - 2; i > 0; i--) {
-            elem.removeChild(elem.children[i]);
-          }
-          currentPrefs[p] = validated.config[p];
-        }
-        setValueToElem(p, validated.config[p]);
-        sendVelueChangeMessage(p, validated.config[p]);
-      }
-      currentPrefs = validated.config;
-    }
-  });
-};
-
 const resetListPrefs = (name, data) => {
   //Remove all list from UI
   let list = document.getElementById(name);
@@ -119,143 +46,7 @@ const resetListPrefs = (name, data) => {
   setValueToElem(name, currentPrefs[name]);
 
   //Save to storage
-  sendVelueChangeMessage(name, currentPrefs[name]);
-};
-
-const importUrlRule = () => {
-  importFromFile(data => {
-    if (data) {
-      const validated = importConfigValidate(data, 'url');
-
-      if (validated.error) {
-        console.error('url config invalid');
-        return;
-      }
-
-      resetListPrefs('urlFilterList', validated.config);
-    }
-  });
-};
-
-const importS2TTable = () => {
-  importFromFile(data => {
-    if (data) {
-      const validated = importConfigValidate(data, 'phrase');
-
-      if (validated.error) {
-        console.error('s2t config invalid');
-        return;
-      }
-
-      resetListPrefs('userPhraseTradList', validated.config);
-    }
-  });
-};
-
-const importT2STable = () => {
-  importFromFile(data => {
-    if (data) {
-      const validated = importConfigValidate(data, 'phrase');
-
-      if (validated.error) {
-        console.error('t2s config invalid');
-        return;
-      }
-
-      resetListPrefs('userPhraseSimpList', validated.config);
-    }
-  });
-};
-
-const importConfigValidate = (config, type) => {
-  switch (type) {
-    case 'all':
-      let isInvalid = false;
-      const allConfigKeys = Object.keys(config).sort();
-      const allKeyValuePair = [
-        { key: 'autoConvert', type: 'number' },
-        { key: 'iconAction', type: 'number' },
-        { key: 'inputConvert', type: 'number' },
-        { key: 'symConvert', type: 'boolean' },
-        { key: 'fontCustomEnabled', type: 'boolean' },
-        { key: 'fontCustomTrad', type: 'string' },
-        { key: 'fontCustomSimp', type: 'string' },
-        { key: 'contextMenuEnabled', type: 'boolean' },
-        { key: 'contextMenuInput2Trad', type: 'boolean' },
-        { key: 'contextMenuInput2Simp', type: 'boolean' },
-        { key: 'contextMenuPage2Trad', type: 'boolean' },
-        { key: 'contextMenuPage2Simp', type: 'boolean' },
-        { key: 'contextMenuClip2Trad', type: 'boolean' },
-        { key: 'contextMenuClip2Simp', type: 'boolean' },
-        { key: 'urlFilterEnabled', type: 'boolean' },
-        { key: 'urlFilterList', type: 'object' },
-        { key: 'userPhraseEnable', type: 'boolean' },
-        { key: 'userPhraseTradList', type: 'object' },
-        { key: 'userPhraseSimpList', type: 'object' },
-        { key: 'version', type: 'number' }
-      ];
-
-      allKeyValuePair.forEach((pair, index) => {
-        if (isInvalid) {
-          return;
-        }
-        if (pair.key === 'urlFilterList' && importConfigValidate(config[pair.key], 'url').error) {
-          isInvalid = true;
-          return;
-        }
-        else if ((pair.key === 'userPhraseTradList' || pair.key === 'userPhraseSimpList') && importConfigValidate(config[pair.key], 'phrase').error) {
-          isInvalid = true;
-          return;
-        }
-        else if (typeof config[pair.key] !== pair.type) {
-          isInvalid = true;
-        }
-      });
-
-      return isInvalid ? { error: true } : { error: false, config };
-    case 'url':
-      if (!Array.isArray(config)) {
-        return { error: true };
-      }
-      if (config.length < 1) {
-        return { error: false, config };
-      }
-      let isUrlInvalid = false;
-      config.forEach(url => {
-        if (isUrlInvalid) {
-          return;
-        }
-        const urlKeys = Object.keys(url).sort();
-        if (urlKeys.length !== 2) {
-          isUrlInvalid = true;
-          return;
-        }
-        if (
-          (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
-          !url.url.match(
-            /^(https?\*?:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/
-          )
-        ) {
-          isUrlInvalid = true;
-          return;
-        }
-      });
-      return isUrlInvalid ? { error: true } : { error: false, config };
-    case 'phrase':
-      let isPhraseInvalid = false;
-      const safeConfig = Object.assign({}, config);
-      Object.keys(safeConfig).forEach(key => {
-        if (isPhraseInvalid) {
-          return;
-        }
-        if (typeof safeConfig[key] !== 'string') {
-          isPhraseInvalid = true;
-        }
-      });
-      return isPhraseInvalid ? { error: true } : { error: false, safeConfig };
-    default:
-      return { error: true };
-  }
+  sendValueChangeMessage(name, currentPrefs[name]);
 };
 
 const checkPhraseEditorInput = () => {
@@ -379,7 +170,7 @@ const clickOnRowButton = (event) => {
           urlFilterList.children[i].setAttribute('index', i - 1);
         }
         currentPrefs.urlFilterList.splice(index, 1);
-        sendVelueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+        sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
         //sendVelueChangeMessage(id);
       }
       else {
@@ -393,7 +184,7 @@ const clickOnRowButton = (event) => {
       if (node.getAttribute('selected') === 'true') {
         node.parentNode.removeChild(node);
         delete currentPrefs[target][key];
-        sendVelueChangeMessage(target, currentPrefs[target]);
+        sendValueChangeMessage(target, currentPrefs[target]);
       }
       else {
         clickOnRowItem({ currentTarget: node });
@@ -429,7 +220,7 @@ const moveUrlFilterPos = (shift) => {
       selectedRowItem = tableRowItem;
       let filter = currentPrefs.urlFilterList.splice(index, 1);
       currentPrefs.urlFilterList.splice(index + shift, 0, filter[0]);
-      sendVelueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+      sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
       break;
     }
   }
@@ -468,7 +259,7 @@ const moveUrlFilterPos = (shift) => {
   }
 };
 
-const modefyUrlFilter = (url, action, index) => {
+const modifyUrlFilter = (url, action, index) => {
   let urlFilterList = document.getElementById('urlFilterList');
   let row = urlFilterList.children[index + 1];
   row.children[0].textContent = url;
@@ -527,7 +318,7 @@ const addUserPhrase = (key, value, type) => {
     tableRowItems.userPhraseSimpList.push(li);
 };
 
-const startup = () => {
+const uiEventBinding = () => {
   categories = Array.from(document.querySelectorAll('.categories .categoryItem'));
   categories.forEach(category => {
     category.addEventListener('click', clickOnCategory, true);
@@ -571,9 +362,9 @@ const startup = () => {
           currentPrefs.urlFilterList.push({ url: url, action: action });
         }
         else {
-          modefyUrlFilter(url, action, index);
+          modifyUrlFilter(url, action, index);
         }
-        sendVelueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+        sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
         hideScreenMask();
       }
       else if (dlgName === 'userPhraseEditor') {
@@ -591,13 +382,13 @@ const startup = () => {
           if (oldkey)
             delete currentPrefs.userPhraseTradList[oldkey];
           currentPrefs.userPhraseTradList[key] = value;
-          sendVelueChangeMessage('userPhraseTradList', currentPrefs.userPhraseTradList);
+          sendValueChangeMessage('userPhraseTradList', currentPrefs.userPhraseTradList);
         }
         else if (type === 'simp') {
           if (oldkey)
             delete currentPrefs.userPhraseSimpList[oldkey];
           currentPrefs.userPhraseSimpList[key] = value;
-          sendVelueChangeMessage('userPhraseSimpList', currentPrefs.userPhraseSimpList);
+          sendValueChangeMessage('userPhraseSimpList', currentPrefs.userPhraseSimpList);
         }
         hideScreenMask();
       }
@@ -640,16 +431,16 @@ const startup = () => {
   }, false);
 
   document.getElementById('btnExportAllOptions').addEventListener('click', event => {
-    exportAllOptions();
+    exportAllOptions(currentPrefs);
   }, false);
   document.getElementById('btnExportUrlRule').addEventListener('click', event => {
-    exportUrlRule();
+    exportUrlRule(currentPrefs);
   }, false);
   document.getElementById('btnExportS2TTable').addEventListener('click', event => {
-    exportS2TTable();
+    exportS2TTable(currentPrefs);
   }, false);
   document.getElementById('btnExportT2STable').addEventListener('click', event => {
-    exportT2STable();
+    exportT2STable(currentPrefs);
   }, false);
 
   document.getElementById('btnImportAllOptions').addEventListener('click', event => {
@@ -701,7 +492,7 @@ const setValueToElem = (id, value) => {
 
 const getValueFromElem = (id) => { };
 
-const sendVelueChangeMessage = (id, value) => {
+const sendValueChangeMessage = (id, value) => {
   if (value === undefined) {
     delete currentPrefs[id];
     //console.log('sendVelueChangeMessage(0): id = ' + id);
@@ -723,27 +514,27 @@ const sendVelueChangeMessage = (id, value) => {
   }
 };
 
-const handleVelueChange = (id) => {
+const handleValueChange = (id) => {
   let elem = document.getElementById(id);
   if (elem) {
     let elemType = elem.getAttribute('type');
     if (elemType === 'radioGroup') {
       let radios = Array.from(elem.querySelectorAll('input[name=' + id + ']'));
       for (let radio of radios) {
-        radio.addEventListener('input', event => { if (radio.checked) sendVelueChangeMessage(id, parseInt(radio.getAttribute("value"))); });
+        radio.addEventListener('input', event => { if (radio.checked) sendValueChangeMessage(id, parseInt(radio.getAttribute("value"))); });
       }
     }
     else if (elemType === 'checkbox') {
-      elem.addEventListener('input', event => { sendVelueChangeMessage(id, elem.checked); });
+      elem.addEventListener('input', event => { sendValueChangeMessage(id, elem.checked); });
     }
     else if (elemType === 'color') {
-      elem.addEventListener('input', event => { sendVelueChangeMessage(id, elem.value); });
+      elem.addEventListener('input', event => { sendValueChangeMessage(id, elem.value); });
     }
     else if (elemType === 'number') {
-      elem.addEventListener('input', event => { sendVelueChangeMessage(id, parseInt(elem.value)); });
+      elem.addEventListener('input', event => { sendValueChangeMessage(id, parseInt(elem.value)); });
     }
     else if (elemType === 'text') {
-      elem.addEventListener('input', event => { sendVelueChangeMessage(id, elem.value); });
+      elem.addEventListener('input', event => { sendValueChangeMessage(id, elem.value); });
     }
   }
 };
@@ -760,7 +551,7 @@ const init = preferences => {
   currentPrefs = preferences;
   for (let p in preferences) {
     setValueToElem(p, preferences[p]);
-    handleVelueChange(p);
+    handleValueChange(p);
   }
   document.title = browser.i18n.getMessage('optionTitle');
   let l10nTags = Array.from(document.querySelectorAll('[data-l10n-id]'));
@@ -781,7 +572,7 @@ window.addEventListener('load', event => {
       }
       if (results.version) {
         init(results);
-        startup();
+        uiEventBinding();
       }
     });
   });
