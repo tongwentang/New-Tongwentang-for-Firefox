@@ -10,38 +10,31 @@
     "48": "icon/tongwen-icon-48.png",
     "128": "icon/tongwen-icon-128.png"
   },
-
   "applications": {
     "gecko": {
       "id": "tongwen@softcup",
       "strict_min_version": "50.0"
     }
   },
-
   "author": "Ett Chung",
-
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
-
   "content_scripts": [
     {
-      "matches": ["<all_urls>", "file:///*"],
+      "matches": [
+        "<all_urls>",
+        "file:///*"
+      ],
       "js": [
-        "lib/tongwen/tongwen_table_s2t.js",
-        "lib/tongwen/tongwen_table_t2s.js",
-        "lib/tongwen/tongwen_table_ps2t.js",
-        "lib/tongwen/tongwen_table_pt2s.js",
-        "lib/tongwen/tongwen_table_ss2t.js",
-        "lib/tongwen/tongwen_table_st2s.js",
-        "lib/tongwen/tongwen_core.js",
         "tongwen.js"
       ],
       "run_at": "document_end",
       "all_frames": true
     }
   ],
-
   "browser_action": {
     "browser_style": true,
     "default_title": "__MSG_extTitle__",
@@ -74,7 +67,6 @@
       }
     }
   },
-
   "permissions": [
     "<all_urls>",
     "storage",
@@ -84,9 +76,7 @@
     "clipboardWrite",
     "downloads"
   ],
-
   "default_locale": "en",
-
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true

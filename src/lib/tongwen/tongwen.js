@@ -1,6 +1,8 @@
+import { TongWen } from './tongwen_core';
+
 // window loaded
 let preferences;
-let convertMapping = ['none','auto','trad','simp'];
+let convertMapping = ['none', 'auto', 'trad', 'simp'];
 
 const urlFilterAction = uri => {
   for (let filter of preferences.urlFilterList) {
@@ -54,7 +56,7 @@ const messageHandler = (request, sender, sendResponse) => {
   //console.log(JSON.stringify(request, null , 4));
   var isInput, val, tag, attr, zhflag, elem, lang;
   if (request.act === 'paste') {
-    if(window.self === window.top) { //this message only handle by top window.
+    if (window.self === window.top) { //this message only handle by top window.
       let val = TongWen.convert(request.text, request.flag);
       let textArea = document.createElement('textarea');
       textArea.value = val;
@@ -62,7 +64,7 @@ const messageHandler = (request, sender, sendResponse) => {
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      sendResponse({text: val});
+      sendResponse({ text: val });
     }
     return;
   }
