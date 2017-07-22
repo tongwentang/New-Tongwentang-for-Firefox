@@ -1,4 +1,5 @@
 import { exportAllOptions, exportUrlRule, exportS2TTable, exportT2STable, importAllOptions, importUrlRule, importS2TTable, importT2STable } from './config-importer-exporter';
+import './options.css';
 
 let categories = [];
 const tableRowItems = {

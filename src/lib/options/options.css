@@ -48,7 +48,7 @@ body {
 .categoryItem span#general::before {
   display: block;
   content: "";
-  background-image: url("./icon/common.svg");
+  background-image: url("../../icon/common.svg");
   background-size: cover;
   float: left;
   width: 24px;
@@ -58,7 +58,7 @@ body {
 .categoryItem span#contextmenu::before {
   display: block;
   content: "";
-  background-image: url("./icon/contextmenu.svg");
+  background-image: url("../../icon/contextmenu.svg");
   background-size: cover;
   float: left;
   width: 24px;
@@ -68,7 +68,7 @@ body {
 .categoryItem span#url::before {
   display: block;
   content: "";
-  background-image: url("./icon/filter.svg");
+  background-image: url("../../icon/filter.svg");
   background-size: cover;
   float: left;
   width: 24px;
@@ -78,7 +78,7 @@ body {
 .categoryItem span#phrase::before {
   display: block;
   content: "";
-  background-image: url("./icon/advanced.svg");
+  background-image: url("../../icon/advanced.svg");
   background-size: cover;
   float: left;
   width: 24px;
@@ -88,7 +88,7 @@ body {
 .categoryItem span#support::before {
   display: block;
   content: "";
-  background-image: url("./icon/github.svg");
+  background-image: url("../../icon/github.svg");
   background-size: cover;
   float: left;
   width: 24px;
@@ -388,15 +388,15 @@ div.cellAction
   background-size: cover;
 }
 .tableRow div.cellAdd {
-  background-image: url("../icon/add.svg");
+  background-image: url("../../icon/add.svg");
   opacity: 0.6;
 }
 .tableRow div.cellMoveUp {
-  background-image: url("../icon/move-up.svg");
+  background-image: url("../../icon/move-up.svg");
   opacity: 0.6;
 }
 .tableRow div.cellMoveDown {
-  background-image: url("../icon/move-down.svg");
+  background-image: url("../../icon/move-down.svg");
   opacity: 0.6;
 }
 .tableRow div.cellAdd:hover,
@@ -415,20 +415,20 @@ li.tableRow:not([selected=true]):nth-child(odd):hover:not(.tableHeader) {
 }
 
 .tableRow:hover:not(.tableHeader) div.cellEdit{
-  background-image: url("./icon/edit-hover.svg");
+  background-image: url("../../icon/edit-hover.svg");
   opacity: 0.8;
   cursor: default;
 }
 .tableRow[selected=true]:not(.tableHeader) div.cellEdit{
-  background-image: url("./icon/edit.svg");
+  background-image: url("../../icon/edit.svg");
   cursor: default;
 }
 .tableRow[selected=true]:not(.tableHeader) div.cellClean{
-  background-image: url("./icon/clean.svg");
+  background-image: url("../../icon/clean.svg");
   cursor: default;
 }
 .tableRow[selected=true]:not(.tableHeader) div.cellDelete{
-  background-image: url("./icon/delete.svg");
+  background-image: url("../../icon/delete.svg");
   cursor: default;
 }
 

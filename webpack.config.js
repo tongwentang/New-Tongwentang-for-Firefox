@@ -19,6 +19,15 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loaders: 'eslint-loader'
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+        exclude: /node-modules/
+      },
+      {
+        test: /\.svg$/,
+        loaders: ['svg-url-loader']
       }
     ]
   },
@@ -27,7 +36,6 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src/LICENSE' },
       { from: './src/manifest.json' },
-      { from: './src/lib/options/options.css' },
       { from: './src/_locales', to: '_locales' },
       { from: './src/icon', to: 'icon' },
     ]),
