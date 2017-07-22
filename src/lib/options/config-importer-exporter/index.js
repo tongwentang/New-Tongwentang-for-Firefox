@@ -1,22 +1,136 @@
-export const exportToFile = (data, fileName) => {
-  let blob = new Blob([data], { type: "text/json;charset=utf-8" });
+import { setValueToElem, sendValueChangeMessage } from '../options';
+
+function importConfigValidate(config, type) {
+  switch (type) {
+    case 'all':
+      {
+        let isInvalid = false;
+        const allKeyValuePair = [
+          { key: 'autoConvert', type: 'number' },
+          { key: 'iconAction', type: 'number' },
+          { key: 'inputConvert', type: 'number' },
+          { key: 'symConvert', type: 'boolean' },
+          { key: 'fontCustomEnabled', type: 'boolean' },
+          { key: 'fontCustomTrad', type: 'string' },
+          { key: 'fontCustomSimp', type: 'string' },
+          { key: 'contextMenuEnabled', type: 'boolean' },
+          { key: 'contextMenuInput2Trad', type: 'boolean' },
+          { key: 'contextMenuInput2Simp', type: 'boolean' },
+          { key: 'contextMenuPage2Trad', type: 'boolean' },
+          { key: 'contextMenuPage2Simp', type: 'boolean' },
+          { key: 'contextMenuClip2Trad', type: 'boolean' },
+          { key: 'contextMenuClip2Simp', type: 'boolean' },
+          { key: 'urlFilterEnabled', type: 'boolean' },
+          { key: 'urlFilterList', type: 'object' },
+          { key: 'userPhraseEnable', type: 'boolean' },
+          { key: 'userPhraseTradList', type: 'object' },
+          { key: 'userPhraseSimpList', type: 'object' },
+          { key: 'version', type: 'number' },
+        ];
+
+        allKeyValuePair.forEach((pair) => {
+          if (isInvalid) {
+            return;
+          }
+          if (pair.key === 'urlFilterList' && importConfigValidate(config[pair.key], 'url').error) {
+            isInvalid = true;
+          }
+          else if ((pair.key === 'userPhraseTradList' || pair.key === 'userPhraseSimpList') && importConfigValidate(config[pair.key], 'phrase').error) {
+            isInvalid = true;
+          }
+          else if (typeof config[pair.key] !== pair.type) {
+            isInvalid = true;
+          }
+        });
+
+        return isInvalid ? { error: true } : { error: false, config };
+      }
+    case 'url':
+      {
+        if (!Array.isArray(config)) {
+          return { error: true };
+        }
+
+        if (config.length < 1) {
+          return { error: false, config };
+        }
+
+        let isUrlInvalid = false;
+        config.forEach((url) => {
+          if (isUrlInvalid) {
+            return;
+          }
+          const urlKeys = Object.keys(url).sort();
+          if (urlKeys.length !== 2) {
+            isUrlInvalid = true;
+            return;
+          }
+          if (
+            (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
+            !url.url.match(
+              /^(https?\*?:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/,
+            )
+          ) {
+            isUrlInvalid = true;
+          }
+        });
+        return isUrlInvalid ? { error: true } : { error: false, config };
+      }
+    case 'phrase':
+      {
+        let isPhraseInvalid = false;
+        const safeConfig = Object.assign({}, config);
+        Object.keys(safeConfig).forEach((key) => {
+          if (isPhraseInvalid) {
+            return;
+          }
+          if (typeof safeConfig[key] !== 'string') {
+            isPhraseInvalid = true;
+          }
+        });
+        return isPhraseInvalid ? { error: true } : { error: false, safeConfig };
+      }
+    default:
+      return { error: true };
+  }
+}
+
+function resetListPrefs(name, partialConfig, currentPrefs) {
+  // Remove all list from UI
+  const list = document.getElementById(name);
+  for (let i = list.children.length - 2; i > 0; i--) {
+    list.removeChild(list.children[i]);
+  }
+
+  // Replace setting
+  currentPrefs[name] = partialConfig;
+
+  // Add new list to UI
+  setValueToElem(name, currentPrefs[name]);
+
+  // Save to storage
+  sendValueChangeMessage(name, currentPrefs[name]);
+}
+
+function exportToFile(data, fileName) {
+  const blob = new Blob([data], { type: 'text/json;charset=utf-8' });
 
   browser.downloads.download({
     url: URL.createObjectURL(blob),
     filename: fileName,
-    saveAs: true
+    saveAs: true,
   });
-};
+}
 
-export const importFromFile = (callback) => {
-  let selectFile = document.getElementById('selectFile');
+function importFromFile(callback) {
+  const selectFile = document.getElementById('selectFile');
   selectFile.onchange = () => {
     if (selectFile.files && selectFile.files.length) {
-      let file = selectFile.files[0];
-      let reader = new FileReader();
-      reader.onload = function (evt) {
+      const file = selectFile.files[0];
+      const reader = new FileReader();
+      reader.onload = function onload(evt) {
         try {
-          let data = JSON.parse(evt.target.result);
+          const data = JSON.parse(evt.target.result);
           callback(data);
         }
         catch (ex) {
@@ -27,26 +141,26 @@ export const importFromFile = (callback) => {
     }
   };
   selectFile.click();
-};
+}
 
-export const exportAllOptions = (currentPrefs) => {
+export function exportAllOptions(currentPrefs) {
   exportToFile(JSON.stringify(currentPrefs), 'NewTongWenTang-Options.json');
-};
+}
 
-export const exportUrlRule = (currentPrefs) => {
+export function exportUrlRule(currentPrefs) {
   exportToFile(JSON.stringify(currentPrefs.urlFilterList), 'NewTongWenTang-UrlRule.json');
-};
+}
 
-export const exportS2TTable = (currentPrefs) => {
+export function exportS2TTable(currentPrefs) {
   exportToFile(JSON.stringify(currentPrefs.userPhraseTradList), 'NewTongWenTang-S2TTable.json');
-};
+}
 
-export const exportT2STable = (currentPrefs) => {
+export function exportT2STable(currentPrefs) {
   exportToFile(JSON.stringify(currentPrefs.userPhraseSimpList), 'NewTongWenTang-T2STable.json');
-};
+}
 
-export const importAllOptions = () => {
-  importFromFile(data => {
+export function importAllOptions(currentPrefs) {
+  importFromFile((data) => {
     if (data) {
       const validated = importConfigValidate(data, 'all');
 
@@ -55,26 +169,26 @@ export const importAllOptions = () => {
         return;
       }
 
-      for (let p in validated.config) {
-        let elem = document.getElementById(p);
-        let elemType = elem.getAttribute('type');
+      Object.keys(validated.config).forEach(key => {
+        const elem = document.getElementById(key);
+        const elemType = elem.getAttribute('type');
         if (elemType === 'listBox' || elemType === 'listBoxObj') {
-          //Remove all list from UI
+          // Remove all list from UI
           for (let i = elem.children.length - 2; i > 0; i--) {
             elem.removeChild(elem.children[i]);
           }
-          currentPrefs[p] = validated.config[p];
+          currentPrefs[key] = validated.config[key];
         }
-        setValueToElem(p, validated.config[p]);
-        sendVelueChangeMessage(p, validated.config[p]);
-      }
+        setValueToElem(key, validated.config[key]);
+        sendValueChangeMessage(key, validated.config[key]);
+      });
       currentPrefs = validated.config;
     }
   });
-};
+}
 
-export const importUrlRule = () => {
-  importFromFile(data => {
+export function importUrlRule(currentPrefs) {
+  importFromFile((data) => {
     if (data) {
       const validated = importConfigValidate(data, 'url');
 
@@ -83,13 +197,13 @@ export const importUrlRule = () => {
         return;
       }
 
-      resetListPrefs('urlFilterList', validated.config);
+      resetListPrefs('urlFilterList', validated.config, currentPrefs);
     }
   });
-};
+}
 
-export const importS2TTable = () => {
-  importFromFile(data => {
+export function importS2TTable(currentPrefs) {
+  importFromFile((data) => {
     if (data) {
       const validated = importConfigValidate(data, 'phrase');
 
@@ -98,13 +212,13 @@ export const importS2TTable = () => {
         return;
       }
 
-      resetListPrefs('userPhraseTradList', validated.config);
+      resetListPrefs('userPhraseTradList', validated.config, currentPrefs);
     }
   });
-};
+}
 
-export const importT2STable = () => {
-  importFromFile(data => {
+export function importT2STable(currentPrefs) {
+  importFromFile((data) => {
     if (data) {
       const validated = importConfigValidate(data, 'phrase');
 
@@ -113,98 +227,7 @@ export const importT2STable = () => {
         return;
       }
 
-      resetListPrefs('userPhraseSimpList', validated.config);
+      resetListPrefs('userPhraseSimpList', validated.config, currentPrefs);
     }
   });
-};
-
-const importConfigValidate = (config, type) => {
-  switch (type) {
-    case 'all':
-      let isInvalid = false;
-      const allConfigKeys = Object.keys(config).sort();
-      const allKeyValuePair = [
-        { key: 'autoConvert', type: 'number' },
-        { key: 'iconAction', type: 'number' },
-        { key: 'inputConvert', type: 'number' },
-        { key: 'symConvert', type: 'boolean' },
-        { key: 'fontCustomEnabled', type: 'boolean' },
-        { key: 'fontCustomTrad', type: 'string' },
-        { key: 'fontCustomSimp', type: 'string' },
-        { key: 'contextMenuEnabled', type: 'boolean' },
-        { key: 'contextMenuInput2Trad', type: 'boolean' },
-        { key: 'contextMenuInput2Simp', type: 'boolean' },
-        { key: 'contextMenuPage2Trad', type: 'boolean' },
-        { key: 'contextMenuPage2Simp', type: 'boolean' },
-        { key: 'contextMenuClip2Trad', type: 'boolean' },
-        { key: 'contextMenuClip2Simp', type: 'boolean' },
-        { key: 'urlFilterEnabled', type: 'boolean' },
-        { key: 'urlFilterList', type: 'object' },
-        { key: 'userPhraseEnable', type: 'boolean' },
-        { key: 'userPhraseTradList', type: 'object' },
-        { key: 'userPhraseSimpList', type: 'object' },
-        { key: 'version', type: 'number' }
-      ];
-
-      allKeyValuePair.forEach((pair, index) => {
-        if (isInvalid) {
-          return;
-        }
-        if (pair.key === 'urlFilterList' && importConfigValidate(config[pair.key], 'url').error) {
-          isInvalid = true;
-          return;
-        }
-        else if ((pair.key === 'userPhraseTradList' || pair.key === 'userPhraseSimpList') && importConfigValidate(config[pair.key], 'phrase').error) {
-          isInvalid = true;
-          return;
-        }
-        else if (typeof config[pair.key] !== pair.type) {
-          isInvalid = true;
-        }
-      });
-
-      return isInvalid ? { error: true } : { error: false, config };
-    case 'url':
-      if (!Array.isArray(config)) {
-        return { error: true };
-      }
-      if (config.length < 1) {
-        return { error: false, config };
-      }
-      let isUrlInvalid = false;
-      config.forEach(url => {
-        if (isUrlInvalid) {
-          return;
-        }
-        const urlKeys = Object.keys(url).sort();
-        if (urlKeys.length !== 2) {
-          isUrlInvalid = true;
-          return;
-        }
-        if (
-          (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
-          !url.url.match(
-            /^(https?\*?:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/
-          )
-        ) {
-          isUrlInvalid = true;
-          return;
-        }
-      });
-      return isUrlInvalid ? { error: true } : { error: false, config };
-    case 'phrase':
-      let isPhraseInvalid = false;
-      const safeConfig = Object.assign({}, config);
-      Object.keys(safeConfig).forEach(key => {
-        if (isPhraseInvalid) {
-          return;
-        }
-        if (typeof safeConfig[key] !== 'string') {
-          isPhraseInvalid = true;
-        }
-      });
-      return isPhraseInvalid ? { error: true } : { error: false, safeConfig };
-    default:
-      return { error: true };
-  }
-};
+}

@@ -1,5 +1,5 @@
-//TongWen.addT2STable
-export const default_T2S_table = {
+// TongWen.addT2STable
+export const defaultT2STable = {
   "㑳": "㑇",
   "㘚": "㘎",
   "㥮": "㤘",
@@ -2884,5 +2884,5 @@ export const default_T2S_table = {
   "﹦": "＝",
   "﹩": "＄",
   "﹪": "％",
-  "﹫": "＠"
+  "﹫": "＠",
 };

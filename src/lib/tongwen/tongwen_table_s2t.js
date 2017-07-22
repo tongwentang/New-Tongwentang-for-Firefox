@@ -1,5 +1,5 @@
-//TongWen.addS2TTable
-export const default_S2T_table = {
+// TongWen.addS2TTable
+export const defaultS2TTable = {
   "㑇": "㑳",
   "㖞": "喎",
   "㘎": "㘚",
@@ -2504,5 +2504,5 @@ export const default_S2T_table = {
   "龚": "龔",
   "龛": "龕",
   "龟": "龜",
-  "": "　"
+  "": "　",
 };

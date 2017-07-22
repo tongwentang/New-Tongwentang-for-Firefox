@@ -1,24 +1,44 @@
-import { exportToFile, importFromFile, exportAllOptions, exportUrlRule, exportS2TTable, exportT2STable, importAllOptions, importUrlRule, importS2TTable, importT2STable } from './config-importer-exporter';
+import { exportAllOptions, exportUrlRule, exportS2TTable, exportT2STable, importAllOptions, importUrlRule, importS2TTable, importT2STable } from './config-importer-exporter';
 
 let categories = [];
-let tableRowItems = {
+const tableRowItems = {
   urlFilterList: [],
   userPhraseTradList: [],
-  userPhraseSimpList: []
+  userPhraseSimpList: [],
 };
 let tableRowButtons = [];
 let screenMask;
 let urlFilterEditor;
 let userPhraseEditor;
 let currentPrefs = {};
-let l10n = {};
-let flagmap = [];
+// const l10n = {};
+const flagmap = [];
 
-const checkFilterEditorInput = () => {
-  //console.log('checkFilterEditorInput');
+export function sendValueChangeMessage(id, value) {
+  if (value === undefined) {
+    delete currentPrefs[id];
+    // console.log('sendVelueChangeMessage(0): id = ' + id);
+  }
+  else if (typeof value === 'object') {
+    // console.log('sendVelueChangeMessage(1): id = ' + id + ', value = ' + JSON.stringify(value));
+    const update = {};
+    update[id] = value;
+    browser.storage.local.set(update).then(null, err => console.error(err));
+  }
+  else if (currentPrefs[id] !== value) {
+    currentPrefs[id] = value;
+    // console.log('sendVelueChangeMessage(2): id = ' + id + ', value = ' + value + ', type = ' + typeof(value));
+    const update = {};
+    update[id] = value;
+    browser.storage.local.set(update).then(null, err => console.error(err));
+  }
+}
+
+function checkFilterEditorInput() {
+  // console.log('checkFilterEditorInput');
   let checkAny = false;
-  let radios = Array.from(document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]'));
-  for (let radio of radios) {
+  const radios = Array.from(document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]'));
+  for (const radio of radios) {
     if (radio.checked) {
       checkAny = true;
       break;
@@ -30,63 +50,46 @@ const checkFilterEditorInput = () => {
   else {
     document.getElementById('btnAcceptFilter').disabled = true;
   }
-};
+}
 
-const resetListPrefs = (name, data) => {
-  //Remove all list from UI
-  let list = document.getElementById(name);
-  for (let i = list.children.length - 2; i > 0; i--) {
-    list.removeChild(list.children[i]);
-  }
-
-  //Replace setting
-  currentPrefs[name] = data;
-
-  //Add new list to UI
-  setValueToElem(name, currentPrefs[name]);
-
-  //Save to storage
-  sendValueChangeMessage(name, currentPrefs[name]);
-};
-
-const checkPhraseEditorInput = () => {
-  //console.log('checkPhraseEditorInput');
+function checkPhraseEditorInput() {
+  // console.log('checkPhraseEditorInput');
   if (document.getElementById('originPhrase').value !== '' && document.getElementById('newPhrase').value !== '') {
     document.getElementById('btnAcceptPhrase').disabled = false;
   }
   else {
     document.getElementById('btnAcceptPhrase').disabled = true;
   }
-};
+}
 
-const hideScreenMask = () => {
+function hideScreenMask() {
   urlFilterEditor.style.display = 'none';
   userPhraseEditor.style.display = 'none';
   screenMask.style.display = 'none';
   document.body.style.height = 'none';
   document.body.style.overflowY = 'scroll';
-};
+}
 
-const showUrlFilterEditor = (url, action, index) => {
+function showUrlFilterEditor(url, action, index) {
   screenMask.style.display = 'block';
   urlFilterEditor.style.display = 'block';
-  document.body.style.height = document.documentElement.clientHeight + 'px';
+  document.body.style.height = `${document.documentElement.clientHeight}px`;
   document.body.style.overflowY = 'hidden';
-  let newFilterUrl = document.getElementById('newFilterUrl');
+  const newFilterUrl = document.getElementById('newFilterUrl');
   newFilterUrl.value = url;
   newFilterUrl.setAttribute('index', index);
-  let radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
-  for (let radio of radios) {
-    radio.checked = (parseInt(radio.getAttribute('value')) === action);
+  const radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
+  for (const radio of radios) {
+    radio.checked = (parseInt(radio.getAttribute('value'), 10) === action);
   }
   document.getElementById('newFilterUrl').focus();
   checkFilterEditorInput();
-};
+}
 
-const showUserPhraseEditor = (key, value, type) => {
+function showUserPhraseEditor(key, value, type) {
   screenMask.style.display = 'block';
   userPhraseEditor.style.display = 'block';
-  document.body.style.height = document.documentElement.clientHeight + 'px';
+  document.body.style.height = `${document.documentElement.clientHeight}px`;
   document.body.style.overflowY = 'hidden';
   document.getElementById('originPhrase').value = key;
   document.getElementById('originPhrase').focus();
@@ -101,12 +104,12 @@ const showUserPhraseEditor = (key, value, type) => {
     document.getElementById('newPhraseLabel').textContent = browser.i18n.getMessage('labelSimplified');
   }
   checkPhraseEditorInput();
-};
+}
 
-const clickOnCategory = (event) => {
-  for (let category of categories) {
-    let id = category.getAttribute('id');
-    let panel = document.getElementById('panel-' + id);
+function clickOnCategory(event) {
+  for (const category of categories) {
+    const id = category.getAttribute('id');
+    const panel = document.getElementById(`panel-${id}`);
     if (category === event.currentTarget) {
       category.setAttribute('selected', true);
       panel.setAttribute('selected', true);
@@ -116,12 +119,12 @@ const clickOnCategory = (event) => {
       panel.removeAttribute('selected');
     }
   }
-};
+}
 
-const clickOnRowItem = (event) => {
-  let target = event.currentTarget.parentNode.getAttribute('id');
-  let items = tableRowItems[target];
-  for (let tableRowItem of items) {
+function clickOnRowItem(event) {
+  const target = event.currentTarget.parentNode.getAttribute('id');
+  const items = tableRowItems[target];
+  for (const tableRowItem of items) {
     if (tableRowItem === event.currentTarget) {
       tableRowItem.setAttribute('selected', true);
     }
@@ -129,26 +132,27 @@ const clickOnRowItem = (event) => {
       tableRowItem.removeAttribute('selected');
     }
   }
-};
+}
 
-const clickOnRowButton = (event) => {
+function clickOnRowButton(event) {
   event.stopPropagation();
   event.preventDefault();
   let button = event.currentTarget;
-  if (button.nodeName === 'LI')
+  if (button.nodeName === 'LI') {
     button = button.querySelector('.cellEdit');
+  }
   if (button.classList.contains('cellEdit')) {
     let target = button.parentNode.parentNode.getAttribute('id');
     if (target === 'urlFilterList') {
-      let index = parseInt(button.parentNode.getAttribute('index'));
-      let url = button.parentNode.firstChild.textContent;
-      let action = currentPrefs.urlFilterList[index].action;
+      const index = parseInt(button.parentNode.getAttribute('index'), 10);
+      const url = button.parentNode.firstChild.textContent;
+      const action = currentPrefs.urlFilterList[index].action;
       showUrlFilterEditor(url, action, index);
     }
     else {
-      let target = button.parentNode.parentNode.getAttribute('id');
-      let key = button.previousElementSibling.previousElementSibling.textContent;
-      let value = button.previousElementSibling.textContent;
+      target = button.parentNode.parentNode.getAttribute('id');
+      const key = button.previousElementSibling.previousElementSibling.textContent;
+      const value = button.previousElementSibling.textContent;
       document.getElementById('originPhrase-old').value = key;
       if (target === 'userPhraseTradList') {
         showUserPhraseEditor(key, value, 'trad');
@@ -161,26 +165,26 @@ const clickOnRowButton = (event) => {
   else if (button.classList.contains('cellDelete')) {
     let target = button.parentNode.parentNode.getAttribute('id');
     if (target === 'urlFilterList') {
-      let urlFilterList = document.getElementById('urlFilterList');
-      let node = button.parentNode;
+      const urlFilterList = document.getElementById('urlFilterList');
+      const node = button.parentNode;
       if (node.getAttribute('selected') === 'true') {
-        let index = parseInt(node.getAttribute('index'));
+        const index = parseInt(node.getAttribute('index'), 10);
         node.parentNode.removeChild(node);
         for (let i = index + 1; i < urlFilterList.children.length - 1; ++i) {
           urlFilterList.children[i].setAttribute('index', i - 1);
         }
         currentPrefs.urlFilterList.splice(index, 1);
         sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
-        //sendVelueChangeMessage(id);
+        // sendVelueChangeMessage(id);
       }
       else {
         clickOnRowItem({ currentTarget: node });
       }
     }
     else {
-      let target = button.parentNode.parentNode.getAttribute('id');
-      let key = button.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-      let node = button.parentNode;
+      target = button.parentNode.parentNode.getAttribute('id');
+      const key = button.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+      const node = button.parentNode;
       if (node.getAttribute('selected') === 'true') {
         node.parentNode.removeChild(node);
         delete currentPrefs[target][key];
@@ -191,50 +195,53 @@ const clickOnRowButton = (event) => {
       }
     }
   }
-};
+}
 
-const addRowItemCell = (row, classList, text, onClick) => {
-  let div = document.createElement('div');
-  for (let c of classList) {
+function addRowItemCell(row, classList, text, onClick) {
+  const div = document.createElement('div');
+  for (const c of classList) {
     div.classList.add(c);
   }
-  if (text)
+  if (text) {
     div.appendChild(document.createTextNode(text));
-  if (onClick)
+  }
+  if (onClick) {
     div.addEventListener('click', onClick, true);
+  }
   row.appendChild(div);
   return div;
-};
+}
 
-const moveUrlFilterPos = (shift) => {
+function moveUrlFilterPos(shift) {
   let selectedIndex = 0;
   let selectedRowItem = null;
   let nNode = null;
   let nIndex = 0;
-  for (let tableRowItem of tableRowItems.urlFilterList) {
+  for (const tableRowItem of tableRowItems.urlFilterList) {
     if (tableRowItem.getAttribute('selected') === 'true') {
-      let index = parseInt(tableRowItem.getAttribute('index'));
-      if ((shift === -1 && index === 0) || (shift === 1 && index === currentPrefs.urlFilterList.length - 1))
+      const index = parseInt(tableRowItem.getAttribute('index'), 10);
+      if ((shift === -1 && index === 0) || (shift === 1 && index === currentPrefs.urlFilterList.length - 1)) {
         return;
+      }
       selectedIndex = index;
       selectedRowItem = tableRowItem;
-      let filter = currentPrefs.urlFilterList.splice(index, 1);
+      const filter = currentPrefs.urlFilterList.splice(index, 1);
       currentPrefs.urlFilterList.splice(index + shift, 0, filter[0]);
       sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
       break;
     }
   }
 
-  let urlFilterList = document.getElementById('urlFilterList');
+  const urlFilterList = document.getElementById('urlFilterList');
   if (shift === 1 && selectedIndex === currentPrefs.urlFilterList.length - 2) {
-    let lastChild = urlFilterList.querySelector('li:last-of-type');
+    const lastChild = urlFilterList.querySelector('li:last-of-type');
     urlFilterList.insertBefore(selectedRowItem, lastChild);
     nNode = selectedRowItem.previousElementSibling;
     nIndex = selectedIndex;
   }
   else {
-    for (let tableRowItem of tableRowItems.urlFilterList) {
-      let index = parseInt(tableRowItem.getAttribute('index'));
+    for (const tableRowItem of tableRowItems.urlFilterList) {
+      const index = parseInt(tableRowItem.getAttribute('index'), 10);
       if (shift === -1 && index === selectedIndex - 1) {
         urlFilterList.insertBefore(selectedRowItem, tableRowItem);
         nNode = selectedRowItem;
@@ -252,73 +259,77 @@ const moveUrlFilterPos = (shift) => {
 
   let item = nNode;
   while (item) {
-    if (item.classList.contains('tableFooter'))
+    if (item.classList.contains('tableFooter')) {
       break;
+    }
     item.setAttribute('index', nIndex++);
     item = item.nextElementSibling;
   }
-};
+}
 
-const modifyUrlFilter = (url, action, index) => {
-  let urlFilterList = document.getElementById('urlFilterList');
-  let row = urlFilterList.children[index + 1];
+function modifyUrlFilter(url, action, index) {
+  const urlFilterList = document.getElementById('urlFilterList');
+  const row = urlFilterList.children[index + 1];
   row.children[0].textContent = url;
   row.children[1].textContent = flagmap[action];
   currentPrefs.urlFilterList[index].url = url;
   currentPrefs.urlFilterList[index].action = action;
-};
+}
 
-const addUrlFilter = (url, action, index) => {
-  let urlFilterList = document.getElementById('urlFilterList');
-  let li = document.createElement('li');
-  if (index === undefined)
+function addUrlFilter(url, action, index) {
+  const urlFilterList = document.getElementById('urlFilterList');
+  const li = document.createElement('li');
+  if (index === undefined) {
     index = currentPrefs.urlFilterList.length;
+  }
   li.setAttribute('index', index);
   li.classList.add('tableRow');
   addRowItemCell(li, ['cellUrl'], url);
   addRowItemCell(li, ['cellAction'], flagmap[action]);
-  let edit = addRowItemCell(li, ['cellEdit', 'cellButton'], null, clickOnRowButton);
+  const edit = addRowItemCell(li, ['cellEdit', 'cellButton'], null, clickOnRowButton);
   edit.setAttribute('custom', true);
   addRowItemCell(li, ['cellDelete', 'cellButton'], null, clickOnRowButton);
   li.addEventListener('click', clickOnRowItem, false);
   li.addEventListener('dblclick', clickOnRowButton, false);
-  let lastChild = urlFilterList.querySelector('li:last-of-type');
+  const lastChild = urlFilterList.querySelector('li:last-of-type');
   urlFilterList.insertBefore(li, lastChild);
   tableRowItems.urlFilterList.push(li);
-};
+}
 
-const modifyUserPhrase = (oldkey, key, value, type) => {
-  let list = type === 'trad' ? document.getElementById('userPhraseTradList') : document.getElementById('userPhraseSimpList');
+function modifyUserPhrase(oldkey, key, value, type) {
+  const list = type === 'trad' ? document.getElementById('userPhraseTradList') : document.getElementById('userPhraseSimpList');
   for (let i = list.children.length - 2; i > 0; i--) {
-    let row = list.children[i];
+    const row = list.children[i];
     if (row.children[0].textContent === oldkey) {
       row.children[0].textContent = key;
       row.children[1].textContent = value;
       break;
     }
   }
-};
+}
 
-const addUserPhrase = (key, value, type) => {
-  let list = type === 'trad' ? document.getElementById('userPhraseTradList') : document.getElementById('userPhraseSimpList');
-  let li = document.createElement('li');
+function addUserPhrase(key, value, type) {
+  const list = type === 'trad' ? document.getElementById('userPhraseTradList') : document.getElementById('userPhraseSimpList');
+  const li = document.createElement('li');
   li.classList.add('tableRow');
   addRowItemCell(li, ['cellConvert'], key);
   addRowItemCell(li, ['cellConvert'], value);
-  let edit = addRowItemCell(li, ['cellEdit', 'cellButton'], null, clickOnRowButton);
+  const edit = addRowItemCell(li, ['cellEdit', 'cellButton'], null, clickOnRowButton);
   edit.setAttribute('custom', true);
   addRowItemCell(li, ['cellDelete', 'cellButton'], null, clickOnRowButton);
   li.addEventListener('click', clickOnRowItem, false);
   li.addEventListener('dblclick', clickOnRowButton, false);
-  let lastChild = list.querySelector('li:last-of-type');
+  const lastChild = list.querySelector('li:last-of-type');
   list.insertBefore(li, lastChild);
-  if (type === 'trad')
+  if (type === 'trad') {
     tableRowItems.userPhraseTradList.push(li);
-  else
+  }
+  else {
     tableRowItems.userPhraseSimpList.push(li);
-};
+  }
+}
 
-const uiEventBinding = () => {
+function uiEventBinding() {
   categories = Array.from(document.querySelectorAll('.categories .categoryItem'));
   categories.forEach(category => {
     category.addEventListener('click', clickOnCategory, true);
@@ -332,26 +343,26 @@ const uiEventBinding = () => {
   urlFilterEditor = document.getElementById('urlFilterEditor');
   userPhraseEditor = document.getElementById('userPhraseEditor');
 
-  screenMask.addEventListener('click', event => {
+  screenMask.addEventListener('click', () => {
     hideScreenMask();
   }, false);
 
   Array.from(document.querySelectorAll('.btnCancel')).forEach(btn => {
-    btn.addEventListener('click', event => {
+    btn.addEventListener('click', () => {
       hideScreenMask();
     }, false);
   });
 
   Array.from(document.querySelectorAll('.btnAccept')).forEach(btn => {
     btn.addEventListener('click', event => {
-      let dlgName = event.target.getAttribute('dlgName');
+      const dlgName = event.target.getAttribute('dlgName');
       if (dlgName === 'urlFilterEditor') {
-        let newFilterUrl = document.getElementById('newFilterUrl');
-        let index = parseInt(newFilterUrl.getAttribute('index'));
-        let url = newFilterUrl.value;
-        let radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
+        const newFilterUrl = document.getElementById('newFilterUrl');
+        const index = parseInt(newFilterUrl.getAttribute('index'));
+        const url = newFilterUrl.value;
+        const radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
         let action;
-        for (let radio of radios) {
+        for (const radio of radios) {
           if (radio.checked) {
             action = parseInt(radio.getAttribute('value'));
             break;
@@ -359,7 +370,7 @@ const uiEventBinding = () => {
         }
         if (index === -1) {
           addUrlFilter(url, action);
-          currentPrefs.urlFilterList.push({ url: url, action: action });
+          currentPrefs.urlFilterList.push({ url, action });
         }
         else {
           modifyUrlFilter(url, action, index);
@@ -368,10 +379,10 @@ const uiEventBinding = () => {
         hideScreenMask();
       }
       else if (dlgName === 'userPhraseEditor') {
-        let oldkey = document.getElementById('originPhrase-old').value;
-        let key = document.getElementById('originPhrase').value;
-        let value = document.getElementById('newPhrase').value;
-        let type = userPhraseEditor.getAttribute('type');
+        const oldkey = document.getElementById('originPhrase-old').value;
+        const key = document.getElementById('originPhrase').value;
+        const value = document.getElementById('newPhrase').value;
+        const type = userPhraseEditor.getAttribute('type');
         if (oldkey) {
           modifyUserPhrase(oldkey, key, value, type);
         }
@@ -379,14 +390,16 @@ const uiEventBinding = () => {
           addUserPhrase(key, value, type);
         }
         if (type === 'trad') {
-          if (oldkey)
+          if (oldkey) {
             delete currentPrefs.userPhraseTradList[oldkey];
+          }
           currentPrefs.userPhraseTradList[key] = value;
           sendValueChangeMessage('userPhraseTradList', currentPrefs.userPhraseTradList);
         }
         else if (type === 'simp') {
-          if (oldkey)
+          if (oldkey) {
             delete currentPrefs.userPhraseSimpList[oldkey];
+          }
           currentPrefs.userPhraseSimpList[key] = value;
           sendValueChangeMessage('userPhraseSimpList', currentPrefs.userPhraseSimpList);
         }
@@ -395,76 +408,75 @@ const uiEventBinding = () => {
     }, false);
   });
 
-  document.getElementById('btnAddUserPhraseTrad').addEventListener('click', event => {
+  document.getElementById('btnAddUserPhraseTrad').addEventListener('click', () => {
     document.getElementById('originPhrase-old').value = '';
     showUserPhraseEditor('', '', 'trad');
   }, false);
-  document.getElementById('btnAddUserPhraseSimp').addEventListener('click', event => {
+  document.getElementById('btnAddUserPhraseSimp').addEventListener('click', () => {
     document.getElementById('originPhrase-old').value = '';
     showUserPhraseEditor('', '', 'simp');
   }, false);
-  document.getElementById('btnAddUrlFilter').addEventListener('click', event => {
+  document.getElementById('btnAddUrlFilter').addEventListener('click', () => {
     showUrlFilterEditor('', -1, -1);
   }, false);
-  document.getElementById('btnMoveUp').addEventListener('click', event => {
+  document.getElementById('btnMoveUp').addEventListener('click', () => {
     moveUrlFilterPos(-1);
   }, false);
-  document.getElementById('btnMoveDown').addEventListener('click', event => {
+  document.getElementById('btnMoveDown').addEventListener('click', () => {
     moveUrlFilterPos(+1);
   }, false);
 
-  document.getElementById('newFilterUrl').addEventListener('input', event => {
+  document.getElementById('newFilterUrl').addEventListener('input', () => {
     checkFilterEditorInput();
   }, false);
-  let radios2 = Array.from(document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]'));
-  for (let radio of radios2) {
-    radio.addEventListener('input', event => {
+  const radios2 = Array.from(document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]'));
+  for (const radio of radios2) {
+    radio.addEventListener('input', () => {
       checkFilterEditorInput();
     });
   }
 
-  document.getElementById('originPhrase').addEventListener('input', event => {
+  document.getElementById('originPhrase').addEventListener('input', () => {
     checkPhraseEditorInput();
   }, false);
-  document.getElementById('newPhrase').addEventListener('input', event => {
+  document.getElementById('newPhrase').addEventListener('input', () => {
     checkPhraseEditorInput();
   }, false);
 
-  document.getElementById('btnExportAllOptions').addEventListener('click', event => {
+  document.getElementById('btnExportAllOptions').addEventListener('click', () => {
     exportAllOptions(currentPrefs);
   }, false);
-  document.getElementById('btnExportUrlRule').addEventListener('click', event => {
+  document.getElementById('btnExportUrlRule').addEventListener('click', () => {
     exportUrlRule(currentPrefs);
   }, false);
-  document.getElementById('btnExportS2TTable').addEventListener('click', event => {
+  document.getElementById('btnExportS2TTable').addEventListener('click', () => {
     exportS2TTable(currentPrefs);
   }, false);
-  document.getElementById('btnExportT2STable').addEventListener('click', event => {
+  document.getElementById('btnExportT2STable').addEventListener('click', () => {
     exportT2STable(currentPrefs);
   }, false);
 
-  document.getElementById('btnImportAllOptions').addEventListener('click', event => {
-    importAllOptions();
+  document.getElementById('btnImportAllOptions').addEventListener('click', () => {
+    importAllOptions(currentPrefs);
   }, false);
-  document.getElementById('btnImportUrlRule').addEventListener('click', event => {
-    importUrlRule();
+  document.getElementById('btnImportUrlRule').addEventListener('click', () => {
+    importUrlRule(currentPrefs);
   }, false);
-  document.getElementById('btnImportS2TTable').addEventListener('click', event => {
-    importS2TTable();
+  document.getElementById('btnImportS2TTable').addEventListener('click', () => {
+    importS2TTable(currentPrefs);
   }, false);
-  document.getElementById('btnImportT2STable').addEventListener('click', event => {
-    importT2STable();
+  document.getElementById('btnImportT2STable').addEventListener('click', () => {
+    importT2STable(currentPrefs);
   }, false);
+}
 
-};
-
-const setValueToElem = (id, value) => {
-  let elem = document.getElementById(id);
+export function setValueToElem(id, value) {
+  const elem = document.getElementById(id);
   if (elem) {
-    let elemType = elem.getAttribute('type');
+    const elemType = elem.getAttribute('type');
     if (elemType === 'radioGroup') {
-      let radios = Array.from(elem.querySelectorAll('input[name=' + id + ']'));
-      for (let radio of radios) {
+      const radios = Array.from(elem.querySelectorAll(`input[name=${id}]`));
+      for (const radio of radios) {
         if (parseInt(radio.getAttribute('value')) === value) {
           radio.checked = true;
           break;
@@ -483,84 +495,70 @@ const setValueToElem = (id, value) => {
       }
     }
     else if (elemType === 'listBoxObj') {
-      for (let key in value) {
+      Object.keys(value).forEach(key => {
         addUserPhrase(key, value[key], id === 'userPhraseTradList' ? 'trad' : 'simp');
-      }
+      });
     }
   }
-};
+}
 
-const getValueFromElem = (id) => { };
-
-const sendValueChangeMessage = (id, value) => {
-  if (value === undefined) {
-    delete currentPrefs[id];
-    //console.log('sendVelueChangeMessage(0): id = ' + id);
-  }
-  else if (typeof value === 'object') {
-    //console.log('sendVelueChangeMessage(1): id = ' + id + ', value = ' + JSON.stringify(value));
-    let update = {};
-    update[id] = value;
-    browser.storage.local.set(update).then(null, err => { });
-  }
-  else {
-    if (currentPrefs[id] !== value) {
-      currentPrefs[id] = value;
-      //console.log('sendVelueChangeMessage(2): id = ' + id + ', value = ' + value + ', type = ' + typeof(value));
-      let update = {};
-      update[id] = value;
-      browser.storage.local.set(update).then(null, err => { });
-    }
-  }
-};
-
-const handleValueChange = (id) => {
-  let elem = document.getElementById(id);
+function handleValueChange(id) {
+  const elem = document.getElementById(id);
   if (elem) {
-    let elemType = elem.getAttribute('type');
+    const elemType = elem.getAttribute('type');
     if (elemType === 'radioGroup') {
-      let radios = Array.from(elem.querySelectorAll('input[name=' + id + ']'));
-      for (let radio of radios) {
-        radio.addEventListener('input', event => { if (radio.checked) sendValueChangeMessage(id, parseInt(radio.getAttribute("value"))); });
+      const radios = Array.from(elem.querySelectorAll(`input[name=${id}]`));
+      for (const radio of radios) {
+        radio.addEventListener('input', () => {
+          if (radio.checked) sendValueChangeMessage(id, parseInt(radio.getAttribute('value')));
+        });
       }
     }
     else if (elemType === 'checkbox') {
-      elem.addEventListener('input', event => { sendValueChangeMessage(id, elem.checked); });
+      elem.addEventListener('input', () => {
+        sendValueChangeMessage(id, elem.checked);
+      });
     }
     else if (elemType === 'color') {
-      elem.addEventListener('input', event => { sendValueChangeMessage(id, elem.value); });
+      elem.addEventListener('input', () => {
+        sendValueChangeMessage(id, elem.value);
+      });
     }
     else if (elemType === 'number') {
-      elem.addEventListener('input', event => { sendValueChangeMessage(id, parseInt(elem.value)); });
+      elem.addEventListener('input', () => {
+        sendValueChangeMessage(id, parseInt(elem.value));
+      });
     }
     else if (elemType === 'text') {
-      elem.addEventListener('input', event => { sendValueChangeMessage(id, elem.value); });
+      elem.addEventListener('input', () => {
+        sendValueChangeMessage(id, elem.value);
+      });
     }
   }
-};
+}
 
-const init = preferences => {
-  flagmap = [
-    browser.i18n.getMessage('labelNoTranslate'),
-    '',
-    browser.i18n.getMessage('labelToTraditional'),
-    browser.i18n.getMessage('labelToSimplified')
-  ];
+// function getValueFromElem(id) {};
 
-  //console.log(JSON.stringify(preferences,null,4));
+function init(preferences) {
+  flagmap.push(browser.i18n.getMessage('labelNoTranslate'));
+  flagmap.push('');
+  flagmap.push(browser.i18n.getMessage('labelToTraditional'));
+  flagmap.push(browser.i18n.getMessage('labelToSimplified'));
+
+  // console.log(JSON.stringify(preferences,null,4));
   currentPrefs = preferences;
-  for (let p in preferences) {
-    setValueToElem(p, preferences[p]);
-    handleValueChange(p);
-  }
+  Object.keys(preferences).forEach(key => {
+    setValueToElem(key, preferences[key]);
+    handleValueChange(key);
+  });
   document.title = browser.i18n.getMessage('optionTitle');
-  let l10nTags = Array.from(document.querySelectorAll('[data-l10n-id]'));
+  const l10nTags = Array.from(document.querySelectorAll('[data-l10n-id]'));
   l10nTags.forEach(tag => {
     tag.textContent = browser.i18n.getMessage(tag.getAttribute('data-l10n-id'));
   });
-};
+}
 
-window.addEventListener('load', event => {
+window.addEventListener('load', () => {
   browser.runtime.getBrowserInfo().then(info => {
     if (info.name === 'Firefox' && parseInt(info.version) < 54) {
       document.getElementById('contextMenuClipboardT').style.display = 'none';
