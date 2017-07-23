@@ -30,7 +30,7 @@
     "html-webpack-plugin": "^2.29.0",
     "style-loader": "^0.18.2",
     "svg-url-loader": "^2.1.1",
-    "webpack": "^3.1.0"
+    "webpack": "^3.3.0"
   },
   "dependencies": {
     "notyf": "^2.0.1"
