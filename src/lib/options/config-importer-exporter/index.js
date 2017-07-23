@@ -73,7 +73,7 @@ function importConfigValidate(config, type) {
           if (
             (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
             !url.url.match(
-              /^(https?\*?:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/,
+              /^(.+:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/,
             )
           ) {
             isUrlInvalid = true;
