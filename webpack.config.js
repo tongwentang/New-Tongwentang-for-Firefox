@@ -1,48 +1,27 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
     background: './src/background',
-    options: './src/lib/options/options',
-    tongwen: './src/lib/tongwen/tongwen',
+    options: './src/options',
+    tongwen: './src/tongwen'
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loaders: 'eslint-loader'
-      },
-      {
-        test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
-        exclude: /node-modules/
-      },
-      {
-        test: /\.svg$/,
-        loaders: ['svg-url-loader']
-      }
-    ]
+    path: path.resolve(__dirname, 'dist')
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
       { from: './src/LICENSE' },
       { from: './src/manifest.json' },
+      { from: './src/options.css' },
+      { from: './src/options.html' },
       { from: './src/_locales', to: '_locales' },
       { from: './src/icon', to: 'icon' },
-    ]),
-    new HtmlWebpackPlugin({
-      filename: 'options.html',
-      template: 'src/lib/options/options.html',
-      chunks: ['options'],
-    }),
-  ],
+      { from: './src/lib/tongwen', to: 'lib/tongwen' }
+    ])
+  ]
 };

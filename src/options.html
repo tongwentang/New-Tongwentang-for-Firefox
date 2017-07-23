@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="options.css"/>
+    <script type="text/javascript" src="options.js"></script>
+  </head>
+  <body>
+    <!--category tab - start-->
+    <div class="categories">
+      <div class="categoryItem" selected="true" id="category-general">
+        <span id="general"></span><span class="categoriesText" data-l10n-id="tabsGeneral">General</span>
+      </div>
+      <div class="categoryItem" id="category-contextmenu">
+        <span id="contextmenu"></span><span class="categoriesText" data-l10n-id="tabsContextmenu">Context Menu</span>
+      </div>
+      <div class="categoryItem" id="category-url">
+        <span id="url"></span><span class="categoriesText" data-l10n-id="tabsUrl">Conversion Rules</span>
+      </div>
+      <div class="categoryItem" id="category-phrase">
+        <span id="phrase"></span><span class="categoriesText" data-l10n-id="tabsPhrase">Customize Phrases</span>
+      </div>
+      <div class="categoryItem" id="category-support">
+        <span id="support"></span><span class="categoriesText" data-l10n-id="tabsSupport">Support</span>
+      </div>
+    </div>
+    <!--category tab - end-->
+
+    <!--panel general start-->
+    <div class="content" selected="true" id="panel-category-general">
+      <div class="contentHead" data-l10n-id="tabsGeneral">General</div>
+      <div class="groupTitle" data-l10n-id="labelAutoConvert">AutoConversion Settings</div>
+      <div>
+        <ul id="autoConvert" type="radioGroup">
+          <li>
+            <input type="radio" id="autoConvert-0" name="autoConvert" value="0">
+            <label class="labelText" for="autoConvert-0" data-l10n-id="labelAutoConvertNone" >Disable AutoConversion</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="autoConvert-1" name="autoConvert"  value="2">
+            <label class="labelText" for="autoConvert-1" data-l10n-id="labelAutoConvertTrad">Convert to Traditional (Simplified-to-Traditional) automatically</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="autoConvert-2" name="autoConvert"  value="3">
+            <label class="labelText" for="autoConvert-2" data-l10n-id="labelAutoConvertSimp">Convert to Simplified (Traditional-to-Simplified) automatically</label>
+            <div class="check"></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="labelIconAction">Button Function</div>
+      <div>
+        <ul id="iconAction" type="radioGroup">
+          <li>
+            <input type="radio" id="iconAction-0" name="iconAction" value="1">
+            <label class="labelText" for="iconAction-0" data-l10n-id="labelIconActionAuto" >Detect and Convert automatically <br />(Simplified-to-Traditional and Traditional-to-Simplified)</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="iconAction-1" name="iconAction"  value="2">
+            <label class="labelText" for="iconAction-1" data-l10n-id="labelIconActionTrad">Convert to Traditional (Simplified-to-Traditional)</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="iconAction-2" name="iconAction"  value="3">
+            <label class="labelText" for="iconAction-2" data-l10n-id="labelIconActionSimp">Convert to Simplified (Traditional-to-Simplified)</label>
+            <div class="check"></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="labelInputConvert">TextArea Conversion Configuration</div>
+      <div>
+        <ul id="inputConvert" type="radioGroup">
+          <li>
+            <input type="radio" id="inputConvert-0" name="inputConvert" value="0">
+            <label class="labelText" for="inputConvert-0" data-l10n-id="labelinputConvertNone" >Disable TextArea conversion</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="inputConvert-1" name="inputConvert"  value="1">
+            <label class="labelText" for="inputConvert-1" data-l10n-id="labelinputConvertAuto">Convert content in TextArea <br />(Simplified-to-Traditional and Traditional-to-Simplified)</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="inputConvert-2" name="inputConvert"  value="2">
+            <label class="labelText" for="inputConvert-2" data-l10n-id="labelinputConvertTrad">Convert content in TextArea to Traditional Chinese <br />(Simplified-to-Traditional)</label>
+            <div class="check"></div>
+          </li>
+          <li>
+            <input type="radio" id="inputConvert-3" name="inputConvert"  value="3">
+            <label class="labelText" for="inputConvert-3" data-l10n-id="labelinputConvertSimp">Convert content in TextArea to Simplified Chinese <br />(Traditional-to-Simplified)</label>
+            <div class="check"></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="labelSymbolConvert">Punctuation Conversion</div>
+      <div>
+        <ul>
+          <li>
+            <input type="checkbox" id="symConvert">
+            <label class="labelText" for="symConvert" data-l10n-id="labelSymbolConvertEnable">Enable Punctuation Conversion</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="labelShowFontSet">Set Font</div>
+      <div>
+        <ul>
+          <li>
+            <input type="checkbox" id="fontCustomEnabled">
+            <label class="labelText" for="fontCustomEnabled" data-l10n-id="labelShowFontSetEnable">Specify Font Changing</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+        <ul>
+          <ul>
+            <li class="inline">
+              <label class="labelText" data-l10n-id="labelShowFontSetTrad">Font for Traditional Chinese: </label>
+            </li>
+            <li class="inline">
+              <input type="text" size="35" id="fontCustomTrad">
+            </li>
+          </ul>
+          <div class="space"></div>
+          <ul>
+            <li class="inline">
+              <label class="labelText" data-l10n-id="labelShowFontSetSimp">Font for Simplified Chinese: </label>
+            </li>
+            <li class="inline">
+              <input type="text" size="35" id="fontCustomSimp">
+            </li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="btnExportOptions">Export Options</div>
+      <div>
+        <ul>
+          <li class="inline">
+            <button id="btnExportAllOptions" data-l10n-id="dlgExportOption">Export all options</button>
+          </li>
+          <li class="inline">
+            <button id="btnExportUrlRule" data-l10n-id="dlgExportRules">Export URL-based conversion rules</button>
+          </li>
+          <li class="inline">
+            <button id="btnExportS2TTable" data-l10n-id="dlgExportPhraseTrad">Export Simplified-to-Traditional phrase table</button>
+          </li>
+          <li class="inline">
+            <button id="btnExportT2STable" data-l10n-id="dlgExportPhraseSimp">Export Traditional-to-Simplified phrase table</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="btnImportOptions">Import Options</div>
+      <div>
+        <input id="selectFile" type="file" style="display:none" accept=".json">
+        <ul>
+          <li class="inline">
+
+            <button id="btnImportAllOptions" data-l10n-id="dlgImportOption">Import all options</button>
+          </li>
+          <li class="inline">
+            <button id="btnImportUrlRule" data-l10n-id="dlgImportRules">Import URL-based conversion rules</button>
+          </li>
+          <li class="inline">
+            <button id="btnImportS2TTable" data-l10n-id="dlgImportPhraseTrad">Import Simplified-to-Traditional phrase table</button>
+          </li>
+          <li class="inline">
+            <button id="btnImportT2STable" data-l10n-id="dlgImportPhraseSimp">Import Traditional-to-Simplified phrase table</button>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <!--panel general end-->
+
+    <!--panel contextmenu - start-->
+    <div class="content" id="panel-category-contextmenu">
+      <div class="contentHead" data-l10n-id="tabsContextmenu">Context Menu</div>
+
+      <div class="groupTitle" data-l10n-id="labelContextMenu">Punctuation Conversion</div>
+      <div>
+        <ul>
+          <li>
+            <input type="checkbox" id="contextMenuEnabled">
+            <label class="labelText" for="contextMenuEnabled" data-l10n-id="labelContextMenuEnable">Enable Punctuation Conversion</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <ul>
+        <ul>
+          <li>
+            <input type="checkbox" id="contextMenuInput2Trad">
+            <label class="labelText" for="contextMenuInput2Trad" data-l10n-id="contextInput2Trad">Textarea: to Traditional</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <input type="checkbox" id="contextMenuInput2Simp">
+            <label class="labelText" for="contextMenuInput2Simp" data-l10n-id="contextInput2Simp">Textarea: to Simplified</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <input type="checkbox" id="contextMenuPage2Trad">
+            <label class="labelText" for="contextMenuPage2Trad" data-l10n-id="contextPage2Trad">Web Page: to Traditional</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <input type="checkbox" id="contextMenuPage2Simp">
+            <label class="labelText" for="contextMenuPage2Simp" data-l10n-id="contextPage2Simp">Web Page: to Simplified</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+
+        <ul id="contextMenuClipboardT">
+          <li>
+            <input type="checkbox" id="contextMenuClip2Trad">
+            <label class="labelText" for="contextMenuClip2Trad" data-l10n-id="contextClip2Trad">Clipboard: to Traditional</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+
+        <ul id="contextMenuClipboardS">
+          <li>
+            <input type="checkbox" id="contextMenuClip2Simp">
+            <label class="labelText" for="contextMenuClip2Simp" data-l10n-id="contextClip2Simp">Clipboard: to Simplified</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+        </ul>
+      </div>
+
+    </div>
+    <!--panel contextmenu - end-->
+
+    <!--panel url - start-->
+    <div class="content" id="panel-category-url">
+      <div class="contentHead" data-l10n-id="tabsUrl">Conversion Rules</div>
+
+      <div class="groupTitle" data-l10n-id="tabsUrl">Conversion Rules</div>
+      <div>
+        <ul>
+          <li>
+            <input type="checkbox" id="urlFilterEnabled">
+            <label class="labelText" for="urlFilterEnabled" data-l10n-id="labelUrlFilterEnable">Enable Punctuation Conversion</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul type="listBox" class="listBox inline" id="urlFilterList">
+          <li class="tableHeader tableRow">
+            <div class="cellEnabled"></div>
+            <div class="cellUrl" data-l10n-id="labelUrlFilterUrl">URL</div><div class="cellAction" data-l10n-id="labelUrlFilterConvert">Conversion</div>
+            <div id="btnAddUrlFilter" class="cellAdd"></div>
+            <div id="btnMoveUp" class="cellMoveUp"></div>
+            <div id="btnMoveDown" class="cellMoveDown"></div>
+          </li>
+          <li class="tableFooter tableRow"><div class="cellUrl"></div></li>
+        </ul>
+      </div>
+
+    </div>
+    <!--panel url - end-->
+
+    <!--panel phrase - start-->
+    <div class="content" id="panel-category-phrase">
+      <div class="contentHead" data-l10n-id="tabsPhrase">Customize Phrases</div>
+
+      <div class="groupTitle" data-l10n-id="tabsPhrase">Customize Rules</div>
+      <div>
+        <ul>
+          <li>
+            <input type="checkbox" id="userPhraseEnable">
+            <label class="labelText" for="userPhraseEnable" data-l10n-id="labelCustomPhraseEnable">Enable Customized Phrases</label>
+            <div class="checkbox"></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="tabSimpToTrad">Simplified to Traditional</div>
+      <div>
+        <ul type="listBoxObj" class="listBox inline" id="userPhraseTradList">
+          <li class="tableHeader tableRow">
+            <div class="cellEnabled"></div>
+            <div class="cellConvert" data-l10n-id="labelSimplified">URL</div><div class="cellConvert" data-l10n-id="labelTraditional">Conversion</div>
+            <div id="btnAddUserPhraseTrad" class="cellAdd"></div>
+          </li>
+          <li class="tableFooter tableRow"><div class="cellUrl"></div></li>
+        </ul>
+      </div>
+
+      <div class="groupTitle" data-l10n-id="tabTradToSimp">Traditional to Simplified</div>
+      <div>
+        <ul type="listBoxObj" class="listBox inline" id="userPhraseSimpList">
+          <li class="tableHeader tableRow">
+            <div class="cellEnabled"></div>
+            <div class="cellConvert" data-l10n-id="labelTraditional">URL</div><div class="cellConvert" data-l10n-id="labelSimplified">Conversion</div>
+            <div id="btnAddUserPhraseSimp" class="cellAdd"></div>
+          </li>
+          <li class="tableFooter tableRow"><div class="cellUrl"></div></li>
+        </ul>
+      </div>
+
+    </div>
+    <!--panel phrase - end-->
+
+    <!--panel support - start-->
+    <div class="content" id="panel-category-support">
+      <div class="contentHead" data-l10n-id="tabsSupport">Help</div>
+
+      <div class="groupTitle" data-l10n-id="tabsSupport"></div>
+      <div>
+        <ul class="inline">
+          <li class="">GitHub: <a href="https://github.com/softcup/New-Tongwentang-for-Firefox" target="_blank">https://github.com/softcup/New-Tongwentang-for-Firefox</a></li>
+          <li class="">Issue Report: <a href="https://github.com/softcup/New-Tongwentang-for-Firefox/issues" target="_blank">https://github.com/softcup/New-Tongwentang-for-Firefox/issues</a></li>
+        </ul>
+      </div>
+
+
+    </div>
+    <!--panel support - end-->
+
+    <!--editor - start-->
+    <div id="screenMask" class="screenMask" >
+    </div>
+    <div id="urlFilterEditor" class="urlFilterEditor">
+      <div id="addNewUrlFilter">
+        <ul class="inline">
+          <li class="inline">
+            <label class="labelText" data-l10n-id="labelUrlFilterUrlColon">URL: </label>
+          </li>
+          <li class="inline">
+            <input type="text" id="newFilterUrl" size="40">
+          </li>
+        </ul>
+        <ul id="urlFilterAction" type="radioGroup" class="inline">
+          <li class="inline">
+            <label class="labelText" data-l10n-id="labelUrlFilterConvertColon">Conversion: </label>
+          </li>
+          <li class="inline">
+            <input type="radio" id="urlFilterAction-0" name="urlFilterAction" value="0">
+            <label class="labelText" for="urlFilterAction-0" data-l10n-id="labelNoTranslate" >Do not convert</label>
+            <div class="check"></div>
+          </li>
+          <li class="inline">
+            <input type="radio" id="urlFilterAction-1" name="urlFilterAction"  value="2">
+            <label class="labelText" for="urlFilterAction-1" data-l10n-id="labelToTraditional">to Traditional</label>
+            <div class="check"></div>
+          </li>
+          <li class="inline">
+            <input type="radio" id="urlFilterAction-2" name="urlFilterAction"  value="3">
+            <label class="labelText" for="urlFilterAction-2" data-l10n-id="labelToSimplified">to Simplified</label>
+            <div class="check"></div>
+          </li>
+        </ul>
+      </div>
+
+      <button id="btnAcceptFilter" dlgName="urlFilterEditor" class="dialogButton btnAccept" data-l10n-id="btnOK">OK</button>
+      <button dlgName="urlFilterEditor" class="dialogButton btnCancel" data-l10n-id="btnCancel">Cancel</button>
+    </div>
+    <!--editor - start-->
+
+    <!--editor - start-->
+    <div id="screenMask" class="screenMask" >
+    </div>
+    <div id="userPhraseEditor" class="userPhraseEditor" type="">
+      <div id="addNewUserPhrase">
+        <ul class="inline">
+          <li class="inline">
+            <label class="labelText" id="originPhraseLabel"></label>
+          </li>
+          <li class="inline">
+            <input type="text" id="originPhrase-old" style="display:none" size="40" >
+            <input type="text" id="originPhrase" size="40">
+          </li>
+        </ul>
+        <div class="space"></div>
+        <ul class="inline">
+          <li class="inline">
+            <label class="labelText" id="newPhraseLabel"></label>
+          </li>
+          <li class="inline">
+            <input type="text" id="newPhrase" size="40">
+          </li>
+        </ul>
+      </div>
+
+      <button id="btnAcceptPhrase" dlgName="userPhraseEditor" class="dialogButton btnAccept" data-l10n-id="btnOK">OK</button>
+      <button dlgName="userPhraseEditor" class="dialogButton btnCancel" data-l10n-id="btnCancel">Cancel</button>
+    </div>
+    <!--editor - start-->
+  </body>
+</html>

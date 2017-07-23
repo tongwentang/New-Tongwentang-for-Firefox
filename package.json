@@ -19,20 +19,8 @@
   },
   "homepage": "https://github.com/softcup/New-Tongwentang-for-Firefox#readme",
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
     "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
-    "css-loader": "^0.28.4",
-    "eslint": "^4.3.0",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.7.0",
-    "html-webpack-plugin": "^2.29.0",
-    "style-loader": "^0.18.2",
-    "svg-url-loader": "^2.1.1",
     "webpack": "^3.1.0"
-  },
-  "dependencies": {
-    "notyf": "^2.0.1"
   }
 }
