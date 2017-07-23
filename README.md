@@ -14,11 +14,9 @@ Released under [MIT/X11 License](https://opensource.org/licenses/mit-license.php
 
 # Todos
 - modular
-  - ~~es6~~
+  - es6
   - ~~webpack~~
   - typescript (maybe)
-- notifier
-  - ~~notyf~~
 - UI rework
   - react / angular / vue
 - reactive to async

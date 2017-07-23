@@ -1,15 +1,13 @@
-import { TongWen } from './tongwen_core';
-
 // window loaded
 let preferences;
-const convertMapping = ['none', 'auto', 'trad', 'simp'];
+let convertMapping = ['none','auto','trad','simp'];
 
 const urlFilterAction = uri => {
-  for (const filter of preferences.urlFilterList) {
+  for (let filter of preferences.urlFilterList) {
     if (filter.url.includes('*')) {
       // var url = filter.url.replace(/(\W+)/ig, '\\$1').replace('*.', '*\\.').replace(/\*/ig, '\\w*'); // 較為嚴謹
-      const url = filter.url.replace(/(\W)/ig, '\\$1').replace(/\\\*/ig, '*').replace(/\*/ig, '.*'); // 寬鬆比對
-      const re = new RegExp(`^${url}$`, 'ig');
+      let url = filter.url.replace(/(\W)/ig, '\\$1').replace(/\\\*/ig, '*').replace(/\*/ig, '.*'); // 寬鬆比對
+      let re = new RegExp('^' + url + '$', 'ig');
       if (uri.match(re) !== null) {
         return convertMapping[filter.action];
       }
@@ -39,9 +37,9 @@ browser.storage.local.get().then(results => {
   }
   if (results.version) {
     preferences = results;
-    // console.log(JSON.stringify(preferences, null, 4));
-    const zhflag = docLoadedInit(document.URL);
-    // console.log('zhflag = ' + zhflag );
+    //console.log(JSON.stringify(preferences, null, 4));
+    let zhflag = docLoadedInit(document.URL);
+    //console.log('zhflag = ' + zhflag );
     TongWen.loadSettingData(preferences);
     if (zhflag === 'trad') {
       TongWen.trans2Trad(document);
@@ -53,37 +51,38 @@ browser.storage.local.get().then(results => {
 });
 
 const messageHandler = (request, sender, sendResponse) => {
-  // console.log(JSON.stringify(request, null , 4));
+  //console.log(JSON.stringify(request, null , 4));
+  var isInput, val, tag, attr, zhflag, elem, lang;
   if (request.act === 'paste') {
-    if (window.self === window.top) { // this message only handle by top window.
-      const val = TongWen.convert(request.text, request.flag);
-      const textArea = document.createElement('textarea');
+    if(window.self === window.top) { //this message only handle by top window.
+      let val = TongWen.convert(request.text, request.flag);
+      let textArea = document.createElement('textarea');
       textArea.value = val;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      sendResponse({ text: val });
+      sendResponse({text: val});
     }
     return;
   }
 
-  const lang = document.documentElement.getAttribute('lang');
+  lang = document.documentElement.getAttribute('lang');
   if ((lang === null) && (request.lang !== false)) {
     document.documentElement.setAttribute('lang', request.lang);
   }
 
-  const elem = document.activeElement;
-  const tag = (typeof elem.tagName === 'undefined') ? '' : elem.tagName.toLowerCase();
-  let val = (typeof elem.type === 'undefined') ? '' : elem.type.toLowerCase();
-  const isInput = ((['textarea', 'input'].indexOf(tag) >= 0) && (['textarea', 'text'].indexOf(val) >= 0));
+  elem = document.activeElement;
+  tag = (typeof elem.tagName === 'undefined') ? '' : elem.tagName.toLowerCase();
+  val = (typeof elem.type === 'undefined') ? '' : elem.type.toLowerCase();
+  isInput = ((['textarea', 'input'].indexOf(tag) >= 0) && (['textarea', 'text'].indexOf(val) >= 0));
 
   if (isInput && ((request.act === 'input') || (convertMapping[preferences.inputConvert] !== 'none'))) {
     // 輸入區文字轉換
-    let zhflag = request.flag;
+    zhflag = request.flag;
     val = document.activeElement.value;
     if (zhflag === 'auto') {
-      const attr = document.activeElement.getAttribute('zhtongwen');
+      attr = document.activeElement.getAttribute('zhtongwen');
       if (attr === null) {
         zhflag = 'traditional';
       }
@@ -112,8 +111,6 @@ const messageHandler = (request, sender, sendResponse) => {
       case 'simp':
         TongWen.trans2Simp(document);
         break;
-      default:
-        break;
     }
   }
 };
@@ -121,5 +118,5 @@ const messageHandler = (request, sender, sendResponse) => {
 browser.runtime.onMessage.addListener(messageHandler);
 
 browser.runtime.sendMessage({
-  loaded: true,
+  loaded: true
 });
