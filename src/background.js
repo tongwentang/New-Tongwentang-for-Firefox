@@ -1,4 +1,4 @@
-let defaultPreference = {
+const defaultPreference = {
   autoConvert: 0,
   iconAction: 1,
   inputConvert: 0,
@@ -22,93 +22,43 @@ let defaultPreference = {
 };
 let supportClipboard = true;
 let menuId = null;
-let convertMapping = ['none','auto','trad','simp'];
+const convertMapping = ['none', 'auto', 'trad', 'simp'];
 let preferences = {};
 
-const loadPreference = () => {
-
-  browser.runtime.getBrowserInfo().then( info => {
-    // Firefox issue: https://bugzilla.mozilla.org/show_bug.cgi?id=1197451#c37
-    //                https://bugzilla.mozilla.org/show_bug.cgi?id=1312260
-    // Fix on Firefox 54.0a
-    if(info.name === 'Firefox' && parseInt(info.version) < 54) {
-      supportClipboard = false;
-    }
-    browser.storage.local.get().then(results => {
-      if ((typeof results.length === 'number') && (results.length > 0)) {
-        results = results[0];
-      }
-      if (!results.version) {
-        preferences = defaultPreference;
-        browser.storage.local.set(defaultPreference).then(res => {
-          browser.storage.onChanged.addListener(storageChangeHandler);
-        }, err => {
-        });
-      } else {
-        preferences = results;
-        browser.storage.onChanged.addListener(storageChangeHandler);
-      }
-      resetContextMenu();
-      setActionButtonText();
-    });
+const doAction = (tab, act, flag) => {
+  browser.tabs.detectLanguage(tab.id).then(lang => {
+    // console.log('lang = ' + lang);
+    lang = typeof lang === 'undefined' ? false : lang.toLocaleLowerCase();
+    const request = {
+      act,
+      flag: 'trad,simp'.includes(flag) ? flag : 'auto',
+      lang
+    };
+    browser.tabs.sendMessage(tab.id, request, () => { });
   });
 };
 
-const storageChangeHandler = (changes, area) => {
-  if(area === 'local') {
-    let changedItems = Object.keys(changes);
-    for (let item of changedItems) {
-      preferences[item] = changes[item].newValue;
-      switch (item) {
-        case 'contextMenuEnabled':
-        case 'contextMenuInput2Trad':
-        case 'contextMenuInput2Simp':
-        case 'contextMenuPage2Trad':
-        case 'contextMenuPage2Simp':
-        case 'contextMenuClip2Trad':
-        case 'contextMenuClip2Simp':
-          resetContextMenu();
-          break;
-        case 'iconAction':
-          setActionButtonText();
-          break;
-      }
+const getActiveTab = callback => {
+  browser.tabs.query({ active: true, currentWindow: true }, tabs => {
+    if ((typeof tabs !== 'undefined') && (tabs.length > 0)) {
+      callback(tabs[0]);
     }
-  }
+    else {
+      // console.log(tabs);
+    }
+  });
 };
-
-const setActionButtonText = () => {
-  switch (convertMapping[preferences.iconAction]) {
-    case 'trad':
-      browser.browserAction.setBadgeText({'text': 'T'});
-      break;
-    case 'simp':
-      browser.browserAction.setBadgeText({'text': 'S'});
-      break;
-    default:
-      browser.browserAction.setBadgeText({'text': 'A'});
-  }
-  browser.browserAction.setBadgeBackgroundColor({'color': '#C0C0C0'});
-};
-
-window.addEventListener('DOMContentLoaded', event => {
-  loadPreference();
-});
-
-browser.browserAction.onClicked.addListener(tab => {
-  doAction(tab, 'icon', convertMapping[preferences.iconAction]);
-});
 
 const getClipData = callback => {
   let textArea = document.getElementById('clipboard');
-  let onPaste = event => {
-    //console.log(event.target.textContent);
+  const onPaste = event => {
+    // console.log(event.target.textContent);
     callback(event.target.textContent);
     event.target.textContent = '';
     event.target.removeEventListener('input', onPaste, false);
-  }
-  let body = document.querySelector('body');
-  if(!textArea) {
+  };
+  const body = document.querySelector('body');
+  if (!textArea) {
     textArea = document.createElement('textarea');
     textArea.setAttribute('id', 'clipboard');
     textArea.setAttribute('type', 'text');
@@ -122,46 +72,22 @@ const getClipData = callback => {
   textArea.addEventListener('input', onPaste, false);
   textArea.focus();
   document.execCommand('Paste');
-}
-
-const getActiveTab = callback => {
-  browser.tabs.query({active: true, currentWindow: true}, tabs => {
-    if ((typeof tabs !== 'undefined') && (tabs.length > 0)) {
-      callback(tabs[0]);
-    }
-    else {
-      //console.log(tabs);
-    }
-  });
-}
-
-const doAction = (tab, act, flag) => {
-  browser.tabs.detectLanguage(tab.id).then( lang => {
-    //console.log('lang = ' + lang);
-    lang = typeof lang === 'undefined' ? false : lang.toLocaleLowerCase();
-    let request = {
-      act: act,
-      flag: 'trad,simp'.includes(flag) ? flag : 'auto',
-      lang: lang
-    };
-    browser.tabs.sendMessage(tab.id, request, function(response) {});
-  });
-}
+};
 
 const createContextMenu = () => {
   if (menuId !== null) {
     return;
   }
-  let contexts = ['page', 'selection', 'link', 'editable', 'image', 'video', 'audio'];
+  const contexts = ['page', 'selection', 'link', 'editable', 'image', 'video', 'audio'];
 
   // 新同文堂
   menuId = browser.contextMenus.create({
     type: 'normal',
     title: browser.i18n.getMessage('extTitle'),
-    contexts: contexts
+    contexts
   });
 
-  if(preferences.contextMenuInput2Trad) {
+  if (preferences.contextMenuInput2Trad) {
     // 輸入區 轉繁體
     browser.contextMenus.create({
       parentId: menuId,
@@ -177,7 +103,7 @@ const createContextMenu = () => {
   }
 
   // 輸入區 轉簡體
-  if(preferences.contextMenuInput2Simp) {
+  if (preferences.contextMenuInput2Simp) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'normal',
@@ -192,8 +118,8 @@ const createContextMenu = () => {
   }
 
   // 分隔線
-  if((preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp) &&
-     (preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp)) {
+  if ((preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp) &&
+    (preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp)) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'separator',
@@ -202,7 +128,7 @@ const createContextMenu = () => {
   }
 
   // 網頁 轉繁體
-  if(preferences.contextMenuPage2Trad) {
+  if (preferences.contextMenuPage2Trad) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'normal',
@@ -217,7 +143,7 @@ const createContextMenu = () => {
   }
 
   // 網頁 轉簡體
-  if(preferences.contextMenuPage2Simp) {
+  if (preferences.contextMenuPage2Simp) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'normal',
@@ -232,8 +158,8 @@ const createContextMenu = () => {
   }
 
   // 分隔線
-  if((preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp) &&
-     (preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard) {
+  if ((preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp) &&
+    (preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'separator',
@@ -242,18 +168,18 @@ const createContextMenu = () => {
   }
 
   // 剪貼簿 轉繁體
-  if(preferences.contextMenuClip2Trad && supportClipboard){
+  if (preferences.contextMenuClip2Trad && supportClipboard) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'normal',
       title: browser.i18n.getMessage('contextClip2Trad'),
       contexts: ['all'],
       onclick: () => {
-        getClipData( text => {
-          getActiveTab( tab => {
+        getClipData(text => {
+          getActiveTab(tab => {
             browser.tabs.sendMessage(
               tab.id,
-              {act: 'paste', text: text, flag: 'traditional'}
+              { act: 'paste', text, flag: 'traditional' }
             );
           });
         });
@@ -262,77 +188,151 @@ const createContextMenu = () => {
   }
 
   // 剪貼簿 轉簡體
-  if(preferences.contextMenuClip2Simp && supportClipboard) {
+  if (preferences.contextMenuClip2Simp && supportClipboard) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'normal',
       title: browser.i18n.getMessage('contextClip2Simp'),
       contexts: ['all'],
       onclick: () => {
-        getClipData( text => {
-          getActiveTab( tab => {
+        getClipData(text => {
+          getActiveTab(tab => {
             browser.tabs.sendMessage(
               tab.id,
-              {act: 'paste', text: text, flag: 'simplified'}
+              { act: 'paste', text, flag: 'simplified' }
             );
           });
         });
       }
     });
   }
-}
+};
 
 const resetContextMenu = () => {
   let createNew = false;
   if (preferences.contextMenuEnabled &&
     (preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp ||
-    preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp ||
-    ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard)))
-  {
+      preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp ||
+      ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard))) {
     createNew = true;
   }
-  if(menuId !== null) {
-    browser.contextMenus.removeAll( () => {
+  if (menuId !== null) {
+    browser.contextMenus.removeAll(() => {
       menuId = null;
-      if(createNew) {
+      if (createNew) {
         createContextMenu();
       }
     });
   }
   else {
-    if(createNew) {
+    if (createNew) {
       createContextMenu();
     }
   }
 };
 
+const setActionButtonText = () => {
+  switch (convertMapping[preferences.iconAction]) {
+    case 'trad':
+      browser.browserAction.setBadgeText({ 'text': 'T' });
+      break;
+    case 'simp':
+      browser.browserAction.setBadgeText({ 'text': 'S' });
+      break;
+    default:
+      browser.browserAction.setBadgeText({ 'text': 'A' });
+  }
+  browser.browserAction.setBadgeBackgroundColor({ 'color': '#C0C0C0' });
+};
+
+const storageChangeHandler = (changes, area) => {
+  if (area === 'local') {
+    const changedItems = Object.keys(changes);
+    for (const item of changedItems) {
+      preferences[item] = changes[item].newValue;
+      switch (item) {
+        case 'contextMenuEnabled':
+        case 'contextMenuInput2Trad':
+        case 'contextMenuInput2Simp':
+        case 'contextMenuPage2Trad':
+        case 'contextMenuPage2Simp':
+        case 'contextMenuClip2Trad':
+        case 'contextMenuClip2Simp':
+          resetContextMenu();
+          break;
+        case 'iconAction':
+          setActionButtonText();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+};
+
+const loadPreference = () => {
+  browser.runtime.getBrowserInfo().then(info => {
+    // Firefox issue: https://bugzilla.mozilla.org/show_bug.cgi?id=1197451#c37
+    //                https://bugzilla.mozilla.org/show_bug.cgi?id=1312260
+    // Fix on Firefox 54.0a
+    if (info.name === 'Firefox' && parseInt(info.version) < 54) {
+      supportClipboard = false;
+    }
+    browser.storage.local.get().then(results => {
+      if ((typeof results.length === 'number') && (results.length > 0)) {
+        results = results[0];
+      }
+      if (!results.version) {
+        preferences = defaultPreference;
+        browser.storage.local.set(defaultPreference).then(() => {
+          browser.storage.onChanged.addListener(storageChangeHandler);
+        }, () => { });
+      }
+      else {
+        preferences = results;
+        browser.storage.onChanged.addListener(storageChangeHandler);
+      }
+      resetContextMenu();
+      setActionButtonText();
+    });
+  });
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadPreference();
+});
+
+browser.browserAction.onClicked.addListener(tab => {
+  doAction(tab, 'icon', convertMapping[preferences.iconAction]);
+});
+
 browser.commands.onCommand.addListener(command => {
   if (command === 'page-trad') {
-    getActiveTab( tab => {
+    getActiveTab(tab => {
       doAction(tab, 'page', 'trad');
     });
   }
   else if (command === 'page-simp') {
-    getActiveTab( tab => {
+    getActiveTab(tab => {
       doAction(tab, 'page', 'simp');
     });
   }
   else if (command === 'clip-trad' && supportClipboard) {
-    getClipData( text => {
-      getActiveTab( tab => {
+    getClipData(text => {
+      getActiveTab(tab => {
         browser.tabs.sendMessage(
           tab.id,
-          {act: 'paste', text: text, flag: 'traditional'}
+          { act: 'paste', text, flag: 'traditional' }
         );
       });
     });
   }
   else if (command === 'clip-simp' && supportClipboard) {
-    getClipData( text => {
-      getActiveTab( tab => {
+    getClipData(text => {
+      getActiveTab(tab => {
         browser.tabs.sendMessage(
           tab.id,
-          {act: 'paste', text: text, flag: 'simplified'}
+          { act: 'paste', text, flag: 'simplified' }
         );
       });
     });
@@ -344,7 +344,7 @@ browser.pageAction.onClicked.addListener((tab) => {
   doAction(tab, 'page', 'auto');
 });
 
-function handleMessage(request, sender, sendResponse) {
+function handleMessage(request, sender) {
   if (request.loaded) {
     browser.pageAction.show(sender.tab.id);
   }
