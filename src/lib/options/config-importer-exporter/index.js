@@ -1,4 +1,9 @@
 import { setValueToElem, sendValueChangeMessage } from '../options';
+import '../../../../node_modules/notyf/dist/notyf.min.css';
+
+const Notyf = require('notyf');
+
+const notyf = new Notyf();
 
 function importConfigValidate(config, type) {
   switch (type) {
@@ -165,7 +170,7 @@ export function importAllOptions(currentPrefs) {
       const validated = importConfigValidate(data, 'all');
 
       if (validated.error) {
-        console.error('config invalid');
+        notyf.alert(browser.i18n.getMessage('dlgImportfail'));
         return;
       }
 
@@ -183,6 +188,7 @@ export function importAllOptions(currentPrefs) {
         sendValueChangeMessage(key, validated.config[key]);
       });
       currentPrefs = validated.config;
+      notyf.confirm(browser.i18n.getMessage('dlgImportSuccess'));
     }
   });
 }
@@ -193,11 +199,12 @@ export function importUrlRule(currentPrefs) {
       const validated = importConfigValidate(data, 'url');
 
       if (validated.error) {
-        console.error('url config invalid');
+        notyf.alert(browser.i18n.getMessage('dlgImportfail'));
         return;
       }
 
       resetListPrefs('urlFilterList', validated.config, currentPrefs);
+      notyf.confirm(browser.i18n.getMessage('dlgImportSuccess'));
     }
   });
 }
@@ -208,11 +215,12 @@ export function importS2TTable(currentPrefs) {
       const validated = importConfigValidate(data, 'phrase');
 
       if (validated.error) {
-        console.error('s2t config invalid');
+        notyf.alert(browser.i18n.getMessage('dlgImportfail'));
         return;
       }
 
       resetListPrefs('userPhraseTradList', validated.config, currentPrefs);
+      notyf.confirm(browser.i18n.getMessage('dlgImportSuccess'));
     }
   });
 }
@@ -223,11 +231,12 @@ export function importT2STable(currentPrefs) {
       const validated = importConfigValidate(data, 'phrase');
 
       if (validated.error) {
-        console.error('t2s config invalid');
+        notyf.alert(browser.i18n.getMessage('dlgImportfail'));
         return;
       }
 
       resetListPrefs('userPhraseSimpList', validated.config, currentPrefs);
+      notyf.confirm(browser.i18n.getMessage('dlgImportSuccess'));
     }
   });
 }

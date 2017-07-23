@@ -2242,6 +2242,10 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
+notyf@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/notyf/-/notyf-2.0.1.tgz#0cbab48e9c9851805d70ba575891145c0840a32c"
+
 npmlog@^4.0.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"

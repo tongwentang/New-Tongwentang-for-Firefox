@@ -32,5 +32,7 @@
     "svg-url-loader": "^2.1.1",
     "webpack": "^3.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "notyf": "^2.0.1"
+  }
 }
