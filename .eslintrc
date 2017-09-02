@@ -9,7 +9,6 @@
     "browser": true
   },
   "extends": [
-    "airbnb-base",
     "prettier"
   ],
   "plugins": [
@@ -23,33 +22,6 @@
         "singleQuote": true,
         "trailingComma": "es5"
       }
-    ],
-    "no-lonely-if": "off",
-    "comma-dangle": "off",
-    "func-names": "off",
-    "quote-props": [
-      "error",
-      "as-needed",
-      {
-        "unnecessary": false
-      }
-    ],
-    "quotes": "off",
-    "no-console": "off",
-    "no-restricted-syntax": "off",
-    "brace-style": [
-      "error",
-      "stroustrup"
-    ],
-    "valid-typeof": "off",
-    "no-useless-escape": "off",
-    "no-trailing-spaces": "off",
-    "arrow-parens": "off",
-    "no-plusplus": "off",
-    "indent": "off",
-    "no-param-reassign": "off",
-    "max-len": "off",
-    "radix": "off",
-    "import/prefer-default-export": "off"
+    ]
   }
 }

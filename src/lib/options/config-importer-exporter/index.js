@@ -36,15 +36,13 @@ function importConfigValidate(config, type) {
           importConfigValidate(config[pair.key], 'url').error
         ) {
           isInvalid = true;
-        }
- else if (
+        } else if (
           (pair.key === 'userPhraseTradList' ||
             pair.key === 'userPhraseSimpList') &&
           importConfigValidate(config[pair.key], 'phrase').error
         ) {
           isInvalid = true;
-        }
- else if (typeof config[pair.key] !== pair.type) {
+        } else if (typeof config[pair.key] !== pair.type) {
           isInvalid = true;
         }
       });
@@ -136,8 +134,7 @@ function importFromFile(callback) {
         try {
           const data = JSON.parse(evt.target.result);
           callback(data);
-        }
- catch (ex) {
+        } catch (ex) {
           callback();
         }
       };

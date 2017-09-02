@@ -42,8 +42,7 @@ const getActiveTab = callback => {
   browser.tabs.query({ active: true, currentWindow: true }, tabs => {
     if (typeof tabs !== 'undefined' && tabs.length > 0) {
       callback(tabs[0]);
-    }
- else {
+    } else {
       // console.log(tabs);
     }
   });
@@ -65,8 +64,7 @@ const getClipData = callback => {
     textArea.setAttribute('value', '');
     textArea.setAttribute('contenteditable', 'true');
     body.appendChild(textArea);
-  }
- else {
+  } else {
     textArea.textContent = '';
   }
   textArea.addEventListener('input', onPaste, false);
@@ -243,8 +241,7 @@ const resetContextMenu = () => {
         createContextMenu();
       }
     });
-  }
- else {
+  } else {
     if (createNew) {
       createContextMenu();
     }
@@ -310,8 +307,7 @@ const loadPreference = () => {
           },
           () => {}
         );
-      }
- else {
+      } else {
         preferences = results;
         browser.storage.onChanged.addListener(storageChangeHandler);
       }
@@ -334,13 +330,11 @@ browser.commands.onCommand.addListener(command => {
     getActiveTab(tab => {
       doAction(tab, 'page', 'trad');
     });
-  }
- else if (command === 'page-simp') {
+  } else if (command === 'page-simp') {
     getActiveTab(tab => {
       doAction(tab, 'page', 'simp');
     });
-  }
- else if (command === 'clip-trad' && supportClipboard) {
+  } else if (command === 'clip-trad' && supportClipboard) {
     getClipData(text => {
       getActiveTab(tab => {
         browser.tabs.sendMessage(tab.id, {
@@ -350,8 +344,7 @@ browser.commands.onCommand.addListener(command => {
         });
       });
     });
-  }
- else if (command === 'clip-simp' && supportClipboard) {
+  } else if (command === 'clip-simp' && supportClipboard) {
     getClipData(text => {
       getActiveTab(tab => {
         browser.tabs.sendMessage(tab.id, {

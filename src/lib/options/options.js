@@ -28,14 +28,12 @@ export function sendValueChangeMessage(id, value) {
   if (value === undefined) {
     delete currentPrefs[id];
     // console.log('sendVelueChangeMessage(0): id = ' + id);
-  }
- else if (typeof value === 'object') {
+  } else if (typeof value === 'object') {
     // console.log('sendVelueChangeMessage(1): id = ' + id + ', value = ' + JSON.stringify(value));
     const update = {};
     update[id] = value;
     browser.storage.local.set(update).then(null, err => console.error(err));
-  }
- else if (currentPrefs[id] !== value) {
+  } else if (currentPrefs[id] !== value) {
     currentPrefs[id] = value;
     // console.log('sendVelueChangeMessage(2): id = ' + id + ', value = ' + value + ', type = ' + typeof(value));
     const update = {};
@@ -60,8 +58,7 @@ function checkFilterEditorInput() {
   }
   if (document.getElementById('newFilterUrl').value !== '' && checkAny) {
     document.getElementById('btnAcceptFilter').disabled = false;
-  }
- else {
+  } else {
     document.getElementById('btnAcceptFilter').disabled = true;
   }
 }
@@ -73,8 +70,7 @@ function checkPhraseEditorInput() {
     document.getElementById('newPhrase').value !== ''
   ) {
     document.getElementById('btnAcceptPhrase').disabled = false;
-  }
- else {
+  } else {
     document.getElementById('btnAcceptPhrase').disabled = true;
   }
 }
@@ -121,8 +117,7 @@ function showUserPhraseEditor(key, value, type) {
     document.getElementById(
       'newPhraseLabel'
     ).textContent = browser.i18n.getMessage('labelTraditional');
-  }
- else if (type === 'simp') {
+  } else if (type === 'simp') {
     document.getElementById(
       'originPhraseLabel'
     ).textContent = browser.i18n.getMessage('labelTraditional');
@@ -140,8 +135,7 @@ function clickOnCategory(event) {
     if (category === event.currentTarget) {
       category.setAttribute('selected', true);
       panel.setAttribute('selected', true);
-    }
- else {
+    } else {
       category.removeAttribute('selected');
       panel.removeAttribute('selected');
     }
@@ -154,8 +148,7 @@ function clickOnRowItem(event) {
   for (const tableRowItem of items) {
     if (tableRowItem === event.currentTarget) {
       tableRowItem.setAttribute('selected', true);
-    }
- else {
+    } else {
       tableRowItem.removeAttribute('selected');
     }
   }
@@ -175,8 +168,7 @@ function clickOnRowButton(event) {
       const url = button.parentNode.firstChild.textContent;
       const action = currentPrefs.urlFilterList[index].action;
       showUrlFilterEditor(url, action, index);
-    }
- else {
+    } else {
       target = button.parentNode.parentNode.getAttribute('id');
       const key =
         button.previousElementSibling.previousElementSibling.textContent;
@@ -184,13 +176,11 @@ function clickOnRowButton(event) {
       document.getElementById('originPhrase-old').value = key;
       if (target === 'userPhraseTradList') {
         showUserPhraseEditor(key, value, 'trad');
-      }
- else if (target === 'userPhraseSimpList') {
+      } else if (target === 'userPhraseSimpList') {
         showUserPhraseEditor(key, value, 'simp');
       }
     }
-  }
- else if (button.classList.contains('cellDelete')) {
+  } else if (button.classList.contains('cellDelete')) {
     let target = button.parentNode.parentNode.getAttribute('id');
     if (target === 'urlFilterList') {
       const urlFilterList = document.getElementById('urlFilterList');
@@ -204,12 +194,10 @@ function clickOnRowButton(event) {
         currentPrefs.urlFilterList.splice(index, 1);
         sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
         // sendVelueChangeMessage(id);
-      }
- else {
+      } else {
         clickOnRowItem({ currentTarget: node });
       }
-    }
- else {
+    } else {
       target = button.parentNode.parentNode.getAttribute('id');
       const key =
         button.previousElementSibling.previousElementSibling
@@ -219,8 +207,7 @@ function clickOnRowButton(event) {
         node.parentNode.removeChild(node);
         delete currentPrefs[target][key];
         sendValueChangeMessage(target, currentPrefs[target]);
-      }
- else {
+      } else {
         clickOnRowItem({ currentTarget: node });
       }
     }
@@ -271,8 +258,7 @@ function moveUrlFilterPos(shift) {
     urlFilterList.insertBefore(selectedRowItem, lastChild);
     nNode = selectedRowItem.previousElementSibling;
     nIndex = selectedIndex;
-  }
- else {
+  } else {
     for (const tableRowItem of tableRowItems.urlFilterList) {
       const index = parseInt(tableRowItem.getAttribute('index'), 10);
       if (shift === -1 && index === selectedIndex - 1) {
@@ -280,8 +266,7 @@ function moveUrlFilterPos(shift) {
         nNode = selectedRowItem;
         nIndex = selectedIndex - 1;
         break;
-      }
- else if (shift === 1 && index === selectedIndex + 2) {
+      } else if (shift === 1 && index === selectedIndex + 2) {
         urlFilterList.insertBefore(selectedRowItem, tableRowItem);
         nNode = selectedRowItem.previousElementSibling;
         nIndex = selectedIndex;
@@ -372,8 +357,7 @@ function addUserPhrase(key, value, type) {
   list.insertBefore(li, lastChild);
   if (type === 'trad') {
     tableRowItems.userPhraseTradList.push(li);
-  }
- else {
+  } else {
     tableRowItems.userPhraseSimpList.push(li);
   }
 }
@@ -434,22 +418,19 @@ function uiEventBinding() {
           if (index === -1) {
             addUrlFilter(url, action);
             currentPrefs.urlFilterList.push({ url, action });
-          }
- else {
+          } else {
             modifyUrlFilter(url, action, index);
           }
           sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
           hideScreenMask();
-        }
- else if (dlgName === 'userPhraseEditor') {
+        } else if (dlgName === 'userPhraseEditor') {
           const oldkey = document.getElementById('originPhrase-old').value;
           const key = document.getElementById('originPhrase').value;
           const value = document.getElementById('newPhrase').value;
           const type = userPhraseEditor.getAttribute('type');
           if (oldkey) {
             modifyUserPhrase(oldkey, key, value, type);
-          }
- else {
+          } else {
             addUserPhrase(key, value, type);
           }
           if (type === 'trad') {
@@ -461,8 +442,7 @@ function uiEventBinding() {
               'userPhraseTradList',
               currentPrefs.userPhraseTradList
             );
-          }
- else if (type === 'simp') {
+          } else if (type === 'simp') {
             if (oldkey) {
               delete currentPrefs.userPhraseSimpList[oldkey];
             }
@@ -621,23 +601,19 @@ export function setValueToElem(id, value) {
           break;
         }
       }
-    }
- else if (elemType === 'checkbox') {
+    } else if (elemType === 'checkbox') {
       elem.checked = value;
-    }
- else if (
+    } else if (
       elemType === 'color' ||
       elemType === 'number' ||
       elemType === 'text'
     ) {
       elem.value = value;
-    }
- else if (elemType === 'listBox') {
+    } else if (elemType === 'listBox') {
       for (let i = 0; i < value.length; ++i) {
         addUrlFilter(value[i].url, value[i].action, i);
       }
-    }
- else if (elemType === 'listBoxObj') {
+    } else if (elemType === 'listBoxObj') {
       Object.keys(value).forEach(key => {
         addUserPhrase(
           key,
@@ -661,23 +637,19 @@ function handleValueChange(id) {
             sendValueChangeMessage(id, parseInt(radio.getAttribute('value')));
         });
       }
-    }
- else if (elemType === 'checkbox') {
+    } else if (elemType === 'checkbox') {
       elem.addEventListener('input', () => {
         sendValueChangeMessage(id, elem.checked);
       });
-    }
- else if (elemType === 'color') {
+    } else if (elemType === 'color') {
       elem.addEventListener('input', () => {
         sendValueChangeMessage(id, elem.value);
       });
-    }
- else if (elemType === 'number') {
+    } else if (elemType === 'number') {
       elem.addEventListener('input', () => {
         sendValueChangeMessage(id, parseInt(elem.value));
       });
-    }
- else if (elemType === 'text') {
+    } else if (elemType === 'text') {
       elem.addEventListener('input', () => {
         sendValueChangeMessage(id, elem.value);
       });

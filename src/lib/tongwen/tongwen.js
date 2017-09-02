@@ -16,8 +16,7 @@ const urlFilterAction = uri => {
       if (uri.match(re) !== null) {
         return convertMapping[filter.action];
       }
-    }
- else if (uri === filter.url) {
+    } else if (uri === filter.url) {
       return convertMapping[filter.action];
     }
   }
@@ -48,8 +47,7 @@ browser.storage.local.get().then(results => {
     TongWen.loadSettingData(preferences);
     if (zhflag === 'trad') {
       TongWen.trans2Trad(document);
-    }
- else if (zhflag === 'simp') {
+    } else if (zhflag === 'simp') {
       TongWen.trans2Simp(document);
     }
   }
@@ -97,21 +95,17 @@ const messageHandler = (request, sender, sendResponse) => {
       const attr = document.activeElement.getAttribute('zhtongwen');
       if (attr === null) {
         zhflag = 'traditional';
-      }
- else {
+      } else {
         zhflag = attr === 'traditional' ? 'simplified' : 'traditional';
       }
       document.activeElement.setAttribute('zhtongwen', zhflag);
       document.activeElement.value = TongWen.convert(val, zhflag);
-    }
- else if (zhflag === 'trad') {
+    } else if (zhflag === 'trad') {
       document.activeElement.value = TongWen.convert(val, 'traditional');
-    }
- else if (zhflag === 'simp') {
+    } else if (zhflag === 'simp') {
       document.activeElement.value = TongWen.convert(val, 'simplified');
     }
-  }
- else {
+  } else {
     // 網頁轉換
     switch (request.flag) {
       case 'auto':

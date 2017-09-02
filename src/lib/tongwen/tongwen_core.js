@@ -137,8 +137,7 @@ export const TongWen = (function() {
     let css;
     if (zhflag === flagTrad) {
       css = ` font-family: ${fontTrad};`;
-    }
- else if (zhflag === flagSimp) {
+    } else if (zhflag === flagSimp) {
       css = ` font-family: ${fontSimp};`;
     }
 
@@ -147,8 +146,7 @@ export const TongWen = (function() {
       sty.addRule = function(rule, newCss, idx) {
         if (typeof idx === 'undefined') {
           this.insertRule(`${rule} { ${newCss} }`, this.cssRules.length);
-        }
- else {
+        } else {
           this.insertRule(`${rule} {${newCss}}`, idx);
         }
       };
@@ -185,17 +183,14 @@ export const TongWen = (function() {
         charset = document.characterSet.toLowerCase();
         if (zhEncodesTrad.indexOf(charset) >= 0) {
           zhflag = flagTrad;
-        }
- else if (zhEncodesSimp.indexOf(charset) >= 0) {
+        } else if (zhEncodesSimp.indexOf(charset) >= 0) {
           zhflag = flagSimp;
         }
-      }
- else {
+      } else {
         lang = lang.toLowerCase();
         if (zhLangTrad.indexOf(lang) >= 0) {
           zhflag = flagTrad;
-        }
- else if (zhLangSimp.indexOf(lang) >= 0) {
+        } else if (zhLangSimp.indexOf(lang) >= 0) {
           zhflag = flagSimp;
         }
       }
@@ -209,8 +204,7 @@ export const TongWen = (function() {
     if (zhflag === flagSimp) {
       // 繁轉簡
       zmap = t2s;
-    }
- else {
+    } else {
       // 簡轉繁
       zmap = s2t;
     }
@@ -241,8 +235,7 @@ export const TongWen = (function() {
       // 繁轉簡
       zmap = t2s;
       leng = Math.min(maxTSLen, str.length);
-    }
- else {
+    } else {
       // 簡轉繁
       zmap = s2t;
       leng = Math.min(maxSTLen, str.length);
@@ -386,8 +379,7 @@ export const TongWen = (function() {
       if (enableFontset) {
         setFont(zhflag);
       }
-    }
- catch (ex) {
+    } catch (ex) {
       console.error(ex);
     }
   }
@@ -450,8 +442,7 @@ export const TongWen = (function() {
       setTradFontset(preferences.fontCustomTrad);
       setSimpFontset(preferences.fontCustomSimp);
       enableCustomFontset(true);
-    }
- else {
+    } else {
       enableCustomFontset(false);
     }
   }
