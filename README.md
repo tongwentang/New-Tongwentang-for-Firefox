@@ -19,3 +19,4 @@ Released under [MIT/X11 License](https://opensource.org/licenses/mit-license.php
   - react / angular / vue
 - reactive to async
 - integrate sync with third party
+- subscribe list for convert phases
