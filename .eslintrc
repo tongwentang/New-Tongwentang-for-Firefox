@@ -9,12 +9,21 @@
     "browser": true
   },
   "extends": [
-    "airbnb-base"
+    "airbnb-base",
+    "prettier"
   ],
   "plugins": [
-    "import"
+    "import",
+    "prettier"
   ],
   "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ],
     "no-lonely-if": "off",
     "comma-dangle": "off",
     "func-names": "off",

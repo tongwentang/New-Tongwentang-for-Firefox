@@ -1,3 +1,0 @@
-Language:        JavaScript
-BasedOnStyle:    Mozilla
-ColumnLimit:     100
