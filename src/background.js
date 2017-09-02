@@ -18,7 +18,7 @@ const defaultPreference = {
   userPhraseEnable: false,
   userPhraseTradList: {},
   userPhraseSimpList: {},
-  version: 1
+  version: 1,
 };
 let supportClipboard = true;
 let menuId = null;
@@ -32,18 +32,18 @@ const doAction = (tab, act, flag) => {
     const request = {
       act,
       flag: 'trad,simp'.includes(flag) ? flag : 'auto',
-      lang
+      lang,
     };
-    browser.tabs.sendMessage(tab.id, request, () => { });
+    browser.tabs.sendMessage(tab.id, request, () => {});
   });
 };
 
 const getActiveTab = callback => {
   browser.tabs.query({ active: true, currentWindow: true }, tabs => {
-    if ((typeof tabs !== 'undefined') && (tabs.length > 0)) {
+    if (typeof tabs !== 'undefined' && tabs.length > 0) {
       callback(tabs[0]);
     }
-    else {
+ else {
       // console.log(tabs);
     }
   });
@@ -66,7 +66,7 @@ const getClipData = callback => {
     textArea.setAttribute('contenteditable', 'true');
     body.appendChild(textArea);
   }
-  else {
+ else {
     textArea.textContent = '';
   }
   textArea.addEventListener('input', onPaste, false);
@@ -78,13 +78,21 @@ const createContextMenu = () => {
   if (menuId !== null) {
     return;
   }
-  const contexts = ['page', 'selection', 'link', 'editable', 'image', 'video', 'audio'];
+  const contexts = [
+    'page',
+    'selection',
+    'link',
+    'editable',
+    'image',
+    'video',
+    'audio',
+  ];
 
   // 新同文堂
   menuId = browser.contextMenus.create({
     type: 'normal',
     title: browser.i18n.getMessage('extTitle'),
-    contexts
+    contexts,
   });
 
   if (preferences.contextMenuInput2Trad) {
@@ -98,7 +106,7 @@ const createContextMenu = () => {
         getActiveTab(tab => {
           doAction(tab, 'input', 'trad');
         });
-      }
+      },
     });
   }
 
@@ -113,17 +121,19 @@ const createContextMenu = () => {
         getActiveTab(tab => {
           doAction(tab, 'input', 'simp');
         });
-      }
+      },
     });
   }
 
   // 分隔線
-  if ((preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp) &&
-    (preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp)) {
+  if (
+    (preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp) &&
+    (preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp)
+  ) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'separator',
-      contexts: ['editable']
+      contexts: ['editable'],
     });
   }
 
@@ -138,7 +148,7 @@ const createContextMenu = () => {
         getActiveTab(tab => {
           doAction(tab, 'page', 'trad');
         });
-      }
+      },
     });
   }
 
@@ -153,17 +163,20 @@ const createContextMenu = () => {
         getActiveTab(tab => {
           doAction(tab, 'page', 'simp');
         });
-      }
+      },
     });
   }
 
   // 分隔線
-  if ((preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp) &&
-    (preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard) {
+  if (
+    (preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp) &&
+    (preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) &&
+    supportClipboard
+  ) {
     browser.contextMenus.create({
       parentId: menuId,
       type: 'separator',
-      contexts: ['all']
+      contexts: ['all'],
     });
   }
 
@@ -177,13 +190,14 @@ const createContextMenu = () => {
       onclick: () => {
         getClipData(text => {
           getActiveTab(tab => {
-            browser.tabs.sendMessage(
-              tab.id,
-              { act: 'paste', text, flag: 'traditional' }
-            );
+            browser.tabs.sendMessage(tab.id, {
+              act: 'paste',
+              text,
+              flag: 'traditional',
+            });
           });
         });
-      }
+      },
     });
   }
 
@@ -197,23 +211,29 @@ const createContextMenu = () => {
       onclick: () => {
         getClipData(text => {
           getActiveTab(tab => {
-            browser.tabs.sendMessage(
-              tab.id,
-              { act: 'paste', text, flag: 'simplified' }
-            );
+            browser.tabs.sendMessage(tab.id, {
+              act: 'paste',
+              text,
+              flag: 'simplified',
+            });
           });
         });
-      }
+      },
     });
   }
 };
 
 const resetContextMenu = () => {
   let createNew = false;
-  if (preferences.contextMenuEnabled &&
-    (preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp ||
-      preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp ||
-      ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard))) {
+  if (
+    preferences.contextMenuEnabled &&
+    (preferences.contextMenuInput2Trad ||
+      preferences.contextMenuInput2Simp ||
+      preferences.contextMenuPage2Trad ||
+      preferences.contextMenuPage2Simp ||
+      ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) &&
+        supportClipboard))
+  ) {
     createNew = true;
   }
   if (menuId !== null) {
@@ -224,7 +244,7 @@ const resetContextMenu = () => {
       }
     });
   }
-  else {
+ else {
     if (createNew) {
       createContextMenu();
     }
@@ -234,15 +254,15 @@ const resetContextMenu = () => {
 const setActionButtonText = () => {
   switch (convertMapping[preferences.iconAction]) {
     case 'trad':
-      browser.browserAction.setBadgeText({ 'text': 'T' });
+      browser.browserAction.setBadgeText({ text: 'T' });
       break;
     case 'simp':
-      browser.browserAction.setBadgeText({ 'text': 'S' });
+      browser.browserAction.setBadgeText({ text: 'S' });
       break;
     default:
-      browser.browserAction.setBadgeText({ 'text': 'A' });
+      browser.browserAction.setBadgeText({ text: 'A' });
   }
-  browser.browserAction.setBadgeBackgroundColor({ 'color': '#C0C0C0' });
+  browser.browserAction.setBadgeBackgroundColor({ color: '#C0C0C0' });
 };
 
 const storageChangeHandler = (changes, area) => {
@@ -279,16 +299,19 @@ const loadPreference = () => {
       supportClipboard = false;
     }
     browser.storage.local.get().then(results => {
-      if ((typeof results.length === 'number') && (results.length > 0)) {
+      if (typeof results.length === 'number' && results.length > 0) {
         results = results[0];
       }
       if (!results.version) {
         preferences = defaultPreference;
-        browser.storage.local.set(defaultPreference).then(() => {
-          browser.storage.onChanged.addListener(storageChangeHandler);
-        }, () => { });
+        browser.storage.local.set(defaultPreference).then(
+          () => {
+            browser.storage.onChanged.addListener(storageChangeHandler);
+          },
+          () => {}
+        );
       }
-      else {
+ else {
         preferences = results;
         browser.storage.onChanged.addListener(storageChangeHandler);
       }
@@ -312,35 +335,36 @@ browser.commands.onCommand.addListener(command => {
       doAction(tab, 'page', 'trad');
     });
   }
-  else if (command === 'page-simp') {
+ else if (command === 'page-simp') {
     getActiveTab(tab => {
       doAction(tab, 'page', 'simp');
     });
   }
-  else if (command === 'clip-trad' && supportClipboard) {
+ else if (command === 'clip-trad' && supportClipboard) {
     getClipData(text => {
       getActiveTab(tab => {
-        browser.tabs.sendMessage(
-          tab.id,
-          { act: 'paste', text, flag: 'traditional' }
-        );
+        browser.tabs.sendMessage(tab.id, {
+          act: 'paste',
+          text,
+          flag: 'traditional',
+        });
       });
     });
   }
-  else if (command === 'clip-simp' && supportClipboard) {
+ else if (command === 'clip-simp' && supportClipboard) {
     getClipData(text => {
       getActiveTab(tab => {
-        browser.tabs.sendMessage(
-          tab.id,
-          { act: 'paste', text, flag: 'simplified' }
-        );
+        browser.tabs.sendMessage(tab.id, {
+          act: 'paste',
+          text,
+          flag: 'simplified',
+        });
       });
     });
   }
 });
 
-
-browser.pageAction.onClicked.addListener((tab) => {
+browser.pageAction.onClicked.addListener(tab => {
   doAction(tab, 'page', 'auto');
 });
 

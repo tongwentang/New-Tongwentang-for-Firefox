@@ -1,100 +1,99 @@
 import { setValueToElem, sendValueChangeMessage } from '../options';
-import '../../../../node_modules/notyf/dist/notyf.min.css';
-
-const Notyf = require('notyf');
-
-const notyf = new Notyf();
 
 function importConfigValidate(config, type) {
   switch (type) {
-    case 'all':
-      {
-        let isInvalid = false;
-        const allKeyValuePair = [
-          { key: 'autoConvert', type: 'number' },
-          { key: 'iconAction', type: 'number' },
-          { key: 'inputConvert', type: 'number' },
-          { key: 'symConvert', type: 'boolean' },
-          { key: 'fontCustomEnabled', type: 'boolean' },
-          { key: 'fontCustomTrad', type: 'string' },
-          { key: 'fontCustomSimp', type: 'string' },
-          { key: 'contextMenuEnabled', type: 'boolean' },
-          { key: 'contextMenuInput2Trad', type: 'boolean' },
-          { key: 'contextMenuInput2Simp', type: 'boolean' },
-          { key: 'contextMenuPage2Trad', type: 'boolean' },
-          { key: 'contextMenuPage2Simp', type: 'boolean' },
-          { key: 'contextMenuClip2Trad', type: 'boolean' },
-          { key: 'contextMenuClip2Simp', type: 'boolean' },
-          { key: 'urlFilterEnabled', type: 'boolean' },
-          { key: 'urlFilterList', type: 'object' },
-          { key: 'userPhraseEnable', type: 'boolean' },
-          { key: 'userPhraseTradList', type: 'object' },
-          { key: 'userPhraseSimpList', type: 'object' },
-          { key: 'version', type: 'number' },
-        ];
+    case 'all': {
+      let isInvalid = false;
+      const allKeyValuePair = [
+        { key: 'autoConvert', type: 'number' },
+        { key: 'iconAction', type: 'number' },
+        { key: 'inputConvert', type: 'number' },
+        { key: 'symConvert', type: 'boolean' },
+        { key: 'fontCustomEnabled', type: 'boolean' },
+        { key: 'fontCustomTrad', type: 'string' },
+        { key: 'fontCustomSimp', type: 'string' },
+        { key: 'contextMenuEnabled', type: 'boolean' },
+        { key: 'contextMenuInput2Trad', type: 'boolean' },
+        { key: 'contextMenuInput2Simp', type: 'boolean' },
+        { key: 'contextMenuPage2Trad', type: 'boolean' },
+        { key: 'contextMenuPage2Simp', type: 'boolean' },
+        { key: 'contextMenuClip2Trad', type: 'boolean' },
+        { key: 'contextMenuClip2Simp', type: 'boolean' },
+        { key: 'urlFilterEnabled', type: 'boolean' },
+        { key: 'urlFilterList', type: 'object' },
+        { key: 'userPhraseEnable', type: 'boolean' },
+        { key: 'userPhraseTradList', type: 'object' },
+        { key: 'userPhraseSimpList', type: 'object' },
+        { key: 'version', type: 'number' },
+      ];
 
-        allKeyValuePair.forEach((pair) => {
-          if (isInvalid) {
-            return;
-          }
-          if (pair.key === 'urlFilterList' && importConfigValidate(config[pair.key], 'url').error) {
-            isInvalid = true;
-          }
-          else if ((pair.key === 'userPhraseTradList' || pair.key === 'userPhraseSimpList') && importConfigValidate(config[pair.key], 'phrase').error) {
-            isInvalid = true;
-          }
-          else if (typeof config[pair.key] !== pair.type) {
-            isInvalid = true;
-          }
-        });
-
-        return isInvalid ? { error: true } : { error: false, config };
-      }
-    case 'url':
-      {
-        if (!Array.isArray(config)) {
-          return { error: true };
+      allKeyValuePair.forEach(pair => {
+        if (isInvalid) {
+          return;
         }
-
-        if (config.length < 1) {
-          return { error: false, config };
+        if (
+          pair.key === 'urlFilterList' &&
+          importConfigValidate(config[pair.key], 'url').error
+        ) {
+          isInvalid = true;
         }
+ else if (
+          (pair.key === 'userPhraseTradList' ||
+            pair.key === 'userPhraseSimpList') &&
+          importConfigValidate(config[pair.key], 'phrase').error
+        ) {
+          isInvalid = true;
+        }
+ else if (typeof config[pair.key] !== pair.type) {
+          isInvalid = true;
+        }
+      });
 
-        let isUrlInvalid = false;
-        config.forEach((url) => {
-          if (isUrlInvalid) {
-            return;
-          }
-          const urlKeys = Object.keys(url).sort();
-          if (urlKeys.length !== 2) {
-            isUrlInvalid = true;
-            return;
-          }
-          if (
-            (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
-            !url.url.match(
-              /^(.+:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/,
-            )
-          ) {
-            isUrlInvalid = true;
-          }
-        });
-        return isUrlInvalid ? { error: true } : { error: false, config };
+      return isInvalid ? { error: true } : { error: false, config };
+    }
+    case 'url': {
+      if (!Array.isArray(config)) {
+        return { error: true };
       }
-    case 'phrase':
-      {
-        let isPhraseInvalid = false;
-        const safeConfig = Object.assign({}, config);
-        Object.keys(safeConfig).forEach((key) => {
-          if (isPhraseInvalid) {
-            return;
-          }
-          if (typeof safeConfig[key] !== 'string') {
-            isPhraseInvalid = true;
-          }
-        });
-        return isPhraseInvalid ? { error: true } : { error: false, safeConfig };
+
+      if (config.length < 1) {
+        return { error: false, config };
       }
+
+      let isUrlInvalid = false;
+      config.forEach(url => {
+        if (isUrlInvalid) {
+          return;
+        }
+        const urlKeys = Object.keys(url).sort();
+        if (urlKeys.length !== 2) {
+          isUrlInvalid = true;
+          return;
+        }
+        if (
+          (url.action !== 0 && url.action !== 2 && url.action !== 3) ||
+          !url.url.match(
+            /^(.+:\/\/)?([\d\w\*\.-]+)\.([a-z\.]{2,6})([\/\w\* \.-]*)*\/?$/
+          )
+        ) {
+          isUrlInvalid = true;
+        }
+      });
+      return isUrlInvalid ? { error: true } : { error: false, config };
+    }
+    case 'phrase': {
+      let isPhraseInvalid = false;
+      const safeConfig = Object.assign({}, config);
+      Object.keys(safeConfig).forEach(key => {
+        if (isPhraseInvalid) {
+          return;
+        }
+        if (typeof safeConfig[key] !== 'string') {
+          isPhraseInvalid = true;
+        }
+      });
+      return isPhraseInvalid ? { error: true } : { error: false, safeConfig };
+    }
     default:
       return { error: true };
   }
@@ -138,7 +137,7 @@ function importFromFile(callback) {
           const data = JSON.parse(evt.target.result);
           callback(data);
         }
-        catch (ex) {
+ catch (ex) {
           callback();
         }
       };
@@ -153,19 +152,28 @@ export function exportAllOptions(currentPrefs) {
 }
 
 export function exportUrlRule(currentPrefs) {
-  exportToFile(JSON.stringify(currentPrefs.urlFilterList), 'NewTongWenTang-UrlRule.json');
+  exportToFile(
+    JSON.stringify(currentPrefs.urlFilterList),
+    'NewTongWenTang-UrlRule.json'
+  );
 }
 
 export function exportS2TTable(currentPrefs) {
-  exportToFile(JSON.stringify(currentPrefs.userPhraseTradList), 'NewTongWenTang-S2TTable.json');
+  exportToFile(
+    JSON.stringify(currentPrefs.userPhraseTradList),
+    'NewTongWenTang-S2TTable.json'
+  );
 }
 
 export function exportT2STable(currentPrefs) {
-  exportToFile(JSON.stringify(currentPrefs.userPhraseSimpList), 'NewTongWenTang-T2STable.json');
+  exportToFile(
+    JSON.stringify(currentPrefs.userPhraseSimpList),
+    'NewTongWenTang-T2STable.json'
+  );
 }
 
 export function importAllOptions(currentPrefs) {
-  importFromFile((data) => {
+  importFromFile(data => {
     if (data) {
       const validated = importConfigValidate(data, 'all');
 
@@ -194,7 +202,7 @@ export function importAllOptions(currentPrefs) {
 }
 
 export function importUrlRule(currentPrefs) {
-  importFromFile((data) => {
+  importFromFile(data => {
     if (data) {
       const validated = importConfigValidate(data, 'url');
 
@@ -210,7 +218,7 @@ export function importUrlRule(currentPrefs) {
 }
 
 export function importS2TTable(currentPrefs) {
-  importFromFile((data) => {
+  importFromFile(data => {
     if (data) {
       const validated = importConfigValidate(data, 'phrase');
 
@@ -226,7 +234,7 @@ export function importS2TTable(currentPrefs) {
 }
 
 export function importT2STable(currentPrefs) {
-  importFromFile((data) => {
+  importFromFile(data => {
     if (data) {
       const validated = importConfigValidate(data, 'phrase');
 

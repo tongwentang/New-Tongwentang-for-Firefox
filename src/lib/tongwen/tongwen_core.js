@@ -25,7 +25,7 @@ import { symbolT2S } from './tongwen_table_st2s';
 // code from https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
   /* eslint no-extend-native: "off", no-var: "off", vars-on-top: "off", no-bitwise: "off" */
-  Array.prototype.indexOf = function (searchElement, fromIndex) {
+  Array.prototype.indexOf = function(searchElement, fromIndex) {
     var k;
 
     // 1. Let o be the result of calling ToObject passing
@@ -83,15 +83,23 @@ if (!Array.prototype.indexOf) {
   };
 }
 
-export const TongWen = (function () {
+export const TongWen = (function() {
   const version = '0.4'; // 版本
 
   const flagSimp = 'simplified'; // 簡體
   const flagTrad = 'traditional'; // 繁體
 
   const zhEncodesSimp = [
-    'gb2312', 'gbk', 'x-gbk', 'gb18030', 'hz-gb-2312', 'iso-2022-cn',
-    'utf-7', 'utf-8', 'utf-16le', 'x-user-defined',
+    'gb2312',
+    'gbk',
+    'x-gbk',
+    'gb18030',
+    'hz-gb-2312',
+    'iso-2022-cn',
+    'utf-7',
+    'utf-8',
+    'utf-16le',
+    'x-user-defined',
   ];
   const zhEncodesTrad = ['big5', 'big5-hkscs', 'x-euc-tw'];
 
@@ -130,17 +138,17 @@ export const TongWen = (function () {
     if (zhflag === flagTrad) {
       css = ` font-family: ${fontTrad};`;
     }
-    else if (zhflag === flagSimp) {
+ else if (zhflag === flagSimp) {
       css = ` font-family: ${fontSimp};`;
     }
 
     const sty = document.styleSheets[styleIdx];
-    if (sty.insertRule && (typeof sty.addRule === 'undefined')) {
-      sty.addRule = function (rule, newCss, idx) {
+    if (sty.insertRule && typeof sty.addRule === 'undefined') {
+      sty.addRule = function(rule, newCss, idx) {
         if (typeof idx === 'undefined') {
           this.insertRule(`${rule} { ${newCss} }`, this.cssRules.length);
         }
-        else {
+ else {
           this.insertRule(`${rule} {${newCss}}`, idx);
         }
       };
@@ -178,16 +186,16 @@ export const TongWen = (function () {
         if (zhEncodesTrad.indexOf(charset) >= 0) {
           zhflag = flagTrad;
         }
-        else if (zhEncodesSimp.indexOf(charset) >= 0) {
+ else if (zhEncodesSimp.indexOf(charset) >= 0) {
           zhflag = flagSimp;
         }
       }
-      else {
+ else {
         lang = lang.toLowerCase();
         if (zhLangTrad.indexOf(lang) >= 0) {
           zhflag = flagTrad;
         }
-        else if (zhLangSimp.indexOf(lang) >= 0) {
+ else if (zhLangSimp.indexOf(lang) >= 0) {
           zhflag = flagSimp;
         }
       }
@@ -202,7 +210,7 @@ export const TongWen = (function () {
       // 繁轉簡
       zmap = t2s;
     }
-    else {
+ else {
       // 簡轉繁
       zmap = s2t;
     }
@@ -234,7 +242,7 @@ export const TongWen = (function () {
       zmap = t2s;
       leng = Math.min(maxTSLen, str.length);
     }
-    else {
+ else {
       // 簡轉繁
       zmap = s2t;
       leng = Math.min(maxSTLen, str.length);
@@ -247,7 +255,7 @@ export const TongWen = (function () {
     txt = '';
     s = '';
     bol = true;
-    for (i = 0, c = str.length; i < c;) {
+    for (i = 0, c = str.length; i < c; ) {
       bol = true;
       for (j = leng; j > 1; j -= 1) {
         s = str.substr(i, j);
@@ -324,8 +332,8 @@ export const TongWen = (function () {
                 break;
               case 'input':
                 if (
-                  ('text,hidden'.indexOf(node.type.toLowerCase()) < 0)
-                  && (node.value.length > 0)
+                  'text,hidden'.indexOf(node.type.toLowerCase()) < 0 &&
+                  node.value.length > 0
                 ) {
                   node.value = convert(node.value, zhflag);
                 }
@@ -367,7 +375,7 @@ export const TongWen = (function () {
       setTimeout(() => {
         walker();
       }, 1);
-    }());
+    })();
   }
 
   function transPage(doc, zhflag) {
@@ -379,7 +387,7 @@ export const TongWen = (function () {
         setFont(zhflag);
       }
     }
-    catch (ex) {
+ catch (ex) {
       console.error(ex);
     }
   }
@@ -401,7 +409,7 @@ export const TongWen = (function () {
         return;
       }
     }
-    const zhflag = (curZhFlag === flagTrad) ? flagSimp : flagTrad;
+    const zhflag = curZhFlag === flagTrad ? flagSimp : flagTrad;
     transPage(curDoc, zhflag);
   }
 
@@ -443,12 +451,12 @@ export const TongWen = (function () {
       setSimpFontset(preferences.fontCustomSimp);
       enableCustomFontset(true);
     }
-    else {
+ else {
       enableCustomFontset(false);
     }
   }
 
-  function extensionAction() { }
+  function extensionAction() {}
   // =============================================================================
 
   return {
@@ -466,4 +474,4 @@ export const TongWen = (function () {
     loadSettingData,
     extensionAction,
   };
-}());
+})();
