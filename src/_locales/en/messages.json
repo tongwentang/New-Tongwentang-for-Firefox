@@ -180,7 +180,8 @@
     "description": ""
   },
   "msgInputConvert1": {
-    "message": "Click TextArea box first then click the Toolbar icon to convert the content text in TextArea",
+    "message":
+      "Click TextArea box first then click the Toolbar icon to convert the content text in TextArea",
     "description": ""
   },
   "msgInputConvert2": {
@@ -240,7 +241,8 @@
     "description": ""
   },
   "labelIconActionAuto": {
-    "message": "Detect and Convert automatically (Simplified-to-Traditional and Traditional-to-Simplified)",
+    "message":
+      "Detect and Convert automatically (Simplified-to-Traditional and Traditional-to-Simplified)",
     "description": ""
   },
   "labelIconActionTrad": {
@@ -260,15 +262,18 @@
     "description": ""
   },
   "labelinputConvertAuto": {
-    "message": "Convert content in TextArea (Simplified-to-Traditional and Traditional-to-Simplified)",
+    "message":
+      "Convert content in TextArea (Simplified-to-Traditional and Traditional-to-Simplified)",
     "description": ""
   },
   "labelinputConvertTrad": {
-    "message": "Convert content in TextArea to Traditional Chinese (Simplified-to-Traditional)",
+    "message":
+      "Convert content in TextArea to Traditional Chinese (Simplified-to-Traditional)",
     "description": ""
   },
   "labelinputConvertSimp": {
-    "message": "Convert content in TextArea to Simplified Chinese (Traditional-to-Simplified)",
+    "message":
+      "Convert content in TextArea to Simplified Chinese (Traditional-to-Simplified)",
     "description": ""
   },
   "labelSymbolConvert": {
@@ -357,6 +362,10 @@
   },
   "empty": {
     "message": "",
+    "description": ""
+  },
+  "notifDefaultTitle": {
+    "message": "New TongwenTang Message: ",
     "description": ""
   }
 }

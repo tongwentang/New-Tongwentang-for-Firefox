@@ -358,5 +358,9 @@
   "empty": {
     "message": "",
     "description": ""
+  },
+  "notifDefaultTitle": {
+    "message": "新同文堂通知：",
+    "description": ""
   }
 }
