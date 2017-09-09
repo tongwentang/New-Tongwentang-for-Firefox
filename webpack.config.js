@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     background: './src/background',
-    options: './src/lib/options/options',
+    options: './src/options/options',
     tongwen: './src/lib/tongwen/tongwen',
   },
   output: {
@@ -18,18 +18,18 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: 'eslint-loader'
+        loaders: 'eslint-loader',
       },
       {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader'],
-        exclude: /node-modules/
+        exclude: /node-modules/,
       },
       {
         test: /\.svg$/,
-        loaders: ['svg-url-loader']
-      }
-    ]
+        loaders: ['svg-url-loader'],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
@@ -41,7 +41,7 @@ module.exports = {
     ]),
     new HtmlWebpackPlugin({
       filename: 'options.html',
-      template: 'src/lib/options/options.html',
+      template: 'src/options/options.html',
       chunks: ['options'],
     }),
   ],

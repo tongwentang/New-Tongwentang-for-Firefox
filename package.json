@@ -1,14 +1,18 @@
 {
   "name": "new-tongwentang-for-firefox",
   "version": "1.4.0",
-  "description": "Firefox Add-on, converts web page between Simplified and Traditional Chinese.",
+  "description":
+    "Firefox Add-on, converts web page between Simplified and Traditional Chinese.",
   "main": "index.js",
   "scripts": {
-    "eslint": "eslint src --fix",
     "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "eslint src --fix",
+    "store-add": "git diff --name-only --cached  --diff-filter=ACMRT > gittoadd",
+    "git-update": "cat ./gittoadd | xargs git add --ignore-errors"
   },
+  "pre-commit": ["store-add", "eslint", "git-update"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/softcup/New-Tongwentang-for-Firefox"
@@ -25,11 +29,13 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.4",
     "eslint": "^4.3.0",
+    "eslint-config-google": "^0.9.1",
     "eslint-config-prettier": "^2.4.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-prettier": "^2.2.0",
     "html-webpack-plugin": "^2.29.0",
+    "pre-commit": "^1.2.2",
     "prettier": "^1.6.1",
     "style-loader": "^0.18.2",
     "svg-url-loader": "^2.1.1",
