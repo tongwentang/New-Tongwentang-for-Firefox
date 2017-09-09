@@ -40,7 +40,6 @@
     "default_title": "__MSG_extTitle__",
     "default_icon": "icon/tongwen-icon-32.png"
   },
-
   "commands": {
     "page-trad": {
       "description": "__MSG_contextPage2Trad__",
@@ -74,7 +73,8 @@
     "contextMenus",
     "clipboardRead",
     "clipboardWrite",
-    "downloads"
+    "downloads",
+    "notifications"
   ],
   "default_locale": "en",
   "options_ui": {
