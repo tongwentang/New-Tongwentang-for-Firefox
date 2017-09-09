@@ -9,6 +9,7 @@
     "browser": true
   },
   "extends": [
+    "google",
     "prettier"
   ],
   "plugins": [
@@ -22,6 +23,8 @@
         "singleQuote": true,
         "trailingComma": "es5"
       }
-    ]
+    ],
+    "require-jsdoc": "off",
+    "no-undef": "error"
   }
 }
