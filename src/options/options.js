@@ -1,6 +1,7 @@
 import './options.css';
 import flagmap from './flagmap';
 import prefs from './prefs';
+import notifier from '../lib/notifier';
 
 let categories = [];
 const tableRowItems = {
@@ -541,6 +542,9 @@ function uiEventBinding() {
     () => {
       prefs.importAllOptions().then(newPrefs => {
         Object.keys(newPrefs).forEach(key => {
+          if (key === 'version') {
+            return;
+          }
           const elem = document.getElementById(key);
           const elemType = elem.getAttribute('type');
           if (elemType === 'listBox' || elemType === 'listBoxObj') {
@@ -551,7 +555,7 @@ function uiEventBinding() {
           }
           setValueToElem(key, newPrefs[key]);
         });
-        alert(browser.i18n.getMessage('dlgImportSuccess'));
+        notifier.create(browser.i18n.getMessage('dlgImportSuccess'));
       });
     },
     false
@@ -562,7 +566,9 @@ function uiEventBinding() {
       prefs
         .importUrlRule()
         .then(({ id, pref }) => setValueToElem(id, pref))
-        .then(() => alert(browser.i18n.getMessage('dlgImportSuccess')));
+        .then(() =>
+          notifier.create(browser.i18n.getMessage('dlgImportSuccess'))
+        );
     },
     false
   );
@@ -572,7 +578,9 @@ function uiEventBinding() {
       prefs
         .importS2TTable()
         .then(({ id, pref }) => setValueToElem(id, pref))
-        .then(() => alert(browser.i18n.getMessage('dlgImportSuccess')));
+        .then(() =>
+          notifier.create(browser.i18n.getMessage('dlgImportSuccess'))
+        );
     },
     false
   );
@@ -582,7 +590,9 @@ function uiEventBinding() {
       prefs
         .importT2STable()
         .then(({ id, pref }) => setValueToElem(id, pref))
-        .then(() => alert(browser.i18n.getMessage('dlgImportSuccess')));
+        .then(() =>
+          notifier.create(browser.i18n.getMessage('dlgImportSuccess'))
+        );
     },
     false
   );

@@ -1,29 +1,10 @@
 import urlValidator from './url-validator';
+import notifier from '../lib/notifier';
+import { defaultPrefs, prefsValidKeys } from '../lib/default/prefs';
 
 class Prefs {
   constructor() {
-    this._prefs = {
-      autoConvert: 0,
-      iconAction: 1,
-      inputConvert: 0,
-      symConvert: true,
-      fontCustomEnabled: false,
-      fontCustomTrad: 'PMingLiU,MingLiU,新細明體,細明體',
-      fontCustomSimp: 'MS Song,宋体,SimSun',
-      contextMenuEnabled: true,
-      contextMenuInput2Trad: true,
-      contextMenuInput2Simp: true,
-      contextMenuPage2Trad: true,
-      contextMenuPage2Simp: true,
-      contextMenuClip2Trad: true,
-      contextMenuClip2Simp: true,
-      urlFilterEnabled: false,
-      urlFilterList: [],
-      userPhraseEnable: false,
-      userPhraseTradList: {},
-      userPhraseSimpList: {},
-      version: 1,
-    };
+    this._prefs = defaultPrefs;
   }
 
   init() {
@@ -41,30 +22,8 @@ class Prefs {
     switch (type) {
       case 'all': {
         let isInvalid = false;
-        const allKeyValuePair = [
-          { key: 'autoConvert', type: 'number' },
-          { key: 'iconAction', type: 'number' },
-          { key: 'inputConvert', type: 'number' },
-          { key: 'symConvert', type: 'boolean' },
-          { key: 'fontCustomEnabled', type: 'boolean' },
-          { key: 'fontCustomTrad', type: 'string' },
-          { key: 'fontCustomSimp', type: 'string' },
-          { key: 'contextMenuEnabled', type: 'boolean' },
-          { key: 'contextMenuInput2Trad', type: 'boolean' },
-          { key: 'contextMenuInput2Simp', type: 'boolean' },
-          { key: 'contextMenuPage2Trad', type: 'boolean' },
-          { key: 'contextMenuPage2Simp', type: 'boolean' },
-          { key: 'contextMenuClip2Trad', type: 'boolean' },
-          { key: 'contextMenuClip2Simp', type: 'boolean' },
-          { key: 'urlFilterEnabled', type: 'boolean' },
-          { key: 'urlFilterList', type: 'object' },
-          { key: 'userPhraseEnable', type: 'boolean' },
-          { key: 'userPhraseTradList', type: 'object' },
-          { key: 'userPhraseSimpList', type: 'object' },
-          { key: 'version', type: 'number' },
-        ];
 
-        allKeyValuePair.forEach(pair => {
+        prefsValidKeys.forEach(pair => {
           if (isInvalid) {
             return;
           }
@@ -149,7 +108,7 @@ class Prefs {
   _exportFile(pref, fileName) {
     const blob = new Blob([pref], { type: 'text/json;charset=utf-8' });
 
-    browser.downloads.download({
+    return browser.downloads.download({
       url: URL.createObjectURL(blob),
       filename: fileName,
       saveAs: true,
@@ -210,7 +169,7 @@ class Prefs {
       })
       .then(validated => {
         if (validated.error) {
-          alert(browser.i18n.getMessage('dlgImportfail'));
+          notifier.create(browser.i18n.getMessage('dlgImportfail'));
           return Promise.reject('import prefs invalid');
         }
 
@@ -227,7 +186,7 @@ class Prefs {
       .then(pref => this._validate(pref, 'url'))
       .then(validated => {
         if (validated.error) {
-          alert(browser.i18n.getMessage('dlgImportfail'));
+          notifier.create(browser.i18n.getMessage('dlgImportfail'));
           return Promise.reject('import prefs invalid');
         }
 
@@ -241,7 +200,7 @@ class Prefs {
       .then(pref => this._validate(pref, 'phrase'))
       .then(validated => {
         if (validated.error) {
-          alert(browser.i18n.getMessage('dlgImportfail'));
+          notifier.create(browser.i18n.getMessage('dlgImportfail'));
           return Promise.reject('import prefs invalid');
         }
 
@@ -255,12 +214,12 @@ class Prefs {
       .then(pref => this._validate(pref, 'phrase'))
       .then(validated => {
         if (validated.error) {
-          alert(browser.i18n.getMessage('dlgImportfail'));
+          notifier.create(browser.i18n.getMessage('dlgImportfail'));
           return Promise.reject('import prefs invalid');
         }
 
         this._reset('userPhraseSimpList', validated.pref);
-        alert(browser.i18n.getMessage('dlgImportSuccess'));
+        notifier.create(browser.i18n.getMessage('dlgImportSuccess'));
         return { id: 'userPhraseSimpList', pref: validated.pref };
       });
   }
