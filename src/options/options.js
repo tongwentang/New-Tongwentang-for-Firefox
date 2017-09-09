@@ -1,14 +1,6 @@
-import {
-  exportAllOptions,
-  exportUrlRule,
-  exportS2TTable,
-  exportT2STable,
-  importAllOptions,
-  importUrlRule,
-  importS2TTable,
-  importT2STable,
-} from './config-importer-exporter';
 import './options.css';
+import flagmap from './flagmap';
+import prefs from './prefs';
 
 let categories = [];
 const tableRowItems = {
@@ -20,27 +12,6 @@ let tableRowButtons = [];
 let screenMask;
 let urlFilterEditor;
 let userPhraseEditor;
-let currentPrefs = {};
-// const l10n = {};
-const flagmap = [];
-
-export function sendValueChangeMessage(id, value) {
-  if (value === undefined) {
-    delete currentPrefs[id];
-    // console.log('sendVelueChangeMessage(0): id = ' + id);
-  } else if (typeof value === 'object') {
-    // console.log('sendVelueChangeMessage(1): id = ' + id + ', value = ' + JSON.stringify(value));
-    const update = {};
-    update[id] = value;
-    browser.storage.local.set(update).then(null, err => console.error(err));
-  } else if (currentPrefs[id] !== value) {
-    currentPrefs[id] = value;
-    // console.log('sendVelueChangeMessage(2): id = ' + id + ', value = ' + value + ', type = ' + typeof(value));
-    const update = {};
-    update[id] = value;
-    browser.storage.local.set(update).then(null, err => console.error(err));
-  }
-}
 
 function checkFilterEditorInput() {
   // console.log('checkFilterEditorInput');
@@ -166,7 +137,7 @@ function clickOnRowButton(event) {
     if (target === 'urlFilterList') {
       const index = parseInt(button.parentNode.getAttribute('index'), 10);
       const url = button.parentNode.firstChild.textContent;
-      const action = currentPrefs.urlFilterList[index].action;
+      const action = prefs.get().urlFilterList[index].action;
       showUrlFilterEditor(url, action, index);
     } else {
       target = button.parentNode.parentNode.getAttribute('id');
@@ -191,8 +162,11 @@ function clickOnRowButton(event) {
         for (let i = index + 1; i < urlFilterList.children.length - 1; ++i) {
           urlFilterList.children[i].setAttribute('index', i - 1);
         }
-        currentPrefs.urlFilterList.splice(index, 1);
-        sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+        prefs.get().urlFilterList.splice(index, 1);
+        prefs.sendValueChangeMessage(
+          'urlFilterList',
+          prefs.get().urlFilterList
+        );
         // sendVelueChangeMessage(id);
       } else {
         clickOnRowItem({ currentTarget: node });
@@ -205,8 +179,8 @@ function clickOnRowButton(event) {
       const node = button.parentNode;
       if (node.getAttribute('selected') === 'true') {
         node.parentNode.removeChild(node);
-        delete currentPrefs[target][key];
-        sendValueChangeMessage(target, currentPrefs[target]);
+        delete prefs.get()[target][key];
+        prefs.sendValueChangeMessage(target, prefs.get()[target]);
       } else {
         clickOnRowItem({ currentTarget: node });
       }
@@ -239,21 +213,21 @@ function moveUrlFilterPos(shift) {
       const index = parseInt(tableRowItem.getAttribute('index'), 10);
       if (
         (shift === -1 && index === 0) ||
-        (shift === 1 && index === currentPrefs.urlFilterList.length - 1)
+        (shift === 1 && index === prefs.get().urlFilterList.length - 1)
       ) {
         return;
       }
       selectedIndex = index;
       selectedRowItem = tableRowItem;
-      const filter = currentPrefs.urlFilterList.splice(index, 1);
-      currentPrefs.urlFilterList.splice(index + shift, 0, filter[0]);
-      sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+      const filter = prefs.get().urlFilterList.splice(index, 1);
+      prefs.get().urlFilterList.splice(index + shift, 0, filter[0]);
+      prefs.sendValueChangeMessage('urlFilterList', prefs.get().urlFilterList);
       break;
     }
   }
 
   const urlFilterList = document.getElementById('urlFilterList');
-  if (shift === 1 && selectedIndex === currentPrefs.urlFilterList.length - 2) {
+  if (shift === 1 && selectedIndex === prefs.get().urlFilterList.length - 2) {
     const lastChild = urlFilterList.querySelector('li:last-of-type');
     urlFilterList.insertBefore(selectedRowItem, lastChild);
     nNode = selectedRowItem.previousElementSibling;
@@ -289,21 +263,21 @@ function modifyUrlFilter(url, action, index) {
   const urlFilterList = document.getElementById('urlFilterList');
   const row = urlFilterList.children[index + 1];
   row.children[0].textContent = url;
-  row.children[1].textContent = flagmap[action];
-  currentPrefs.urlFilterList[index].url = url;
-  currentPrefs.urlFilterList[index].action = action;
+  row.children[1].textContent = flagmap.get(action);
+  prefs.get().urlFilterList[index].url = url;
+  prefs.get().urlFilterList[index].action = action;
 }
 
 function addUrlFilter(url, action, index) {
   const urlFilterList = document.getElementById('urlFilterList');
   const li = document.createElement('li');
   if (index === undefined) {
-    index = currentPrefs.urlFilterList.length;
+    index = prefs.get().urlFilterList.length;
   }
   li.setAttribute('index', index);
   li.classList.add('tableRow');
   addRowItemCell(li, ['cellUrl'], url);
-  addRowItemCell(li, ['cellAction'], flagmap[action]);
+  addRowItemCell(li, ['cellAction'], flagmap.get(action));
   const edit = addRowItemCell(
     li,
     ['cellEdit', 'cellButton'],
@@ -417,11 +391,14 @@ function uiEventBinding() {
           }
           if (index === -1) {
             addUrlFilter(url, action);
-            currentPrefs.urlFilterList.push({ url, action });
+            prefs.get().urlFilterList.push({ url, action });
           } else {
             modifyUrlFilter(url, action, index);
           }
-          sendValueChangeMessage('urlFilterList', currentPrefs.urlFilterList);
+          prefs.sendValueChangeMessage(
+            'urlFilterList',
+            prefs.get().urlFilterList
+          );
           hideScreenMask();
         } else if (dlgName === 'userPhraseEditor') {
           const oldkey = document.getElementById('originPhrase-old').value;
@@ -435,21 +412,21 @@ function uiEventBinding() {
           }
           if (type === 'trad') {
             if (oldkey) {
-              delete currentPrefs.userPhraseTradList[oldkey];
+              delete prefs.get().userPhraseTradList[oldkey];
             }
-            currentPrefs.userPhraseTradList[key] = value;
-            sendValueChangeMessage(
+            prefs.get().userPhraseTradList[key] = value;
+            prefs.sendValueChangeMessage(
               'userPhraseTradList',
-              currentPrefs.userPhraseTradList
+              prefs.get().userPhraseTradList
             );
           } else if (type === 'simp') {
             if (oldkey) {
-              delete currentPrefs.userPhraseSimpList[oldkey];
+              delete prefs.get().userPhraseSimpList[oldkey];
             }
-            currentPrefs.userPhraseSimpList[key] = value;
-            sendValueChangeMessage(
+            prefs.get().userPhraseSimpList[key] = value;
+            prefs.sendValueChangeMessage(
               'userPhraseSimpList',
-              currentPrefs.userPhraseSimpList
+              prefs.get().userPhraseSimpList
             );
           }
           hideScreenMask();
@@ -533,28 +510,28 @@ function uiEventBinding() {
   document.getElementById('btnExportAllOptions').addEventListener(
     'click',
     () => {
-      exportAllOptions(currentPrefs);
+      prefs.exportAllOptions();
     },
     false
   );
   document.getElementById('btnExportUrlRule').addEventListener(
     'click',
     () => {
-      exportUrlRule(currentPrefs);
+      prefs.exportUrlRule();
     },
     false
   );
   document.getElementById('btnExportS2TTable').addEventListener(
     'click',
     () => {
-      exportS2TTable(currentPrefs);
+      prefs.exportS2TTable();
     },
     false
   );
   document.getElementById('btnExportT2STable').addEventListener(
     'click',
     () => {
-      exportT2STable(currentPrefs);
+      prefs.exportT2STable();
     },
     false
   );
@@ -562,34 +539,56 @@ function uiEventBinding() {
   document.getElementById('btnImportAllOptions').addEventListener(
     'click',
     () => {
-      importAllOptions(currentPrefs);
+      prefs.importAllOptions().then(newPrefs => {
+        Object.keys(newPrefs).forEach(key => {
+          const elem = document.getElementById(key);
+          const elemType = elem.getAttribute('type');
+          if (elemType === 'listBox' || elemType === 'listBoxObj') {
+            // Remove all list from UI
+            for (let i = elem.children.length - 2; i > 0; i--) {
+              elem.removeChild(elem.children[i]);
+            }
+          }
+          setValueToElem(key, newPrefs[key]);
+        });
+        alert(browser.i18n.getMessage('dlgImportSuccess'));
+      });
     },
     false
   );
   document.getElementById('btnImportUrlRule').addEventListener(
     'click',
     () => {
-      importUrlRule(currentPrefs);
+      prefs
+        .importUrlRule()
+        .then(({ id, pref }) => setValueToElem(id, pref))
+        .then(() => alert(browser.i18n.getMessage('dlgImportSuccess')));
     },
     false
   );
   document.getElementById('btnImportS2TTable').addEventListener(
     'click',
     () => {
-      importS2TTable(currentPrefs);
+      prefs
+        .importS2TTable()
+        .then(({ id, pref }) => setValueToElem(id, pref))
+        .then(() => alert(browser.i18n.getMessage('dlgImportSuccess')));
     },
     false
   );
   document.getElementById('btnImportT2STable').addEventListener(
     'click',
     () => {
-      importT2STable(currentPrefs);
+      prefs
+        .importT2STable()
+        .then(({ id, pref }) => setValueToElem(id, pref))
+        .then(() => alert(browser.i18n.getMessage('dlgImportSuccess')));
     },
     false
   );
 }
 
-export function setValueToElem(id, value) {
+function setValueToElem(id, value) {
   const elem = document.getElementById(id);
   if (elem) {
     const elemType = elem.getAttribute('type');
@@ -634,24 +633,27 @@ function handleValueChange(id) {
       for (const radio of radios) {
         radio.addEventListener('input', () => {
           if (radio.checked)
-            sendValueChangeMessage(id, parseInt(radio.getAttribute('value')));
+            prefs.sendValueChangeMessage(
+              id,
+              parseInt(radio.getAttribute('value'))
+            );
         });
       }
     } else if (elemType === 'checkbox') {
       elem.addEventListener('input', () => {
-        sendValueChangeMessage(id, elem.checked);
+        prefs.sendValueChangeMessage(id, elem.checked);
       });
     } else if (elemType === 'color') {
       elem.addEventListener('input', () => {
-        sendValueChangeMessage(id, elem.value);
+        prefs.sendValueChangeMessage(id, elem.value);
       });
     } else if (elemType === 'number') {
       elem.addEventListener('input', () => {
-        sendValueChangeMessage(id, parseInt(elem.value));
+        prefs.sendValueChangeMessage(id, parseInt(elem.value));
       });
     } else if (elemType === 'text') {
       elem.addEventListener('input', () => {
-        sendValueChangeMessage(id, elem.value);
+        prefs.sendValueChangeMessage(id, elem.value);
       });
     }
   }
@@ -659,16 +661,9 @@ function handleValueChange(id) {
 
 // function getValueFromElem(id) {};
 
-function init(preferences) {
-  flagmap.push(browser.i18n.getMessage('labelNoTranslate'));
-  flagmap.push('');
-  flagmap.push(browser.i18n.getMessage('labelToTraditional'));
-  flagmap.push(browser.i18n.getMessage('labelToSimplified'));
-
-  // console.log(JSON.stringify(preferences,null,4));
-  currentPrefs = preferences;
-  Object.keys(preferences).forEach(key => {
-    setValueToElem(key, preferences[key]);
+function init() {
+  Object.keys(prefs.get()).forEach(key => {
+    setValueToElem(key, prefs.get()[key]);
     handleValueChange(key);
   });
   document.title = browser.i18n.getMessage('optionTitle');
@@ -686,15 +681,16 @@ window.addEventListener(
         document.getElementById('contextMenuClipboardT').style.display = 'none';
         document.getElementById('contextMenuClipboardS').style.display = 'none';
       }
-      browser.storage.local.get().then(results => {
-        if (typeof results.length === 'number' && results.length > 0) {
-          results = results[0];
-        }
-        if (results.version) {
-          init(results);
+
+      prefs
+        .init()
+        .then(() => {
+          init();
           uiEventBinding();
-        }
-      });
+        })
+        .catch(() => {
+          throw new Error('prefs.init(): get prefs from storage failed');
+        });
     });
   },
   true
