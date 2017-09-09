@@ -1,28 +1,8 @@
-const defaultPreference = {
-  autoConvert: 0,
-  iconAction: 1,
-  inputConvert: 0,
-  symConvert: true,
-  fontCustomEnabled: false,
-  fontCustomTrad: 'PMingLiU,MingLiU,新細明體,細明體',
-  fontCustomSimp: 'MS Song,宋体,SimSun',
-  contextMenuEnabled: true,
-  contextMenuInput2Trad: true,
-  contextMenuInput2Simp: true,
-  contextMenuPage2Trad: true,
-  contextMenuPage2Simp: true,
-  contextMenuClip2Trad: true,
-  contextMenuClip2Simp: true,
-  urlFilterEnabled: false,
-  urlFilterList: [],
-  userPhraseEnable: false,
-  userPhraseTradList: {},
-  userPhraseSimpList: {},
-  version: 1,
-};
+import { defaultPrefs } from '../lib/default/prefs';
+import { convertMapping } from '../lib/default/convert-mapping';
+
 let supportClipboard = true;
 let menuId = null;
-const convertMapping = ['none', 'auto', 'trad', 'simp'];
 let preferences = {};
 
 const doAction = (tab, act, flag) => {
@@ -300,8 +280,8 @@ const loadPreference = () => {
         results = results[0];
       }
       if (!results.version) {
-        preferences = defaultPreference;
-        browser.storage.local.set(defaultPreference).then(
+        preferences = defaultPrefs;
+        browser.storage.local.set(defaultPrefs).then(
           () => {
             browser.storage.onChanged.addListener(storageChangeHandler);
           },
