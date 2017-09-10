@@ -14,11 +14,16 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loaders: 'eslint-loader',
+        options: {
+          fix: true,
+          emitError: true,
+          emitWarning: true,
+        },
       },
       {
         test: /\.css$/,

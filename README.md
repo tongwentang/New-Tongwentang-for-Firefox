@@ -10,10 +10,13 @@ Released under [MIT/X11 License](https://opensource.org/licenses/mit-license.php
 Some predefine npm scripts for development:
 - `dev`: continually watch the files change under `src/`, once change emitted, webpack automatically rebuild.
 - `build`: one time build.
-- `eslint`: lint the files under `src/` with `eslint-config-google` and reformat with `prettier`. `eslint` command automatically run at pre-commit stage, so you don't really need to run this command by youself.
+- `eslint`: lint the files under `src/` with `eslint-config-google` and reformat with `prettier`. Under `dev` mode (`yarn run dev`), eslint and prettier continually checking the files, so you don't really need to run this command by youself.
 
-#### pre-commit
-There is a pre-commit validation with eslint, this should significally slow down commit process time, but ensure the code quality. If you already install eslint and prettier plugin in your editor or run `eslint` command before commit to speed up commit processing time, considering use `commit --no-verify` to bypass pre-commit check (make sure your prettier settings is same as the project).
+#### `dev` mode
+If you not going to developing under `dev` mode, you should run a `yarn run build` to perform a eslint and prettier check to the files before you actually commit you works. So, developing under `dev` mode is strongly recommended.
+
+#### prettier editor extension
+Make sure you editor's prettier extension settings no conflict with the project prettier settings, if you already instal prettier extension on your editor.
 
 # Todos
 - modular

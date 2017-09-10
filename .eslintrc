@@ -8,14 +8,8 @@
   "globals": {
     "browser": true
   },
-  "extends": [
-    "google",
-    "prettier"
-  ],
-  "plugins": [
-    "import",
-    "prettier"
-  ],
+  "extends": ["google", "plugin:import/errors", "prettier"],
+  "plugins": ["import", "prettier"],
   "rules": {
     "prettier/prettier": [
       "warn",
