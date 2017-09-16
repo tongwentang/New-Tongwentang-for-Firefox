@@ -1,22 +1,9 @@
 import urlValidator from './url-validator';
 import notifier from '../lib/notifier';
-import { defaultPrefs, prefsValidKeys } from '../lib/default/prefs';
+import { prefsValidKeys } from '../lib/default/prefs';
+import { Prefs } from '../lib/prefs/prefs.class';
 
-class Prefs {
-  constructor() {
-    this._prefs = defaultPrefs;
-  }
-
-  init() {
-    return browser.storage.local.get().then(prefsList => {
-      this._prefs = Object.assign({}, prefsList);
-    });
-  }
-
-  get() {
-    return this._prefs;
-  }
-
+class PrefsExtend extends Prefs {
   // type: all, url, phrase
   _validate(pref, type) {
     switch (type) {
@@ -237,4 +224,4 @@ class Prefs {
   }
 }
 
-export default new Prefs();
+export default new PrefsExtend({});
