@@ -53,6 +53,8 @@ const getClipData = callback => {
 };
 
 const createContextMenu = () => {
+  // BUG FIX
+  // 如果選項內的右鍵選單只勾選輸入區則 contenxts 陣列只能有 editable （意思是只在輸入的右鍵選單插入同文堂
   if (menuId !== null) {
     return;
   }
@@ -64,6 +66,7 @@ const createContextMenu = () => {
     'image',
     'video',
     'audio',
+    'frame',
   ];
 
   // 新同文堂
