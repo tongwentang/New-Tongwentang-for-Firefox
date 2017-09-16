@@ -4,9 +4,12 @@
   "description": "Firefox Add-on, converts web page between Simplified and Traditional Chinese.",
   "main": "index.js",
   "scripts": {
+    "start": "echo \"not yet ready\"",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --watch",
+    "run": "web-ext run -s ./dist -u \"about:debugging\" --firefox=nightly",
+    "run:win": "web-ext run -s ./dist -u \"about:debugging\" --firefox \"C:\\Program Files\\Firefox Developer Edition\\firefox.exe\"",
     "eslint": "eslint src --fix"
   },
   "repository": {
@@ -22,6 +25,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "clean-webpack-plugin": "^0.1.16",
+    "concurrently": "^3.5.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.4",
     "eslint": "^4.3.0",
