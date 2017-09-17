@@ -19,11 +19,17 @@ export class Prefs {
   }
 
   _onStorageChanged(changes, areaName) {
+    const newValues = Object.keys(changes)
+      .map(key => ({
+        [key]: changes[key].newValue,
+      }))
+      .reduce((curr, next) => Object.assign(curr, next), {});
+
     if (areaName === 'local') {
-      this._prefs = Object.assign({}, this._prefs, changes);
+      this._prefs = Object.assign({}, this._prefs, newValues);
     }
     if (typeof this._storageChangedCB === 'function') {
-      this._storageChangedCB();
+      this._storageChangedCB(changes, areaName, this._prefs);
     }
   }
 
