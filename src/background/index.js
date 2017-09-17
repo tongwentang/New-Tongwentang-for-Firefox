@@ -1,9 +1,8 @@
-import { defaultPrefs } from '../lib/default/prefs';
 import { convertMapping } from '../lib/default/convert-mapping';
+import { Prefs } from '../lib/prefs/prefs.class';
 
 let supportClipboard = true;
 let menuId = null;
-let preferences = {};
 
 const doAction = (tab, act, flag) => {
   browser.tabs.detectLanguage(tab.id).then(lang => {
@@ -52,7 +51,7 @@ const getClipData = callback => {
   document.execCommand('Paste');
 };
 
-const createContextMenu = () => {
+const createContextMenu = preferences => {
   // BUG FIX
   // 如果選項內的右鍵選單只勾選輸入區則 contenxts 陣列只能有 editable （意思是只在輸入的右鍵選單插入同文堂
   if (menuId !== null) {
@@ -204,7 +203,7 @@ const createContextMenu = () => {
   }
 };
 
-const resetContextMenu = () => {
+const resetContextMenu = preferences => {
   let createNew = false;
   if (
     preferences.contextMenuEnabled &&
@@ -221,17 +220,17 @@ const resetContextMenu = () => {
     browser.contextMenus.removeAll(() => {
       menuId = null;
       if (createNew) {
-        createContextMenu();
+        createContextMenu(preferences);
       }
     });
   } else {
     if (createNew) {
-      createContextMenu();
+      createContextMenu(preferences);
     }
   }
 };
 
-const setActionButtonText = () => {
+const setActionButtonText = preferences => {
   switch (convertMapping[preferences.iconAction]) {
     case 'trad':
       browser.browserAction.setBadgeText({ text: 'T' });
@@ -245,11 +244,10 @@ const setActionButtonText = () => {
   browser.browserAction.setBadgeBackgroundColor({ color: '#C0C0C0' });
 };
 
-const storageChangeHandler = (changes, area) => {
+const storageChangeHandler = (changes, area, newPrefs) => {
   if (area === 'local') {
     const changedItems = Object.keys(changes);
     for (const item of changedItems) {
-      preferences[item] = changes[item].newValue;
       switch (item) {
         case 'contextMenuEnabled':
         case 'contextMenuInput2Trad':
@@ -258,10 +256,10 @@ const storageChangeHandler = (changes, area) => {
         case 'contextMenuPage2Simp':
         case 'contextMenuClip2Trad':
         case 'contextMenuClip2Simp':
-          resetContextMenu();
+          resetContextMenu(prefs.get());
           break;
         case 'iconAction':
-          setActionButtonText();
+          setActionButtonText(prefs.get());
           break;
         default:
           break;
@@ -269,6 +267,8 @@ const storageChangeHandler = (changes, area) => {
     }
   }
 };
+
+const prefs = new Prefs({ storageChangedCB: storageChangeHandler });
 
 const loadPreference = () => {
   browser.runtime.getBrowserInfo().then(info => {
@@ -278,24 +278,10 @@ const loadPreference = () => {
     if (info.name === 'Firefox' && parseInt(info.version) < 54) {
       supportClipboard = false;
     }
-    browser.storage.local.get().then(results => {
-      if (typeof results.length === 'number' && results.length > 0) {
-        results = results[0];
-      }
-      if (!results.version) {
-        preferences = defaultPrefs;
-        browser.storage.local.set(defaultPrefs).then(
-          () => {
-            browser.storage.onChanged.addListener(storageChangeHandler);
-          },
-          () => {}
-        );
-      } else {
-        preferences = results;
-        browser.storage.onChanged.addListener(storageChangeHandler);
-      }
-      resetContextMenu();
-      setActionButtonText();
+
+    prefs.init().then(() => {
+      resetContextMenu(prefs.get());
+      setActionButtonText(prefs.get());
     });
   });
 };
@@ -305,7 +291,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 browser.browserAction.onClicked.addListener(tab => {
-  doAction(tab, 'icon', convertMapping[preferences.iconAction]);
+  doAction(tab, 'icon', convertMapping[prefs.get().iconAction]);
 });
 
 browser.commands.onCommand.addListener(command => {
