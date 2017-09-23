@@ -4,6 +4,10 @@ Firefox Add-on, converts web page between Simplified and Traditional Chinese.
 # License
 Released under [MIT/X11 License](https://opensource.org/licenses/mit-license.php)
 
+# Install require librarys
+- npm install --save-dev  webpack
+- npm install --save-dev copy-webpack-plugin
+
 # Dev
 **CAUTION:** You must at least install **git for windows** if you developing under Windows or developing with cmder with **git for windows**.
 
