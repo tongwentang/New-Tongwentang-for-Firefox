@@ -1,18 +1,22 @@
+import { TongWen } from './tongwen_core';
+
 // window loaded
 let preferences;
-let convertMapping = ['none','auto','trad','simp'];
+const convertMapping = ['none', 'auto', 'trad', 'simp'];
 
 const urlFilterAction = uri => {
-  for (let filter of preferences.urlFilterList) {
+  for (const filter of preferences.urlFilterList) {
     if (filter.url.includes('*')) {
       // var url = filter.url.replace(/(\W+)/ig, '\\$1').replace('*.', '*\\.').replace(/\*/ig, '\\w*'); // 較為嚴謹
-      let url = filter.url.replace(/(\W)/ig, '\\$1').replace(/\\\*/ig, '*').replace(/\*/ig, '.*'); // 寬鬆比對
-      let re = new RegExp('^' + url + '$', 'ig');
+      const url = filter.url
+        .replace(/(\W)/gi, '\\$1')
+        .replace(/\\\*/gi, '*')
+        .replace(/\*/gi, '.*'); // 寬鬆比對
+      const re = new RegExp(`^${url}$`, 'ig');
       if (uri.match(re) !== null) {
         return convertMapping[filter.action];
       }
-    }
-    else if (uri === filter.url) {
+    } else if (uri === filter.url) {
       return convertMapping[filter.action];
     }
   }
@@ -32,74 +36,76 @@ const docLoadedInit = uri => {
 };
 
 browser.storage.local.get().then(results => {
-  if ((typeof results.length === 'number') && (results.length > 0)) {
+  if (typeof results.length === 'number' && results.length > 0) {
     results = results[0];
   }
   if (results.version) {
     preferences = results;
-    //console.log(JSON.stringify(preferences, null, 4));
-    let zhflag = docLoadedInit(document.URL);
-    //console.log('zhflag = ' + zhflag );
+    // console.log(JSON.stringify(preferences, null, 4));
+    const zhflag = docLoadedInit(document.URL);
+    // console.log('zhflag = ' + zhflag );
     TongWen.loadSettingData(preferences);
     if (zhflag === 'trad') {
       TongWen.trans2Trad(document);
-    }
-    else if (zhflag === 'simp') {
+    } else if (zhflag === 'simp') {
       TongWen.trans2Simp(document);
     }
   }
 });
 
 const messageHandler = (request, sender, sendResponse) => {
-  //console.log(JSON.stringify(request, null , 4));
-  var isInput, val, tag, attr, zhflag, elem, lang;
+  // console.log(JSON.stringify(request, null , 4));
   if (request.act === 'paste') {
-    if(window.self === window.top) { //this message only handle by top window.
-      let val = TongWen.convert(request.text, request.flag);
-      let textArea = document.createElement('textarea');
+    if (window.self === window.top) {
+      // this message only handle by top window.
+      const val = TongWen.convert(request.text, request.flag);
+      const textArea = document.createElement('textarea');
       textArea.value = val;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
-      sendResponse({text: val});
+      sendResponse({ text: val });
     }
     return;
   }
 
-  lang = document.documentElement.getAttribute('lang');
-  if ((lang === null) && (request.lang !== false)) {
+  const lang = document.documentElement.getAttribute('lang');
+  if (lang === null && request.lang !== false) {
     document.documentElement.setAttribute('lang', request.lang);
   }
 
-  elem = document.activeElement;
-  tag = (typeof elem.tagName === 'undefined') ? '' : elem.tagName.toLowerCase();
-  val = (typeof elem.type === 'undefined') ? '' : elem.type.toLowerCase();
-  isInput = ((['textarea', 'input'].indexOf(tag) >= 0) && (['textarea', 'text'].indexOf(val) >= 0));
+  const elem = document.activeElement;
+  const tag =
+    typeof elem.tagName === 'undefined' ? '' : elem.tagName.toLowerCase();
+  let val = typeof elem.type === 'undefined' ? '' : elem.type.toLowerCase();
+  const isInput =
+    ['textarea', 'input'].indexOf(tag) >= 0 &&
+    ['textarea', 'text'].indexOf(val) >= 0;
 
-  if (isInput && ((request.act === 'input') || (convertMapping[preferences.inputConvert] !== 'none'))) {
+  if (
+    isInput &&
+    (request.act === 'input' ||
+      convertMapping[preferences.inputConvert] !== 'none')
+  ) {
     // 輸入區文字轉換
-    zhflag = request.flag;
+    let zhflag = request.flag;
     val = document.activeElement.value;
     if (zhflag === 'auto') {
-      attr = document.activeElement.getAttribute('zhtongwen');
+      const attr = document.activeElement.getAttribute('zhtongwen');
       if (attr === null) {
         zhflag = 'traditional';
-      }
-      else {
-        zhflag = (attr === 'traditional') ? 'simplified' : 'traditional';
+      } else {
+        zhflag = attr === 'traditional' ? 'simplified' : 'traditional';
       }
       document.activeElement.setAttribute('zhtongwen', zhflag);
       document.activeElement.value = TongWen.convert(val, zhflag);
-    }
-    else if (zhflag === 'trad') {
+    } else if (zhflag === 'trad') {
       document.activeElement.value = TongWen.convert(val, 'traditional');
-    }
-    else if (zhflag === 'simp') {
+    } else if (zhflag === 'simp') {
       document.activeElement.value = TongWen.convert(val, 'simplified');
     }
-  }
-  else {
+  } else {
     // 網頁轉換
     switch (request.flag) {
       case 'auto':
@@ -111,6 +117,8 @@ const messageHandler = (request, sender, sendResponse) => {
       case 'simp':
         TongWen.trans2Simp(document);
         break;
+      default:
+        break;
     }
   }
 };
@@ -118,5 +126,5 @@ const messageHandler = (request, sender, sendResponse) => {
 browser.runtime.onMessage.addListener(messageHandler);
 
 browser.runtime.sendMessage({
-  loaded: true
+  loaded: true,
 });

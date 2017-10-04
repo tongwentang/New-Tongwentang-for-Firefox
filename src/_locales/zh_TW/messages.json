@@ -1,371 +1,366 @@
 {
-	"extName": {
-		"message": "新同文堂",
-		"description": ""
-	},
-	"extDescription": {
-		"message": "繁體簡體中文轉換工具",
-		"description": ""
-	},
-	"extTitle": {
-		"message": "新同文堂",
-		"description": ""
-	},
-	"optionTitle": {
-		"message": "新同文堂 - 設定",
-		"description": ""
-	},
-	"optionVersion": {
-		"message": "版本：",
-		"description": ""
-	},
-
-	"btnClose": {
-		"message": "關閉",
-		"description": ""
-	},
-	"btnSave": {
-		"message": "儲存",
-		"description": ""
-	},
-	"btnImportOptions": {
-		"message": "匯入設定",
-		"description": ""
-	},
-	"btnExportOptions": {
-		"message": "匯出設定",
-		"description": ""
-	},
-	"btnImport": {
-		"message": "匯入",
-		"description": ""
-	},
-	"btnExport": {
-		"message": "匯出",
-		"description": ""
-	},
-	"btnCancel": {
-		"message": "取消",
-		"description": ""
-	},
-	"btnApply": {
-		"message": "套用",
-		"description": ""
-	},
-	"btnDelete": {
-		"message": "刪除",
-		"description": ""
-	},
-	"btnEdit": {
-		"message": "修改",
-		"description": ""
-	},
-	"btnOK": {
-		"message": "確定",
-		"description": ""
-	},
-	"btnAdd": {
-		"message": "新增",
-		"description": ""
-	},
-
-	"dlgImportOption": {
-		"message": "匯入所有設定",
-		"description": ""
-	},
-	"dlgExportOption": {
-		"message": "匯出所有設定",
-		"description": ""
-	},
-	"dlgImportRules": {
-		"message": "匯入網址自訂轉換規則",
-		"description": ""
-	},
-	"dlgExportRules": {
-		"message": "匯出網址自訂轉換規則",
-		"description": ""
-	},
-	"dlgWarning": {
-		"message": "警告",
-		"description": ""
-	},
-	"dlgImportPhraseTrad": {
-		"message": "匯入簡轉繁對照表",
-		"description": ""
-	},
-	"dlgExportPhraseTrad": {
-		"message": "匯出簡轉繁對照表",
-		"description": ""
-	},
-	"dlgImportPhraseSimp": {
-		"message": "匯入繁轉簡對照表",
-		"description": ""
-	},
-	"dlgExportPhraseSimp": {
-		"message": "匯出繁轉簡對照表",
-		"description": ""
-	},
-	"dlgNotice": {
-		"message": "提示訊息",
-		"description": ""
-	},
-
-	"tabsGeneral": {
-		"message": "一般設定",
-		"description": ""
-	},
-	"tabsContextmenu": {
-		"message": "右鍵選單",
-		"description": ""
-	},
-	"tabsUrl": {
-		"message": "自訂轉換規則",
-		"description": ""
-	},
-	"tabsPhrase": {
-		"message": "自訂詞彙",
-		"description": ""
-	},
-	"tabsSupport": {
-		"message": "支援",
-		"description": ""
-	},
-	"tabSimpToTrad": {
-		"message": "簡 轉 繁",
-		"description": ""
-	},
-	"tabTradToSimp": {
-		"message": "繁 轉 簡",
-		"description": ""
-	},
-
-	"msgSaveSuccess": {
-		"message": "設定儲存完成。",
-		"description": ""
-	},
-	"msgExportNotice": {
-		"message": "請記得先儲存再匯出。",
-		"description": ""
-	},
-	"msgImportNotice": {
-		"message": "請貼上之前備份的設定。",
-		"description": ""
-	},
-	"msgImportSuccess": {
-		"message": "設定資料匯入完成。",
-		"description": ""
-	},
-	"msgImportFailed": {
-		"message": "輸入的設定資料格式錯誤，請重新輸入！",
-		"description": ""
-	},
-	"msgUrlNotEmpty": {
-		"message": "網址不得為空白，請填寫網址！",
-		"description": ""
-	},
-	"msgPhraseNotEmpty": {
-		"message": "要轉換的字串不得為空白，請填寫！",
-		"description": ""
-	},
-	"msgFrameNotConvert": {
-		"message": "某些網頁的頁框會無法正常轉換。",
-		"description": ""
-	},
-	"msgUrlFilter": {
-		"message": "可在網址內使用萬用字元 (*)",
-		"description": ""
-	},
-	"msgInputConvert1": {
-		"message": "要轉換時，請先讓游標停留在輸入區內，再點選工具列上的圖示",
-		"description": ""
-	},
-	"msgInputConvert2": {
-		"message": "不支援「所見即所得」輸入區內的文字轉換",
-		"description": ""
-	},
-
-	"labelNoTranslate": {
-		"message": "不轉換",
-		"description": ""
-	},
-	"labelToTraditional": {
-		"message": "轉 繁體",
-		"description": ""
-	},
-	"labelToSimplified": {
-		"message": "轉 簡體",
-		"description": ""
-	},
-	"labelReplaceOption": {
-		"message": "直接取代原本的設定",
-		"description": ""
-	},
-	"labelTraditional": {
-		"message": "繁體",
-		"description": ""
-	},
-	"labelSimplified": {
-		"message": "簡體",
-		"description": ""
-	},
-	"labelTraditionalColon": {
-		"message": "繁體：",
-		"description": ""
-	},
-	"labelSimplifiedColon": {
-		"message": "簡體：",
-		"description": ""
-	},
-
-	"labelAutoConvert": {
-		"message": "自動轉換設定",
-		"description": ""
-	},
-	"labelAutoConvertNone": {
-		"message": "不啟用自動轉換",
-		"description": ""
-	},
-	"labelAutoConvertTrad": {
-		"message": "自動轉為 繁體 (簡 > 繁)",
-		"description": ""
-	},
-	"labelAutoConvertSimp": {
-		"message": "自動轉為 簡體 (繁 > 簡)",
-		"description": ""
-	},
-
-	"labelIconAction": {
-		"message": "圖示轉換設定",
-		"description": ""
-	},
-	"labelIconActionAuto": {
-		"message": "自動偵測轉換 (簡 > 繁、繁 > 簡)",
-		"description": ""
-	},
-	"labelIconActionTrad": {
-		"message": "轉為 繁體 (簡 > 繁)",
-		"description": ""
-	},
-	"labelIconActionSimp": {
-		"message": "轉為 簡體 (繁 > 簡)",
-		"description": ""
-	},
-	"labelInputConvert": {
-		"message": "輸入區轉換設定",
-		"description": ""
-	},
-	"labelinputConvertNone": {
-		"message": "停用 輸入區轉換",
-		"description": ""
-	},
-	"labelinputConvertAuto": {
-		"message": "輸入區文字繁簡轉換 (簡 > 繁、繁 > 簡)",
-		"description": ""
-	},
-	"labelinputConvertTrad": {
-		"message": "輸入區文字轉為 繁體 (簡 > 繁)",
-		"description": ""
-	},
-	"labelinputConvertSimp": {
-		"message": "輸入區文字轉為 簡體 (繁 > 簡)",
-		"description": ""
-	},
-	"labelSymbolConvert": {
-		"message": "標點符號轉換",
-		"description": ""
-	},
-	"labelSymbolConvertEnable": {
-		"message": "啟用標點符號轉換",
-		"description": ""
-	},
-	"labelSymbolConvertDisable": {
-		"message": "停用標點符號轉換",
-		"description": ""
-	},
-	"labelShowFontSet": {
-		"message": "顯示字型設定",
-		"description": ""
-	},
-	"labelShowFontSetEnable": {
-		"message": "強制字型轉換",
-		"description": ""
-	},
-	"labelShowFontSetTrad": {
-		"message": "繁體顯示字型：",
-		"description": ""
-	},
-	"labelShowFontSetSimp": {
-		"message": "簡體顯示字型：",
-		"description": ""
-	},
-
-	"labelContextMenu": {
-		"message": "右鍵選單",
-		"description": ""
-	},
-	"labelContextMenuEnable": {
-		"message": "啟用右鍵選單",
-		"description": ""
-	},
-
-	"labelUrlFilterEnable": {
-		"message": "啟用自訂轉換規則",
-		"description": ""
-	},
-	"labelUrlFilterUrl": {
-		"message": "網址",
-		"description": ""
-	},
-	"labelUrlFilterConvert": {
-		"message": "繁簡轉換",
-		"description": ""
-	},
-	"labelUrlFilterUrlColon": {
-		"message": "網址：",
-		"description": ""
-	},
-	"labelUrlFilterConvertColon": {
-		"message": "繁簡轉換：",
-		"description": ""
-	},
-
-	"labelCustomPhraseEnable": {
-		"message": "啟用自訂詞彙",
-		"description": ""
-	},
-
-	"contextInput2Trad": {
-		"message": "輸入區：轉 繁體",
-		"description": ""
-	},
-
-	"contextInput2Simp": {
-		"message": "輸入區：轉 簡體",
-		"description": ""
-	},
-
-	"contextPage2Trad": {
-		"message": "網頁：轉 繁體",
-		"description": ""
-	},
-
-	"contextPage2Simp": {
-		"message": "網頁：轉 簡體",
-		"description": ""
-	},
-
-	"contextClip2Trad": {
-		"message": "剪貼簿：轉 繁體",
-		"description": ""
-	},
-
-	"contextClip2Simp": {
-		"message": "剪貼簿：轉 簡體",
-		"description": ""
-	},
-
-	"empty": {
-		"message": "",
-		"description": ""
-	}
+  "extName": {
+    "message": "新同文堂",
+    "description": ""
+  },
+  "extDescription": {
+    "message": "繁體簡體中文轉換工具",
+    "description": ""
+  },
+  "extTitle": {
+    "message": "新同文堂",
+    "description": ""
+  },
+  "optionTitle": {
+    "message": "新同文堂 - 設定",
+    "description": ""
+  },
+  "optionVersion": {
+    "message": "版本：",
+    "description": ""
+  },
+  "btnClose": {
+    "message": "關閉",
+    "description": ""
+  },
+  "btnSave": {
+    "message": "儲存",
+    "description": ""
+  },
+  "btnImportOptions": {
+    "message": "匯入設定",
+    "description": ""
+  },
+  "btnExportOptions": {
+    "message": "匯出設定",
+    "description": ""
+  },
+  "btnImport": {
+    "message": "匯入",
+    "description": ""
+  },
+  "btnExport": {
+    "message": "匯出",
+    "description": ""
+  },
+  "btnCancel": {
+    "message": "取消",
+    "description": ""
+  },
+  "btnApply": {
+    "message": "套用",
+    "description": ""
+  },
+  "btnDelete": {
+    "message": "刪除",
+    "description": ""
+  },
+  "btnEdit": {
+    "message": "修改",
+    "description": ""
+  },
+  "btnOK": {
+    "message": "確定",
+    "description": ""
+  },
+  "btnAdd": {
+    "message": "新增",
+    "description": ""
+  },
+  "dlgImportOption": {
+    "message": "匯入所有設定",
+    "description": ""
+  },
+  "dlgExportOption": {
+    "message": "匯出所有設定",
+    "description": ""
+  },
+  "dlgImportRules": {
+    "message": "匯入網址自訂轉換規則",
+    "description": ""
+  },
+  "dlgExportRules": {
+    "message": "匯出網址自訂轉換規則",
+    "description": ""
+  },
+  "dlgWarning": {
+    "message": "警告",
+    "description": ""
+  },
+  "dlgImportPhraseTrad": {
+    "message": "匯入簡轉繁對照表",
+    "description": ""
+  },
+  "dlgExportPhraseTrad": {
+    "message": "匯出簡轉繁對照表",
+    "description": ""
+  },
+  "dlgImportPhraseSimp": {
+    "message": "匯入繁轉簡對照表",
+    "description": ""
+  },
+  "dlgExportPhraseSimp": {
+    "message": "匯出繁轉簡對照表",
+    "description": ""
+  },
+  "dlgImportSuccess": {
+    "message": "已匯入",
+    "description": ""
+  },
+  "dlgImportfail": {
+    "message": "匯出失敗，組態檔格式不正確",
+    "description": ""
+  },
+  "dlgNotice": {
+    "message": "提示訊息",
+    "description": ""
+  },
+  "tabsGeneral": {
+    "message": "一般設定",
+    "description": ""
+  },
+  "tabsContextmenu": {
+    "message": "右鍵選單",
+    "description": ""
+  },
+  "tabsUrl": {
+    "message": "自訂轉換規則",
+    "description": ""
+  },
+  "tabsPhrase": {
+    "message": "自訂詞彙",
+    "description": ""
+  },
+  "tabsSupport": {
+    "message": "支援",
+    "description": ""
+  },
+  "tabSimpToTrad": {
+    "message": "簡 轉 繁",
+    "description": ""
+  },
+  "tabTradToSimp": {
+    "message": "繁 轉 簡",
+    "description": ""
+  },
+  "msgSaveSuccess": {
+    "message": "設定儲存完成。",
+    "description": ""
+  },
+  "msgExportNotice": {
+    "message": "請記得先儲存再匯出。",
+    "description": ""
+  },
+  "msgImportNotice": {
+    "message": "請貼上之前備份的設定。",
+    "description": ""
+  },
+  "msgImportSuccess": {
+    "message": "設定資料匯入完成。",
+    "description": ""
+  },
+  "msgImportFailed": {
+    "message": "輸入的設定資料格式錯誤，請重新輸入！",
+    "description": ""
+  },
+  "msgUrlNotEmpty": {
+    "message": "網址不得為空白，請填寫網址！",
+    "description": ""
+  },
+  "msgPhraseNotEmpty": {
+    "message": "要轉換的字串不得為空白，請填寫！",
+    "description": ""
+  },
+  "msgFrameNotConvert": {
+    "message": "某些網頁的頁框會無法正常轉換。",
+    "description": ""
+  },
+  "msgUrlFilter": {
+    "message": "可在網址內使用萬用字元 (*)",
+    "description": ""
+  },
+  "msgInputConvert1": {
+    "message": "要轉換時，請先讓游標停留在輸入區內，再點選工具列上的圖示",
+    "description": ""
+  },
+  "msgInputConvert2": {
+    "message": "不支援「所見即所得」輸入區內的文字轉換",
+    "description": ""
+  },
+  "labelNoTranslate": {
+    "message": "不轉換",
+    "description": ""
+  },
+  "labelToTraditional": {
+    "message": "轉 繁體",
+    "description": ""
+  },
+  "labelToSimplified": {
+    "message": "轉 簡體",
+    "description": ""
+  },
+  "labelReplaceOption": {
+    "message": "直接取代原本的設定",
+    "description": ""
+  },
+  "labelTraditional": {
+    "message": "繁體",
+    "description": ""
+  },
+  "labelSimplified": {
+    "message": "簡體",
+    "description": ""
+  },
+  "labelTraditionalColon": {
+    "message": "繁體：",
+    "description": ""
+  },
+  "labelSimplifiedColon": {
+    "message": "簡體：",
+    "description": ""
+  },
+  "labelAutoConvert": {
+    "message": "自動轉換設定",
+    "description": ""
+  },
+  "labelAutoConvertNone": {
+    "message": "不啟用自動轉換",
+    "description": ""
+  },
+  "labelAutoConvertTrad": {
+    "message": "自動轉為 繁體 (簡 > 繁)",
+    "description": ""
+  },
+  "labelAutoConvertSimp": {
+    "message": "自動轉為 簡體 (繁 > 簡)",
+    "description": ""
+  },
+  "labelIconAction": {
+    "message": "圖示轉換設定",
+    "description": ""
+  },
+  "labelIconActionAuto": {
+    "message": "自動偵測轉換 (簡 > 繁、繁 > 簡)",
+    "description": ""
+  },
+  "labelIconActionTrad": {
+    "message": "轉為 繁體 (簡 > 繁)",
+    "description": ""
+  },
+  "labelIconActionSimp": {
+    "message": "轉為 簡體 (繁 > 簡)",
+    "description": ""
+  },
+  "labelInputConvert": {
+    "message": "輸入區轉換設定",
+    "description": ""
+  },
+  "labelinputConvertNone": {
+    "message": "停用 輸入區轉換",
+    "description": ""
+  },
+  "labelinputConvertAuto": {
+    "message": "輸入區文字繁簡轉換 (簡 > 繁、繁 > 簡)",
+    "description": ""
+  },
+  "labelinputConvertTrad": {
+    "message": "輸入區文字轉為 繁體 (簡 > 繁)",
+    "description": ""
+  },
+  "labelinputConvertSimp": {
+    "message": "輸入區文字轉為 簡體 (繁 > 簡)",
+    "description": ""
+  },
+  "labelSymbolConvert": {
+    "message": "標點符號轉換",
+    "description": ""
+  },
+  "labelSymbolConvertEnable": {
+    "message": "啟用標點符號轉換",
+    "description": ""
+  },
+  "labelSymbolConvertDisable": {
+    "message": "停用標點符號轉換",
+    "description": ""
+  },
+  "labelShowFontSet": {
+    "message": "顯示字型設定",
+    "description": ""
+  },
+  "labelShowFontSetEnable": {
+    "message": "強制字型轉換",
+    "description": ""
+  },
+  "labelShowFontSetTrad": {
+    "message": "繁體顯示字型：",
+    "description": ""
+  },
+  "labelShowFontSetSimp": {
+    "message": "簡體顯示字型：",
+    "description": ""
+  },
+  "labelContextMenu": {
+    "message": "右鍵選單",
+    "description": ""
+  },
+  "labelContextMenuEnable": {
+    "message": "啟用右鍵選單",
+    "description": ""
+  },
+  "labelUrlFilterEnable": {
+    "message": "啟用自訂轉換規則",
+    "description": ""
+  },
+  "labelUrlFilterUrl": {
+    "message": "網址",
+    "description": ""
+  },
+  "labelUrlFilterConvert": {
+    "message": "繁簡轉換",
+    "description": ""
+  },
+  "labelUrlFilterUrlColon": {
+    "message": "網址：",
+    "description": ""
+  },
+  "labelUrlFilterConvertColon": {
+    "message": "繁簡轉換：",
+    "description": ""
+  },
+  "labelCustomPhraseEnable": {
+    "message": "啟用自訂詞彙",
+    "description": ""
+  },
+  "contextInput2Trad": {
+    "message": "輸入區：轉 繁體",
+    "description": ""
+  },
+  "contextInput2Simp": {
+    "message": "輸入區：轉 簡體",
+    "description": ""
+  },
+  "contextPage2Trad": {
+    "message": "網頁：轉 繁體",
+    "description": ""
+  },
+  "contextPage2Simp": {
+    "message": "網頁：轉 簡體",
+    "description": ""
+  },
+  "contextClip2Trad": {
+    "message": "剪貼簿：轉 繁體",
+    "description": ""
+  },
+  "contextClip2Simp": {
+    "message": "剪貼簿：轉 簡體",
+    "description": ""
+  },
+  "empty": {
+    "message": "",
+    "description": ""
+  },
+  "notifDefaultTitle": {
+    "message": "新同文堂通知：",
+    "description": ""
+  }
 }
