@@ -135,16 +135,36 @@ const getActiveTab = callback => {
   });
 }
 
+async function importAll(tabId)
+{
+//todo: only import script once
+//  let imported = await browser.sessions.getTabValue(tabId,'script_imported');
+//  if (!imported)
+//  {
+    let exec = browser.tabs.executeScript;
+    await exec(tabId,{file:"lib/tongwen/tongwen_table_s2t.js"})
+    await exec(tabId,{file:"lib/tongwen/tongwen_table_t2s.js"})
+    await exec(tabId,{file:"lib/tongwen/tongwen_table_ps2t.js"})
+    await exec(tabId,{file:"lib/tongwen/tongwen_table_pt2s.js"})
+    await exec(tabId,{file:"lib/tongwen/tongwen_table_ss2t.js"})
+    await exec(tabId,{file:"lib/tongwen/tongwen_table_st2s.js"})
+    await exec(tabId,{file:"lib/tongwen/tongwen_core.js"})
+//    await browser.sessions.setTabValue(tabId,'script_imported',true);
+//  }
+}
+
 const doAction = (tab, act, flag) => {
-  browser.tabs.detectLanguage(tab.id).then( lang => {
-    //console.log('lang = ' + lang);
-    lang = typeof lang === 'undefined' ? false : lang.toLocaleLowerCase();
-    let request = {
-      act: act,
-      flag: 'trad,simp'.includes(flag) ? flag : 'auto',
-      lang: lang
-    };
-    browser.tabs.sendMessage(tab.id, request, function(response) {});
+  importAll(tab.id).then(()=>{
+    browser.tabs.detectLanguage(tab.id).then( lang => {
+      //console.log('lang = ' + lang);
+      lang = typeof lang === 'undefined' ? false : lang.toLocaleLowerCase();
+      let request = {
+        act: act,
+        flag: 'trad,simp'.includes(flag) ? flag : 'auto',
+        lang: lang
+      };
+      browser.tabs.sendMessage(tab.id, request, function(response) {});
+    });
   });
 }
 
