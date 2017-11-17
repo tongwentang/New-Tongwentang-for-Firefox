@@ -69,7 +69,9 @@ const messageHandler = (request, sender, sendResponse) => {
 
   lang = document.documentElement.getAttribute('lang');
   if ((lang === null) && (request.lang !== false)) {
-    document.documentElement.setAttribute('lang', request.lang);
+    if (document.documentElement.hasAttribute('lang')){
+      document.documentElement.setAttribute('lang', request.lang);
+    }
   }
 
   elem = document.activeElement;
