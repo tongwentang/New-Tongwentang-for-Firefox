@@ -152,7 +152,7 @@ const createContextMenu = () => {
   if (menuId !== null) {
     return;
   }
-  let contexts = ['page', 'selection', 'link', 'editable', 'image', 'video', 'audio'];
+  let contexts = ['page', 'selection', 'link', 'editable', 'image', 'video', 'audio', 'frame'];
 
   // 新同文堂
   menuId = browser.contextMenus.create({
