@@ -18,9 +18,7 @@ function checkFilterEditorInput() {
   // console.log('checkFilterEditorInput');
   let checkAny = false;
   const radios = Array.from(
-    document
-      .getElementById('urlFilterAction')
-      .querySelectorAll('input[name=urlFilterAction]')
+    document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]')
   );
   for (const radio of radios) {
     if (radio.checked) {
@@ -63,9 +61,7 @@ function showUrlFilterEditor(url, action, index) {
   const newFilterUrl = document.getElementById('newFilterUrl');
   newFilterUrl.value = url;
   newFilterUrl.setAttribute('index', index);
-  const radios = Array.from(
-    document.querySelectorAll('input[name=urlFilterAction]')
-  );
+  const radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
   for (const radio of radios) {
     radio.checked = parseInt(radio.getAttribute('value'), 10) === action;
   }
@@ -83,19 +79,19 @@ function showUserPhraseEditor(key, value, type) {
   document.getElementById('newPhrase').value = value;
   userPhraseEditor.setAttribute('type', type);
   if (type === 'trad') {
-    document.getElementById(
-      'originPhraseLabel'
-    ).textContent = browser.i18n.getMessage('labelSimplified');
-    document.getElementById(
-      'newPhraseLabel'
-    ).textContent = browser.i18n.getMessage('labelTraditional');
+    document.getElementById('originPhraseLabel').textContent = browser.i18n.getMessage(
+      'labelSimplified'
+    );
+    document.getElementById('newPhraseLabel').textContent = browser.i18n.getMessage(
+      'labelTraditional'
+    );
   } else if (type === 'simp') {
-    document.getElementById(
-      'originPhraseLabel'
-    ).textContent = browser.i18n.getMessage('labelTraditional');
-    document.getElementById(
-      'newPhraseLabel'
-    ).textContent = browser.i18n.getMessage('labelSimplified');
+    document.getElementById('originPhraseLabel').textContent = browser.i18n.getMessage(
+      'labelTraditional'
+    );
+    document.getElementById('newPhraseLabel').textContent = browser.i18n.getMessage(
+      'labelSimplified'
+    );
   }
   checkPhraseEditorInput();
 }
@@ -142,8 +138,7 @@ function clickOnRowButton(event) {
       showUrlFilterEditor(url, action, index);
     } else {
       target = button.parentNode.parentNode.getAttribute('id');
-      const key =
-        button.previousElementSibling.previousElementSibling.textContent;
+      const key = button.previousElementSibling.previousElementSibling.textContent;
       const value = button.previousElementSibling.textContent;
       document.getElementById('originPhrase-old').value = key;
       if (target === 'userPhraseTradList') {
@@ -164,10 +159,7 @@ function clickOnRowButton(event) {
           urlFilterList.children[i].setAttribute('index', i - 1);
         }
         prefs.get().urlFilterList.splice(index, 1);
-        prefs.sendValueChangeMessage(
-          'urlFilterList',
-          prefs.get().urlFilterList
-        );
+        prefs.sendValueChangeMessage('urlFilterList', prefs.get().urlFilterList);
         // sendVelueChangeMessage(id);
       } else {
         clickOnRowItem({ currentTarget: node });
@@ -175,8 +167,7 @@ function clickOnRowButton(event) {
     } else {
       target = button.parentNode.parentNode.getAttribute('id');
       const key =
-        button.previousElementSibling.previousElementSibling
-          .previousElementSibling.textContent;
+        button.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
       const node = button.parentNode;
       if (node.getAttribute('selected') === 'true') {
         node.parentNode.removeChild(node);
@@ -279,12 +270,7 @@ function addUrlFilter(url, action, index) {
   li.classList.add('tableRow');
   addRowItemCell(li, ['cellUrl'], url);
   addRowItemCell(li, ['cellAction'], flagmap.get(action));
-  const edit = addRowItemCell(
-    li,
-    ['cellEdit', 'cellButton'],
-    null,
-    clickOnRowButton
-  );
+  const edit = addRowItemCell(li, ['cellEdit', 'cellButton'], null, clickOnRowButton);
   edit.setAttribute('custom', true);
   addRowItemCell(li, ['cellDelete', 'cellButton'], null, clickOnRowButton);
   li.addEventListener('click', clickOnRowItem, false);
@@ -318,12 +304,7 @@ function addUserPhrase(key, value, type) {
   li.classList.add('tableRow');
   addRowItemCell(li, ['cellConvert'], key);
   addRowItemCell(li, ['cellConvert'], value);
-  const edit = addRowItemCell(
-    li,
-    ['cellEdit', 'cellButton'],
-    null,
-    clickOnRowButton
-  );
+  const edit = addRowItemCell(li, ['cellEdit', 'cellButton'], null, clickOnRowButton);
   edit.setAttribute('custom', true);
   addRowItemCell(li, ['cellDelete', 'cellButton'], null, clickOnRowButton);
   li.addEventListener('click', clickOnRowItem, false);
@@ -338,9 +319,7 @@ function addUserPhrase(key, value, type) {
 }
 
 function uiEventBinding() {
-  categories = Array.from(
-    document.querySelectorAll('.categories .categoryItem')
-  );
+  categories = Array.from(document.querySelectorAll('.categories .categoryItem'));
   categories.forEach(category => {
     category.addEventListener('click', clickOnCategory, true);
   });
@@ -380,9 +359,7 @@ function uiEventBinding() {
           const newFilterUrl = document.getElementById('newFilterUrl');
           const index = parseInt(newFilterUrl.getAttribute('index'));
           const url = newFilterUrl.value;
-          const radios = Array.from(
-            document.querySelectorAll('input[name=urlFilterAction]')
-          );
+          const radios = Array.from(document.querySelectorAll('input[name=urlFilterAction]'));
           let action;
           for (const radio of radios) {
             if (radio.checked) {
@@ -396,10 +373,7 @@ function uiEventBinding() {
           } else {
             modifyUrlFilter(url, action, index);
           }
-          prefs.sendValueChangeMessage(
-            'urlFilterList',
-            prefs.get().urlFilterList
-          );
+          prefs.sendValueChangeMessage('urlFilterList', prefs.get().urlFilterList);
           hideScreenMask();
         } else if (dlgName === 'userPhraseEditor') {
           const oldkey = document.getElementById('originPhrase-old').value;
@@ -416,19 +390,13 @@ function uiEventBinding() {
               delete prefs.get().userPhraseTradList[oldkey];
             }
             prefs.get().userPhraseTradList[key] = value;
-            prefs.sendValueChangeMessage(
-              'userPhraseTradList',
-              prefs.get().userPhraseTradList
-            );
+            prefs.sendValueChangeMessage('userPhraseTradList', prefs.get().userPhraseTradList);
           } else if (type === 'simp') {
             if (oldkey) {
               delete prefs.get().userPhraseSimpList[oldkey];
             }
             prefs.get().userPhraseSimpList[key] = value;
-            prefs.sendValueChangeMessage(
-              'userPhraseSimpList',
-              prefs.get().userPhraseSimpList
-            );
+            prefs.sendValueChangeMessage('userPhraseSimpList', prefs.get().userPhraseSimpList);
           }
           hideScreenMask();
         }
@@ -483,9 +451,7 @@ function uiEventBinding() {
     false
   );
   const radios2 = Array.from(
-    document
-      .getElementById('urlFilterAction')
-      .querySelectorAll('input[name=urlFilterAction]')
+    document.getElementById('urlFilterAction').querySelectorAll('input[name=urlFilterAction]')
   );
   for (const radio of radios2) {
     radio.addEventListener('input', () => {
@@ -566,9 +532,7 @@ function uiEventBinding() {
       prefs
         .importUrlRule()
         .then(({ id, pref }) => setValueToElem(id, pref))
-        .then(() =>
-          notifier.create(browser.i18n.getMessage('dlgImportSuccess'))
-        );
+        .then(() => notifier.create(browser.i18n.getMessage('dlgImportSuccess')));
     },
     false
   );
@@ -578,9 +542,7 @@ function uiEventBinding() {
       prefs
         .importS2TTable()
         .then(({ id, pref }) => setValueToElem(id, pref))
-        .then(() =>
-          notifier.create(browser.i18n.getMessage('dlgImportSuccess'))
-        );
+        .then(() => notifier.create(browser.i18n.getMessage('dlgImportSuccess')));
     },
     false
   );
@@ -590,9 +552,7 @@ function uiEventBinding() {
       prefs
         .importT2STable()
         .then(({ id, pref }) => setValueToElem(id, pref))
-        .then(() =>
-          notifier.create(browser.i18n.getMessage('dlgImportSuccess'))
-        );
+        .then(() => notifier.create(browser.i18n.getMessage('dlgImportSuccess')));
     },
     false
   );
@@ -612,11 +572,7 @@ function setValueToElem(id, value) {
       }
     } else if (elemType === 'checkbox') {
       elem.checked = value;
-    } else if (
-      elemType === 'color' ||
-      elemType === 'number' ||
-      elemType === 'text'
-    ) {
+    } else if (elemType === 'color' || elemType === 'number' || elemType === 'text') {
       elem.value = value;
     } else if (elemType === 'listBox') {
       for (let i = 0; i < value.length; ++i) {
@@ -624,11 +580,7 @@ function setValueToElem(id, value) {
       }
     } else if (elemType === 'listBoxObj') {
       Object.keys(value).forEach(key => {
-        addUserPhrase(
-          key,
-          value[key],
-          id === 'userPhraseTradList' ? 'trad' : 'simp'
-        );
+        addUserPhrase(key, value[key], id === 'userPhraseTradList' ? 'trad' : 'simp');
       });
     }
   }
@@ -643,10 +595,7 @@ function handleValueChange(id) {
       for (const radio of radios) {
         radio.addEventListener('input', () => {
           if (radio.checked)
-            prefs.sendValueChangeMessage(
-              id,
-              parseInt(radio.getAttribute('value'))
-            );
+            prefs.sendValueChangeMessage(id, parseInt(radio.getAttribute('value')));
         });
       }
     } else if (elemType === 'checkbox') {

@@ -14,14 +14,10 @@ class PrefsExtend extends Prefs {
           if (isInvalid) {
             return;
           }
-          if (
-            pair.key === 'urlFilterList' &&
-            this._validate(pref[pair.key], 'url').error
-          ) {
+          if (pair.key === 'urlFilterList' && this._validate(pref[pair.key], 'url').error) {
             isInvalid = true;
           } else if (
-            (pair.key === 'userPhraseTradList' ||
-              pair.key === 'userPhraseSimpList') &&
+            (pair.key === 'userPhraseTradList' || pair.key === 'userPhraseSimpList') &&
             this._validate(pref[pair.key], 'phrase').error
           ) {
             isInvalid = true;
@@ -69,9 +65,7 @@ class PrefsExtend extends Prefs {
             isPhraseInvalid = true;
           }
         });
-        return isPhraseInvalid
-          ? { error: true }
-          : { error: false, pref: safeConfig };
+        return isPhraseInvalid ? { error: true } : { error: false, pref: safeConfig };
       }
       default:
         return { error: true };
@@ -129,24 +123,15 @@ class PrefsExtend extends Prefs {
   }
 
   exportUrlRule() {
-    this._exportFile(
-      JSON.stringify(this._prefs.urlFilterList),
-      'NewTongWenTang.url-rule.json'
-    );
+    this._exportFile(JSON.stringify(this._prefs.urlFilterList), 'NewTongWenTang.url-rule.json');
   }
 
   exportS2TTable() {
-    this._exportFile(
-      JSON.stringify(this._prefs.userPhraseTradList),
-      'NewTongWenTang.s2t.json'
-    );
+    this._exportFile(JSON.stringify(this._prefs.userPhraseTradList), 'NewTongWenTang.s2t.json');
   }
 
   exportT2STable() {
-    this._exportFile(
-      JSON.stringify(this._prefs.userPhraseSimpList),
-      'NewTongWenTang.t2s.json'
-    );
+    this._exportFile(JSON.stringify(this._prefs.userPhraseSimpList), 'NewTongWenTang.t2s.json');
   }
 
   importAllOptions() {
@@ -161,9 +146,7 @@ class PrefsExtend extends Prefs {
         }
 
         this._prefs = validated.pref;
-        Object.keys(this._prefs).forEach(key =>
-          this.sendValueChangeMessage(key, this._prefs[key])
-        );
+        Object.keys(this._prefs).forEach(key => this.sendValueChangeMessage(key, this._prefs[key]));
         return this._prefs;
       });
   }

@@ -57,16 +57,7 @@ const createContextMenu = preferences => {
   if (menuId !== null) {
     return;
   }
-  const contexts = [
-    'page',
-    'selection',
-    'link',
-    'editable',
-    'image',
-    'video',
-    'audio',
-    'frame',
-  ];
+  const contexts = ['page', 'selection', 'link', 'editable', 'image', 'video', 'audio', 'frame'];
 
   // 新同文堂
   menuId = browser.contextMenus.create({
@@ -211,8 +202,7 @@ const resetContextMenu = preferences => {
       preferences.contextMenuInput2Simp ||
       preferences.contextMenuPage2Trad ||
       preferences.contextMenuPage2Simp ||
-      ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) &&
-        supportClipboard))
+      ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard))
   ) {
     createNew = true;
   }

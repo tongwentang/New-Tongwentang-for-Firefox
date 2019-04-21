@@ -76,18 +76,11 @@ const messageHandler = (request, sender, sendResponse) => {
   }
 
   const elem = document.activeElement;
-  const tag =
-    typeof elem.tagName === 'undefined' ? '' : elem.tagName.toLowerCase();
+  const tag = typeof elem.tagName === 'undefined' ? '' : elem.tagName.toLowerCase();
   let val = typeof elem.type === 'undefined' ? '' : elem.type.toLowerCase();
-  const isInput =
-    ['textarea', 'input'].indexOf(tag) >= 0 &&
-    ['textarea', 'text'].indexOf(val) >= 0;
+  const isInput = ['textarea', 'input'].indexOf(tag) >= 0 && ['textarea', 'text'].indexOf(val) >= 0;
 
-  if (
-    isInput &&
-    (request.act === 'input' ||
-      convertMapping[preferences.inputConvert] !== 'none')
-  ) {
+  if (isInput && (request.act === 'input' || convertMapping[preferences.inputConvert] !== 'none')) {
     // 輸入區文字轉換
     let zhflag = request.flag;
     val = document.activeElement.value;

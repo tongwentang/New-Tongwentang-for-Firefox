@@ -246,10 +246,7 @@ export const TongWen = (function() {
                 }
                 break;
               case 'input':
-                if (
-                  'text,hidden'.indexOf(node.type.toLowerCase()) < 0 &&
-                  node.value.length > 0
-                ) {
+                if ('text,hidden'.indexOf(node.type.toLowerCase()) < 0 && node.value.length > 0) {
                   node.value = convert(node.value, zhflag);
                 }
                 break;
