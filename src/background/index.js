@@ -326,13 +326,13 @@ browser.commands.onCommand.addListener(command => {
   }
 });
 
-browser.pageAction.onClicked.addListener(tab => {
+browser.browserAction.onClicked.addListener(tab => {
   doAction(tab, 'page', 'auto');
 });
 
 function handleMessage(request, sender) {
   if (request.loaded) {
-    browser.pageAction.show(sender.tab.id);
+    browser.browserAction.show(sender.tab.id);
   }
 }
 
