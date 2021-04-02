@@ -1,3 +1,5 @@
+THE NEW VERSION IS NOW ON [tongwentang-extension](https://github.com/tongwentang/tongwentang-extension).
+
 # New-Tongwentang
 Firefox Add-on, converts web page between Simplified and Traditional Chinese.
 
